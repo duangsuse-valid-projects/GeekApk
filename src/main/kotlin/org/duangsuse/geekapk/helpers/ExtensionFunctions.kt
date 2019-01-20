@@ -7,3 +7,5 @@ inline infix fun <reified A : Number, B> ((A) -> B).loopFor(times: Int) {
     restIteration--
   }
 }
+
+inline fun <reified R : Number> Number.times(): R = this as R

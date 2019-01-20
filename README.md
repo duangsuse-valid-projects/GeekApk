@@ -10,6 +10,14 @@ GeekApk Spring server built with (\*v\*) and Kotlin and SpringBoot
 
 ## API Mapping
 
+### Main
+
++ [/](http://geekapk.h2h2.org/) API Index, help message
++ [/serverVersion](http://geekapk.h2h2.org/serverVersion) Server version string
++ [/serverDesc](http://geekapk.h2h2.org/serverDesc) description string
++ [/serverBoot](http://geekapk.h2h2.org/serverBoot) bootUp datetime
++ [/detail](http://geekapk.h2h2.org/detail) server detail map
+
 ## References
 
 + [GeekApkR](https://github.com/geekapk-r/) GitHub Organization

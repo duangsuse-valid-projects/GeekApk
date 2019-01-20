@@ -14,6 +14,7 @@ import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
+import javax.validation.constraints.Size
 
 @StandaloneEntity("comment")
 @Entity
@@ -28,6 +29,7 @@ data class Comment (
   @LinkTo("comment", rel = Relation.BELONGING)
   val replies: CommentId?,
 
+  @Size(message = "comment too long (at most 6k characters)", min = 0, max = 6000)
   @Nls var content: String = "",
 
   val createdAt: Date = Date(),
