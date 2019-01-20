@@ -9,7 +9,7 @@ import org.duangsuse.geekapk.annotations.Relation
 import org.duangsuse.geekapk.annotations.StandaloneEntity
 import org.jetbrains.annotations.Nls
 import org.jetbrains.annotations.NonNls
-import java.util.Date
+import java.util.*
 import javax.persistence.*
 import javax.validation.constraints.Size
 

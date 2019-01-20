@@ -7,7 +7,6 @@ import org.duangsuse.geekapk.annotations.UserPrivate
 import org.duangsuse.geekapk.helpers.loopFor
 import org.duangsuse.geekapk.helpers.times
 import org.jetbrains.annotations.Nls
-import java.lang.StringBuilder
 import java.util.*
 import javax.persistence.*
 import javax.validation.constraints.Size
@@ -51,6 +50,7 @@ data class GeekUser (
     const val FLAG_READONLY = 0b1
     const val FLAG_BANNED = 0b10
     const val FLAG_ADMIN = 0b11
+    @Suppress("SpellCheckingInspection")
     private val SHARED_HASH_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_".toCharArray()
 
     /** Generate random [A-Za-z0-9] strings */

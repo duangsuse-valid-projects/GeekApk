@@ -6,7 +6,7 @@ import org.duangsuse.geekapk.annotations.Appendage
 import org.duangsuse.geekapk.annotations.LinkTo
 import org.duangsuse.geekapk.annotations.Relation
 import org.jetbrains.annotations.Nls
-import java.util.Date
+import java.util.*
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType

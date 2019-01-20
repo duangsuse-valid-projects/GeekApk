@@ -5,8 +5,7 @@ import org.duangsuse.geekapk.UserId
 import org.duangsuse.geekapk.annotations.Appendage
 import org.duangsuse.geekapk.annotations.LinkTo
 import org.duangsuse.geekapk.annotations.Relation
-import java.util.Date
-
+import java.util.*
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
