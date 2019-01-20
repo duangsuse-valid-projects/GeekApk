@@ -4,6 +4,7 @@ import org.duangsuse.geekapk.UserId
 import org.duangsuse.geekapk.annotations.CounterFor
 import org.duangsuse.geekapk.annotations.StandaloneEntity
 import org.duangsuse.geekapk.annotations.UserPrivate
+import org.duangsuse.geekapk.helpers.loopFor
 import org.jetbrains.annotations.Nls
 import java.lang.StringBuilder
 import java.util.*
@@ -48,11 +49,13 @@ data class GeekUser (
     @JvmStatic
     fun makeSharedHash(length: Int): String {
       val ret = StringBuilder()
-      var restLength = length
-      while (restLength > 0) {
+
+      val appendRandomChar = fun (_: Int) = {
         ret.append(SHARED_HASH_CHARS[(Math.random() * SHARED_HASH_CHARS.lastIndex).roundToInt()])
-        restLength--
       }
+
+      let { appendRandomChar loopFor length }
+
       return ret.toString()
     }
   }

@@ -14,7 +14,7 @@ import javax.persistence.Id
 
 @Appendage("app")
 @Entity
-class AppUpdate (
+data class AppUpdate (
   @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
   val id: AppUpdateId = 0,
 

@@ -28,32 +28,7 @@ class MainController {
 
   @GetMapping("detail")
   @ResponseBody
-  fun serverDetail(): Map<String, String> {
-    val result = mutableMapOf<String, String>()
-
-    val javaRt = System.getProperty("java.version", "Unknown")
-    result["jdkVersion"] = javaRt
-
-    val jvmComp = System.getProperty("sun.management.compiler", "Unknown Compiler")
-    val jvmMode = System.getProperty("java.vm.info", "Unknown Flags")
-
-    val javaImpBean = ManagementFactory.getRuntimeMXBean()
-    result["jvmSpec"] = "${javaImpBean.vmName} from ${javaImpBean.vmVendor}"
-    result["jvmVersion"] = javaImpBean.vmVersion
-    result["jvmMode"] = jvmMode
-    result["bootUptime"] = javaImpBean.uptime.toString()
-    result["jvmCompiler"] = jvmComp
-    result["jvmDataModel"] = System.getProperty("sun.arch.data.model", "Unknown")
-    result["encoding"] = System.getProperty("file.encoding", "UTF-8")
-
-    result.putAll(mapOf(
-      "os" to System.getProperty("os.name", "Unknown OS Family"),
-      "arch" to System.getProperty("os.arch", "Unknown Arch"),
-      "osVersion" to System.getProperty("os.version", "Unknown OS Version")
-    ))
-
-    return result
-  }
+  fun serverDetail(): Map<String, String> = serverDetail
 
   @GetMapping("serverVersion")
   @ResponseBody
@@ -68,10 +43,41 @@ class MainController {
   fun serverUptime(): Date = bootUpAt
 
   companion object {
-    const val programVersion = "0.1.0"
-    const val serverDesc = "Spring GeekApk Server by duangsuse, the dying Server for GeekApk." +
-      "\nSpring version: 2.1.2\nKotlin version: 1.2.7"
+    fun makeServerDetail(): Map<String, String> {
+      val result = mutableMapOf<String, String>()
 
+      val javaRt = System.getProperty("java.version", "Unknown")
+      result["jdkVersion"] = javaRt
+
+      val jvmComp = System.getProperty("sun.management.compiler", "Unknown Compiler")
+      val jvmMode = System.getProperty("java.vm.info", "Unknown Flags")
+
+      val javaImpBean = ManagementFactory.getRuntimeMXBean()
+      result["jvmSpec"] = "${javaImpBean.vmName} from ${javaImpBean.vmVendor}"
+      result["jvmVersion"] = javaImpBean.vmVersion
+      result["jvmMode"] = jvmMode
+      result["bootUptime"] = javaImpBean.uptime.toString()
+      result["jvmCompiler"] = jvmComp
+      result["jvmDataModel"] = System.getProperty("sun.arch.data.model", "Unknown")
+      result["encoding"] = System.getProperty("file.encoding", "UTF-8")
+
+      result.putAll(mapOf(
+        "os" to System.getProperty("os.name", "Unknown OS Family"),
+        "arch" to System.getProperty("os.arch", "Unknown Arch"),
+        "osVersion" to System.getProperty("os.version", "Unknown OS Version")
+      ))
+
+      return result
+    }
+
+    const val programVersion = "0.1.0"
+    val serverDesc = """
+      > Spring GeekApk Server by duangsuse, the dying Server for GeekApk.
+      > Spring version: 2.1.2
+      > Kotlin version: 1.2.7
+      """.trimMargin(">")
+
+    val serverDetail = makeServerDetail()
     val bootUpAt = Date()
   }
 }

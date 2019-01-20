@@ -8,7 +8,7 @@ static void forEachAspect(String aspects, Consumer block)
 
 buildscript {
     ext {
-        kotlinVersion = '1.2.71'
+        kotlinVersion = '1.3.0'
         springBootVersion = '2.1.2.RELEASE'
     }
     repositories { mavenCentral() }
@@ -51,6 +51,9 @@ compileKotlin {
     kotlinOptions {
         freeCompilerArgs = ['-Xjsr305=strict']
         jvmTarget = '1.8'
+        noReflect = false
+        languageVersion = '1.3'
+        apiVersion = '1.3'
     }
 }
 
