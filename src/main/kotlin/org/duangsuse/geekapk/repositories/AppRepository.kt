@@ -1,10 +1,11 @@
 package org.duangsuse.geekapk.repositories
 
+import org.duangsuse.geekapk.AppId
 import org.duangsuse.geekapk.entity.App
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.CrudRepository
 
-interface AppRepository : CrudRepository<App, Long> {
+interface AppRepository : CrudRepository<App, AppId> {
   @Query("SELECT x FROM #{#entityName} x ORDER BY x.updatedAt")
   fun allByUpdated(): MutableList<App>
   @Query("SELECT x FROM #{#entityName} x ORDER BY x.createdAt")

@@ -1,12 +1,15 @@
 package org.duangsuse.geekapk.repositories.relations
 
+import org.duangsuse.geekapk.AppId
+import org.duangsuse.geekapk.StarRelId
+import org.duangsuse.geekapk.UserId
 import org.duangsuse.geekapk.relations.RelationUserAppStar
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.CrudRepository
 
-interface StarRelRepository : CrudRepository<RelationUserAppStar, Long> {
+interface StarRelRepository : CrudRepository<RelationUserAppStar, StarRelId> {
   @Query("SELECT x.starred FROM #{#entityName} x WHERE x.starer = ?1")
-  fun allUserStars(uid: Int): MutableList<Long>
+  fun allUserStars(uid: UserId): MutableList<AppId>
   @Query("SELECT x.starer FROM #{#entityName} x WHERE x.starred = ?1")
-  fun allStaredUsers(appId: Long): MutableList<Int>
+  fun allStaredUsers(appId: AppId): MutableList<UserId>
 }
