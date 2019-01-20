@@ -2,10 +2,12 @@ package org.duangsuse.geekapk
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
+import org.springframework.boot.web.servlet.ServletComponentScan
 import java.io.BufferedInputStream
 import java.io.IOException
 import java.util.*
 
+@ServletComponentScan
 @SpringBootApplication
 class GeekapkApplication
 
@@ -39,7 +41,7 @@ fun main(args: Array<String>) {
     println("== Setup ($key) to ($value)")
   }
 
-  println(":: Bootstrap SpringBoot Application ${GeekapkApplication::javaClass}")
+  println(":: Bootstrap SpringBoot Application ${GeekapkApplication::class}")
 
   val spring = runApplication<GeekapkApplication>(*args)
 

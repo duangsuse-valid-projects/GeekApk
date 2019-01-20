@@ -1,6 +1,7 @@
 package org.duangsuse.geekapk.controller
 
 import org.springframework.boot.SpringBootVersion
+import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Controller
@@ -12,6 +13,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 import java.lang.management.ManagementFactory
 import java.util.*
 import javax.servlet.http.HttpServletRequest
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
+
+
 
 @Controller
 class MainController {
@@ -100,6 +104,7 @@ class MainController {
   }
 }
 
+/* makes no difference on my machine... */
 @Configuration("cors")
 class CorsConfiguration : WebMvcConfigurer {
   override fun addCorsMappings(registry: CorsRegistry) {
@@ -107,5 +112,14 @@ class CorsConfiguration : WebMvcConfigurer {
       .allowedOrigins("*")
       .allowedMethods("GET", "POST", "DELETE", "PUT")
       .maxAge(3600)
+  }
+}
+
+@Bean
+fun corsConfigurer(): WebMvcConfigurer {
+  return object : WebMvcConfigurerAdapter() {
+    override fun addCorsMappings(registry: CorsRegistry) {
+      registry.addMapping("/**").allowedOrigins("*")
+    }
   }
 }
