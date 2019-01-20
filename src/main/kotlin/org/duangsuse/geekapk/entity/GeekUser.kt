@@ -50,7 +50,7 @@ data class GeekUser (
     fun makeSharedHash(length: Int): String {
       val ret = StringBuilder()
 
-      val appendRandomChar = fun (_: Int) = {
+      val appendRandomChar = fun (_: Int) {
         ret.append(SHARED_HASH_CHARS[(Math.random() * SHARED_HASH_CHARS.lastIndex).roundToInt()])
       }
 
