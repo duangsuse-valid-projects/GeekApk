@@ -21,15 +21,33 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 class MainController {
   fun String.href(req: HttpServletRequest) = "${req.scheme}://${req.localAddr}:${req.localPort}/$this"
 
+  /* This is API document(R */
   @GetMapping("/")
   @ResponseBody
   fun apiHint(hsr: HttpServletRequest): Map<String, Map<String, String>> = mapOf(
     "server" to mapOf(
-      "index" to "".href(hsr),
-      "version" to "serverVersion".href(hsr),
-      "desc" to "serverDesc".href(hsr),
-      "upTime" to "serverBoot".href(hsr),
-      "detailedInfo" to "detail".href(hsr)
+      "description" to "GeekApk server information related APIs",
+      "index() -> object<category,object<operation,linkTemplate>>" to "".href(hsr),
+      "version() -> plain" to "serverVersion".href(hsr),
+      "desc() -> plain" to "serverDesc".href(hsr),
+      "upTime() -> string:datetime" to "serverBoot".href(hsr),
+      "detailedInfo() -> object:<prop,desc>" to "detail".href(hsr)
+    ),
+    "admin" to mapOf(
+      "description" to "GeekApk community administration functions",
+      "schema" to "Cookie(gaModTok)",
+      "POST@createUser(username) -> object:user" to "makeUser".href(hsr),
+      "PUT@resetSharedHash(uid,shash?) -> plain" to "resetMetaHash/{uid}".href(hsr),
+      "DELETE@deleteUser(uid) -> object:user" to "dropUser/{uid}".href(hsr),
+      "PUT@flagUser(uid,flag) -> object:user" to "flagUser/{uid}".href(hsr),
+      "POST@createCategory(name) -> object:category" to "makeCategory".href(hsr),
+      "PUT@renameCategory(id,name) -> object:category" to "nameCategory/{id}".href(hsr),
+      "DELETE@deleteCategory(id) -> object:category" to "dropCategory/{id}".href(hsr),
+      "DELETE@deleteApp(aid) -> object:app" to "dropApp/{aid}".href(hsr),
+      "PUT@transferAppCategory(aid,cid) -> object:[aid,old,new]" to "moveApp/{aid}".href(hsr),
+      "PUT@transferAppOwner(aid,uid) -> object:[aid,old,new]" to "transferApp/{aid}".href(hsr),
+      "DELETE@deleteAppUpdate(aid,rev) -> object:appUpdate" to "dropAppUpdate/{aid}/{rev}".href(hsr),
+      "DELETE@deleteComment(cid) -> object:[comment,deletedSubComments]" to "dropComment/{cid}".href(hsr)
     )
   )
 
