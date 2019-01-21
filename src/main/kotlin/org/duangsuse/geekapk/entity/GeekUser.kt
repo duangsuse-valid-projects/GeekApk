@@ -1,10 +1,8 @@
 package org.duangsuse.geekapk.entity
 
+import org.duangsuse.geekapk.AppId
 import org.duangsuse.geekapk.UserId
-import org.duangsuse.geekapk.annotations.CounterFor
-import org.duangsuse.geekapk.annotations.Markdown
-import org.duangsuse.geekapk.annotations.StandaloneEntity
-import org.duangsuse.geekapk.annotations.UserPrivate
+import org.duangsuse.geekapk.annotations.*
 import org.duangsuse.geekapk.helpers.loopFor
 import org.duangsuse.geekapk.helpers.times
 import org.jetbrains.annotations.Nls
@@ -29,6 +27,9 @@ data class GeekUser (
   @Size(message = "avatar url too large (~ ..600)", min = 0, max = 600)
   var avatarUrl: String = "",
 
+  @LinkTo("app", Relation.HAS_ONE)
+  var metaApp: AppId? = null,
+
   @Size(message = "bio too long (~ ..6k)", min = 0, max = 6000)
   @Markdown @Nls var bio: String = "_No bio provided QAQ_",
 
@@ -48,6 +49,8 @@ data class GeekUser (
 ) {
   companion object {
     val KEY: String = System.getProperty("geekapk.key", "dolphins")
+    val BOT_UID: UserId = System.getProperty("geekapk.bot", "0").toInt()
+    val BOT_OVERRIDE: AppId? = System.getProperty("geekapk.botMessageAppOverride").toLongOrNull()
 
     const val FLAG_NONE = 0b0
     const val FLAG_READONLY = 0b1
@@ -69,5 +72,13 @@ data class GeekUser (
 
       return ret.toString()
     }
+
+    private val makeNewShared64CharKey = { makeSharedHash(64) }
+
+    private fun makeUserProto(hash: () -> String = makeNewShared64CharKey) = fun (name: String): GeekUser {
+      return GeekUser(username = name, hash = hash())
+    }
+
+    val makeUser = makeUserProto()
   }
 }

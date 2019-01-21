@@ -25,18 +25,22 @@ class MainController {
   /* This is API document(R */
   @GetMapping("/")
   @ResponseBody
-  fun apiHint(hsr: HttpServletRequest): Map<String, Map<String, String>> = mapOf(
+  /* must be */ fun apiHint(hsr: HttpServletRequest): Map<String, Map<String, String>> = mapOf(
     "server" to mapOf(
-      "description" to "GeekApk server information related APIs",
+      description to "GeekApk server information related APIs",
+      schema to "ALL INTERFACES REQUIRES NONE",
       "index() -> object<category,object<operation,linkTemplate>>" to "".href(hsr),
       "version() -> plain" to "serverVersion".href(hsr),
       "desc() -> plain" to "serverDesc".href(hsr),
-      "upTime() -> string:datetime" to "serverBoot".href(hsr),
+      "upTime() -> (string|number):datetime" to "serverBoot".href(hsr),
       "detailedInfo() -> object:<prop,desc>" to "detail".href(hsr)
     ),
+
     "admin" to mapOf(
-      "description" to "GeekApk community administration functions",
-      "schema" to "Cookie(gaModTok)",
+      description to "GeekApk community administration functions",
+      /* `admin flag` in GeekApk JUST a flag, modTok is required for non-deleteApp,transAppCategory,deleteComment operations */
+      schema to "ALL INTERFACES BUT (deleteApp,transferAppCategory,deleteComment,flagUser)#a REQUIRES Cookie(gaModTok) BE " +
+        "`geekapk admin token` AND (Cookie(gaUser), Cookie(gaHash) BE `valid login`)#b; #a REQUIRES REWRITE #b `valid superuser login`",
       "POST@createUser(username) -> object:user" to "makeUser".href(hsr),
       "PUT@resetSharedHash(uid,shash?) -> plain" to "resetMetaHash/{uid}".href(hsr),
       "DELETE@deleteUser(uid) -> object:user" to "dropUser/{uid}".href(hsr),
@@ -48,7 +52,60 @@ class MainController {
       "PUT@transferAppCategory(aid,cid) -> object:[aid,old,new]" to "moveApp/{aid}".href(hsr),
       "PUT@transferAppOwner(aid,uid) -> object:[aid,old,new]" to "transferApp/{aid}".href(hsr),
       "DELETE@deleteAppUpdate(aid,rev) -> object:appUpdate" to "dropAppUpdate/{aid}/{rev}".href(hsr),
-      "DELETE@deleteComment(cid) -> object:[comment,deletedSubComments]" to "dropComment/{cid}".href(hsr)
+      "DELETE@deleteComment(cid) -> object:[comment,deletedSubCommentsCount]" to "dropComment/{cid}".href(hsr)
+    ),
+
+    "category" to mapOf( /* trivially */
+      description to "Application Categories",
+      schema to "ALL INTERFACES REQUIRES NONE",
+      "categoryList() -> array:category" to "category/all".href(hsr),
+      "categoryName(id) -> plain" to "category/{id}".href(hsr)
+    ),
+
+    "user" to mapOf(
+      description to "GeekApk user APIs",
+      schema to "INTERFACE updateUser REQUIRES Cookie(gaHash) BE `valid hash`",
+      "readUser(id) -> object:user" to "user/{id}".href(hsr),
+      "PUT@updateUser(id,prop{username,nickname,avatar,bio,metaApp},value) -> [user,prop,old,new]" to "user/{id}".href(hsr),
+      "PUT@resetHash(id,shash,hash) -> [id,newShash,newHash]" to "user/{id}/hash".href(hsr),
+      "checkHash(id,hash) -> [valid,message]" to "user/{id}/checkHash".href(hsr),
+      "listUser(sort?{created,followers},sliceFrom?,sliceTo?) -> array:object:user" to "user/all".href(hsr),
+      "listMetaUser(sort?{created,followers},sliceFrom?,sliceTo?) -> array:object:user" to "user/allHasMetaApp".href(hsr),
+      "searchUser(type?{username,nickname,bio},kw,sort?{created,followers}) -> array:object:user" to "user/search/{kw}".href(hsr)
+    ),
+
+    "timeline" to mapOf(
+      description to "GeekApk user timeline functions"
+    ),
+    "notification" to mapOf(
+      description to "GeekApk user private notification APIs"
+    ),
+    "app" to mapOf(
+      description to "GeekApk Android application metadata APIs"
+    ),
+    "appUpdate" to mapOf(
+      description to "GeekApk Android application reversion metadata APIs"
+    ),
+    "comment" to mapOf(
+      description to "GeekApk User->App comment interfaces"
+    ),
+
+    "follow" to mapOf(
+      description to "GeekApk User->User follow relation operations",
+        schema to "ALL NON GET INTERFACE REQUIRES Cookie(gaUser), Cookie(gaHash) BE `valid login`",
+        "POST@follow(uid)" to "follow/{uid}".href(hsr),
+        "DELETE@unfollow(uid)" to "follow/{uid}".href(hsr),
+        "followers(uid)" to "follow/followers/{uid}".href(hsr),
+        "following(uid)" to "follow/{uid}".href(hsr)
+    ),
+
+    "star" to mapOf(
+      description to "GeekApk User->App star functions",
+      schema to "ALL NON GET INTERFACE REQUIRES Cookie(gaUser), Cookie(gaHash) BE `valid login`",
+      "POST@star(aid)" to "star/{aid}".href(hsr),
+      "DELETE@unStar(aid)" to "star/{aid}".href(hsr),
+      "stargazers(aid)" to "star/{aid}".href(hsr),
+      "stars(uid)" to "star/user/{uid}".href(hsr)
     )
   )
 
@@ -112,6 +169,8 @@ class MainController {
     }
 
     const val programVersion = "0.1.0"
+    const val description = "description"
+    const val schema = "schema"
     val serverDesc = """
       > Spring GeekApk Server by duangsuse, the dying Server for GeekApk.
       > Spring version: 2.1.2
