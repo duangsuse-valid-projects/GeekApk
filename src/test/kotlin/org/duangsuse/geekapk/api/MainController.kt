@@ -2,23 +2,16 @@ package org.duangsuse.geekapk.api
 
 import org.duangsuse.geekapk.controller.MainController
 import org.duangsuse.geekapk.middlewares.CorsFilter
-import org.hamcrest.Description
-import org.hamcrest.Matcher
 import org.junit.Test
-import org.junit.matchers.JUnitMatchers.containsString
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.SpringBootVersion
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
-import org.springframework.core.SpringVersion
 import org.springframework.http.MediaType
 import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.test.web.servlet.MockMvc
-import org.springframework.test.web.servlet.MvcResult
-import org.springframework.test.web.servlet.ResultMatcher
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
-import org.springframework.web.cors.reactive.CorsWebFilter
 import javax.servlet.annotation.WebFilter
 
 /*

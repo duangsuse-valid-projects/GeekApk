@@ -4,16 +4,19 @@ import org.springframework.boot.SpringBootVersion
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpStatus
+import org.springframework.http.converter.HttpMessageConverter
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.servlet.config.annotation.CorsRegistry
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import java.lang.management.ManagementFactory
 import java.util.*
 import javax.servlet.http.HttpServletRequest
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 @Controller
 class MainController {
@@ -131,12 +134,12 @@ class CorsConfiguration : WebMvcConfigurer {
   }
 }
 
-@Configuration
-class MainJsonPrettyPrintConfiguration : WebMvcConfigurationSupport {
-  override fun extendMessageConverters(converters: List<HttpMessageConverter>) {
+@Configuration /* not efficient, don't enable this in production environment */
+class MainJsonPrettyPrintConfiguration : WebMvcConfigurationSupport() {
+  override fun extendMessageConverters(converters: MutableList<HttpMessageConverter<*>>) {
     for (converter in converters)
       if (converter is MappingJackson2HttpMessageConverter)
-        (converter as? MappingJackson2HttpMessageConverter)?.run { prettyPrint = true }
+        (converter as? MappingJackson2HttpMessageConverter)?.run { setPrettyPrint(true) }
   }
 }
 

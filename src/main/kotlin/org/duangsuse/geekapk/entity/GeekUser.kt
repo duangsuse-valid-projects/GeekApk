@@ -46,7 +46,7 @@ data class GeekUser (
   var followersCount: Int = 0
 ) {
   companion object {
-    val KEY = System.getProperty("geekapk.key", "dolphins")
+    val KEY: String = System.getProperty("geekapk.key", "dolphins")
 
     const val FLAG_NONE = 0b0
     const val FLAG_READONLY = 0b1

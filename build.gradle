@@ -30,7 +30,7 @@ group = 'org.duangsuse'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
 
-repositories { aliMavenCentral(it) }
+repositories { RepositoryHandler x -> aliMavenCentral(x) }
 
 dependencies {
     def starters = 'actuator,data-jpa,web'
@@ -38,13 +38,13 @@ dependencies {
         { implementation "org.springframework.boot:spring-boot-starter-$it:$springBootVersion" }
 
     implementation 'com.fasterxml.jackson.module:jackson-module-kotlin'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}"
-    implementation "org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}".intern()
+    implementation "org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}".intern()
 
     runtimeOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'org.postgresql:postgresql'
 
-    testImplementation "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
+    testImplementation "org.springframework.boot:spring-boot-starter-test:$springBootVersion".intern()
 }
 
 compileKotlin {
