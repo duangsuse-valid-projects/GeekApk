@@ -86,22 +86,31 @@ class MainController {
     "appUpdate" to mapOf(
       description to "GeekApk Android application reversion metadata APIs"
     ),
+
     "comment" to mapOf(
-      description to "GeekApk User->App comment interfaces"
+      description to "GeekApk User->App comment interfaces",
+      schema to "ALL NON GET INTERFACE REQUIRES Cookie(gaUser), Cookie(gaHash) BE `valid non-readonly login`",
+      "searchComment(inApp?,user?,repliesTo?,content) -> array:object:comment" to "comment/search/{content}".href(hsr),
+      "listCommentInApp(aid,sliceFrom?,sliceTo?) -> array:object:comment" to "comment/{aid}".href(hsr),
+      "listSubComment(cid) -> array:object:comment" to "comment/subOf/{cid}".href(hsr),
+      "listAllComment(inApp?,user?,sliceFrom?,sliceTo?) -> array:object:comment" to "comment/all".href(hsr),
+      "POST@createComment(aid,content) -> object:comment" to "comment/{aid}".href(hsr),
+      "PUT@editComment(cid) -> [oldContent,newContent]" to "comment/edit/{cid}".href(hsr),
+      "DELETE@deleteComment(cid) -> object:comment" to "comment/delete/{cid}".href(hsr)
     ),
 
     "follow" to mapOf(
       description to "GeekApk User->User follow relation operations",
-        schema to "ALL NON GET INTERFACE REQUIRES Cookie(gaUser), Cookie(gaHash) BE `valid login`",
-        "POST@follow(uid)" to "follow/{uid}".href(hsr),
-        "DELETE@unfollow(uid)" to "follow/{uid}".href(hsr),
-        "followers(uid)" to "follow/followers/{uid}".href(hsr),
-        "following(uid)" to "follow/{uid}".href(hsr)
+        schema to "ALL NON GET INTERFACE REQUIRES Cookie(gaUser), Cookie(gaHash) BE `valid non-banned login`",
+        "POST@follow(uid) -> [oldCount,newCount]" to "follow/{uid}".href(hsr),
+        "DELETE@unfollow(uid) -> [oldCount,newCount]" to "follow/{uid}".href(hsr),
+        "followers(uid) -> array:object:user" to "follow/followers/{uid}".href(hsr),
+        "following(uid) -> array:object:user" to "follow/{uid}".href(hsr)
     ),
 
     "star" to mapOf(
       description to "GeekApk User->App star functions",
-      schema to "ALL NON GET INTERFACE REQUIRES Cookie(gaUser), Cookie(gaHash) BE `valid login`",
+      schema to "ALL NON GET INTERFACE REQUIRES Cookie(gaUser), Cookie(gaHash) BE `valid non-banned login`",
       "POST@star(aid) -> [oldCount,newCount]" to "star/{aid}".href(hsr),
       "DELETE@unStar(aid) -> [oldCount,newCount]" to "star/{aid}".href(hsr),
       "stargazers(aid) -> array:object:user" to "star/{aid}".href(hsr),
