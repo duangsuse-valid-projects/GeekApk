@@ -72,7 +72,7 @@ class MainController {
 
   @GetMapping("serverBoot")
   @ResponseBody
-  fun serverUptime(): Date = bootUpAt
+  fun serverUptime(): Date = bootUpAt()
 
   companion object {
     private fun makeServerDetail(): Map<String, String> {
@@ -88,7 +88,7 @@ class MainController {
       result["jvmSpec"] = "${javaImpBean.vmName} from ${javaImpBean.vmVendor}"
       result["jvmVersion"] = javaImpBean.vmVersion
       result["jvmMode"] = jvmMode
-      result["bootUptime"] = javaImpBean.uptime.toString()
+      result["bootUpTime"] = javaImpBean.uptime.toString()
       result["jvmCompiler"] = jvmComp
       result["jvmDataModel"] = System.getProperty("sun.arch.data.model", "Unknown")
       result["encoding"] = System.getProperty("file.encoding", "UTF-8")
@@ -119,7 +119,7 @@ class MainController {
       """.trimMargin(">").intern()
 
     val serverDetail = makeServerDetail()
-    val bootUpAt = Date()
+    val bootUpAt = { Date() } /* must be call-by-need */
   }
 }
 
