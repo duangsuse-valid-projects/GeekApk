@@ -102,10 +102,10 @@ class MainController {
     "star" to mapOf(
       description to "GeekApk User->App star functions",
       schema to "ALL NON GET INTERFACE REQUIRES Cookie(gaUser), Cookie(gaHash) BE `valid login`",
-      "POST@star(aid)" to "star/{aid}".href(hsr),
-      "DELETE@unStar(aid)" to "star/{aid}".href(hsr),
-      "stargazers(aid)" to "star/{aid}".href(hsr),
-      "stars(uid)" to "star/user/{uid}".href(hsr)
+      "POST@star(aid) -> [oldCount,newCount]" to "star/{aid}".href(hsr),
+      "DELETE@unStar(aid) -> [oldCount,newCount]" to "star/{aid}".href(hsr),
+      "stargazers(aid) -> array:object:user" to "star/{aid}".href(hsr),
+      "stars(uid) -> array:object:app" to "star/user/{uid}".href(hsr)
     )
   )
 
