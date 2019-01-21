@@ -2,6 +2,7 @@ package org.duangsuse.geekapk.entity
 
 import org.duangsuse.geekapk.UserId
 import org.duangsuse.geekapk.annotations.CounterFor
+import org.duangsuse.geekapk.annotations.Markdown
 import org.duangsuse.geekapk.annotations.StandaloneEntity
 import org.duangsuse.geekapk.annotations.UserPrivate
 import org.duangsuse.geekapk.helpers.loopFor
@@ -29,7 +30,7 @@ data class GeekUser (
   var avatarUrl: String = "",
 
   @Size(message = "bio too long (~ ..6k)", min = 0, max = 6000)
-  @Nls var bio: String = "No bio provided QAQ",
+  @Markdown @Nls var bio: String = "_No bio provided QAQ_",
 
   var flags: Int = FLAG_NONE,
 

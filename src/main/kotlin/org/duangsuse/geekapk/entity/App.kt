@@ -3,10 +3,7 @@ package org.duangsuse.geekapk.entity
 import org.duangsuse.geekapk.AppId
 import org.duangsuse.geekapk.CategoryId
 import org.duangsuse.geekapk.UserId
-import org.duangsuse.geekapk.annotations.CounterFor
-import org.duangsuse.geekapk.annotations.LinkTo
-import org.duangsuse.geekapk.annotations.Relation
-import org.duangsuse.geekapk.annotations.StandaloneEntity
+import org.duangsuse.geekapk.annotations.*
 import org.jetbrains.annotations.Nls
 import org.jetbrains.annotations.NonNls
 import java.util.*
@@ -33,7 +30,7 @@ data class App (
   @Nls var name: String = "App",
 
   @Size(message = "expected readme text size to be in (0, 32768)", min = 0, max = 32768)
-  @Nls var readme: String = "",
+  @Markdown @Nls var readme: String = "",
 
   @Size(message = "~ ..500", min = 0, max = 500)
   @NonNls var icon: String = "",

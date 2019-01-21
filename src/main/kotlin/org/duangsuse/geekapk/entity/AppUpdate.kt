@@ -4,6 +4,7 @@ import org.duangsuse.geekapk.AppId
 import org.duangsuse.geekapk.AppUpdateId
 import org.duangsuse.geekapk.annotations.Appendage
 import org.duangsuse.geekapk.annotations.LinkTo
+import org.duangsuse.geekapk.annotations.Markdown
 import org.duangsuse.geekapk.annotations.Relation
 import org.jetbrains.annotations.Nls
 import java.util.*
@@ -27,7 +28,7 @@ data class AppUpdate (
   var version: String = "v0.1.0",
 
   @Size(message = "update log too large or short (~ 0..32768)", min = 0, max = 1024 * 16 * 2)
-  @Nls var updates: String = "(none)",
+  @Markdown @Nls var updates: String = "(none)",
 
   var minSdk: Int = 14,
 
