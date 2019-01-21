@@ -15,11 +15,9 @@ import java.util.*
 import javax.servlet.http.HttpServletRequest
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
-
-
 @Controller
 class MainController {
-  fun String.href(req: HttpServletRequest) = "${req.scheme}://${req.localAddr}:${req.localPort}/$this"
+  fun String.href(req: HttpServletRequest) = "${req.scheme}://${req.localAddr}:${req.localPort}/$this".intern()
 
   /* This is API document(R */
   @GetMapping("/")
@@ -54,7 +52,7 @@ class MainController {
   /* useless but fun */
   @GetMapping("/mustError")
   @ResponseStatus(code = HttpStatus.I_AM_A_TEAPOT, reason = "see \$object")
-  @ResponseBody
+  @ResponseBody /* body not concerned by Spring */
   fun errorJson(): Map<String, String> = mapOf("message" to "(^_^)")
 
   @GetMapping("detail")
@@ -115,7 +113,7 @@ class MainController {
       > Spring GeekApk Server by duangsuse, the dying Server for GeekApk.
       > Spring version: 2.1.2
       > Kotlin version: 1.2.7
-      """.trimMargin(">")
+      """.trimMargin(">").intern()
 
     val serverDetail = makeServerDetail()
     val bootUpAt = Date()
@@ -130,6 +128,15 @@ class CorsConfiguration : WebMvcConfigurer {
       .allowedOrigins("*")
       .allowedMethods("GET", "POST", "DELETE", "PUT")
       .maxAge(3600)
+  }
+}
+
+@Configuration
+class MainJsonPrettyPrintConfiguration : WebMvcConfigurationSupport {
+  override fun extendMessageConverters(converters: List<HttpMessageConverter>) {
+    for (converter in converters)
+      if (converter is MappingJackson2HttpMessageConverter)
+        (converter as? MappingJackson2HttpMessageConverter)?.run { prettyPrint = true }
   }
 }
 

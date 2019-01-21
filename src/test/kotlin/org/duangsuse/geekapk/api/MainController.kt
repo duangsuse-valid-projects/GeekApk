@@ -45,8 +45,8 @@ class MainController {
       .contentType(MediaType.APPLICATION_JSON_UTF8))
       .andExpect(status().isOk)
       .andExpect(jsonPath("$").isMap)
-      .andExpect(jsonPath("$.server.upTime").exists())
-      .andExpect(jsonPath("$.server.index").isNotEmpty)
+      .andExpect(jsonPath("$.server.description").exists())
+      .andExpect(jsonPath("$.admin.schema").isNotEmpty)
   }
 
   @Test
