@@ -43,6 +43,12 @@ class MainController {
   }
 
   @Test
+  fun indexShowsHref() {
+    mock.perform(get("/"))
+      .andExpect(jsonPath("$.admin.['POST@createUser(username) -> object:user']").value("http://127.0.0.1:80/makeUser"))
+  }
+
+  @Test
   fun givesDetail() {
     mock.perform(get("/serverDetail")
       .contentType(MediaType.APPLICATION_JSON))

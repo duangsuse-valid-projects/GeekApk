@@ -94,9 +94,6 @@ class MainController {
      */
     const val programVersion = "0.1.0"
 
-    const val description = "description"
-    const val schema = "schema"
-
     /**
      * Server program description for text clients
      */
