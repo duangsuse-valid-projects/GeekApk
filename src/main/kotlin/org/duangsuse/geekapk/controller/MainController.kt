@@ -18,22 +18,36 @@ import java.lang.management.ManagementFactory
 import java.util.*
 import javax.servlet.http.HttpServletRequest
 
+/**
+ * Main (server-related information) controller logics
+ *
+ * @author duangsuse
+ * @version 1.0
+ * @since 1.0
+ */
 @Controller
 class MainController {
+  /**
+   * Generate something like `request_location/string`
+   *
+   * @param req Input request
+   * @receiver appended hierarchical part
+   * @return intern string like request-location/this
+   */
   fun String.href(req: HttpServletRequest) = "${req.scheme}://${req.localAddr}:${req.localPort}/$this".intern()
 
   /* This is API document(R */
   @GetMapping("/")
   @ResponseBody
-  /* must be */ fun apiHint(hsr: HttpServletRequest): Map<String, Map<String, String>> = mapOf(
+  /** must be fun */ fun apiHint(hsr: HttpServletRequest): Map<String, Map<String, String>> = mapOf(
     "server" to mapOf(
       description to "GeekApk server information related APIs",
       schema to "ALL INTERFACES REQUIRES NONE",
       "index() -> object<category,object<operation,linkTemplate>>" to "".href(hsr),
       "version() -> plain" to "serverVersion".href(hsr),
-      "desc() -> plain" to "serverDesc".href(hsr),
+      "desc() -> plain" to "serverDescription".href(hsr),
       "upTime() -> (string|number):datetime" to "serverBoot".href(hsr),
-      "detailedInfo() -> object:<prop,desc>" to "detail".href(hsr)
+      "detailedInfo() -> object:<prop,desc>" to "serverDetail".href(hsr)
     ),
 
     "admin" to mapOf(
@@ -124,7 +138,7 @@ class MainController {
   @ResponseBody /* body not concerned by Spring */
   fun errorJson(): Map<String, String> = mapOf("message" to "(^_^)")
 
-  @GetMapping("detail")
+  @GetMapping("serverDetail")
   @ResponseBody
   fun serverDetail(): Map<String, String> = serverDetail
 
@@ -132,15 +146,20 @@ class MainController {
   @ResponseBody
   fun serverVersion(): String = programVersion
 
-  @GetMapping("serverDesc")
+  @GetMapping("serverDescription")
   @ResponseBody
-  fun serverDesc(): String = serverDesc
+  fun serverDescription(): String = serverDescription
 
   @GetMapping("serverBoot")
   @ResponseBody
   fun serverUptime(): Date = bootUpAt()
 
   companion object {
+    /**
+     * Make server detail maps using JMX capabilities
+     *
+     * @return java collections map with K(property name) to V(value)
+     */
     private fun makeServerDetail(): Map<String, String> {
       val result = mutableMapOf<String, String>()
 
@@ -177,17 +196,29 @@ class MainController {
       return result
     }
 
+    /**
+     * Server program version
+     */
     const val programVersion = "0.1.0"
+
     const val description = "description"
     const val schema = "schema"
-    val serverDesc = """
+
+    /**
+     * Server program description for text clients
+     */
+    val serverDescription = """
       > Spring GeekApk Server by duangsuse, the dying Server for GeekApk.
       > Spring version: 2.1.2
       > Kotlin version: 1.2.7
+      > Built with love and ^_^ using IntelliJ IDEA
       """.trimMargin(">").intern()
 
+    /**
+     * Static server detail made during server boot-ups
+     */
     val serverDetail = makeServerDetail()
-    val bootUpAt = { Date() } /* must be call-by-need */
+    val bootUpAt = { Date() } /* must be call-by-need (why not `by` lazy?) */
   }
 }
 

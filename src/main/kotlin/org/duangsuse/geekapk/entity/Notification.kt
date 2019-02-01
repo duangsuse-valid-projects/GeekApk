@@ -9,21 +9,39 @@ import java.io.Serializable
 import java.util.*
 import javax.persistence.*
 
+/**
+ * GeekApk user private notification box
+ */
 @Appendage("user")
 @Entity
 data class Notification (
   @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
   val id: NotificationId = 0,
 
+  /**
+   * Notification owner
+   */
   @LinkTo("user", rel = Relation.BELONGING)
   val owner: UserId,
 
+  /**
+   * Notification type
+   */
   val type: Int = SYSTEM,
+  /**
+   * Paired data
+   */
   val data: Int = 0,
 
+  /**
+   * Created date timestamp
+   */
   @Temporal(TemporalType.TIMESTAMP)
   val createdAt: Date = Date(),
 
+  /**
+   * Mark as read
+   */
   var pass: Boolean = false
 ): Serializable {
   companion object {

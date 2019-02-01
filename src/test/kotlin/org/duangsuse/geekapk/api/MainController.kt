@@ -20,9 +20,9 @@ import javax.servlet.annotation.WebFilter
 * main controller(GET)
 *
 * object index: /
-* object serverDetail: /detail
+* object serverDetail: /serverDetail
 * plain serverVersion: /serverVersion
-* plain serverDesc: /serverDesc
+* plain serverDescription: /serverDescription
 * string.datetime serverBootUp: /serverBoot
 *
 * */
@@ -44,7 +44,7 @@ class MainController {
 
   @Test
   fun givesDetail() {
-    mock.perform(get("/detail")
+    mock.perform(get("/serverDetail")
       .contentType(MediaType.APPLICATION_JSON))
       .andExpect(status().isOk)
       .andExpect(jsonPath("$.encoding").isString)
@@ -62,8 +62,8 @@ class MainController {
   }
 
   @Test
-  fun givesDesc() {
-    mock.perform(get("/serverDesc")
+  fun givesDescription() {
+    mock.perform(get("/serverDescription")
       .contentType(MediaType.APPLICATION_JSON))
       .andExpect(status().isOk)
       .andExpect { c -> c.response.contentAsString.isNotEmpty() }

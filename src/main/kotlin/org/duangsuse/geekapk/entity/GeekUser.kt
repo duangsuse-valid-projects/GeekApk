@@ -13,54 +13,118 @@ import javax.persistence.*
 import javax.validation.constraints.Size
 import kotlin.math.roundToInt
 
+/**
+ * GeekApk users
+ */
 @StandaloneEntity("user")
 @Table(name = "users")
 @Entity
 data class GeekUser (
   @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
   val id: UserId = 0,
+
+  /**
+   * Transient version log
+   */
   @Version var version: Long = 0,
 
+  /**
+   * User's identical machine name (but not in GeekApk 1.x)
+   */
   @Size(message = "username must be greater than 1 char and smaller than 21 char count", min = 2, max = 20)
   @Nls var username: String = "(generated)",
+
+  /**
+   * User's display name
+   */
   @Size(message = "nickname too long (~ ..90)", min = 0, max = 90) /* in case for unicode composition */
   @Nls var nickname: String = "Geek",
 
+  /**
+   * User's avatar bitmap image link
+   */
   @Size(message = "avatar url too large (~ ..600)", min = 0, max = 600)
   var avatarUrl: String = "",
 
+  /**
+   * User's meta application ID, may null
+   */
   @LinkTo("app", Relation.HAS_ONE)
   var metaApp: AppId? = null,
 
+  /**
+   * User's markdown bio text
+   */
   @Size(message = "bio too long (~ ..6k)", min = 0, max = 6000)
   @Markdown @Nls var bio: String = "_No bio provided QAQ_",
 
+  /**
+   * User status flags
+   */
   var flags: Int = FLAG_NONE,
 
+  /**
+   * "Distributed" Password
+   */
   @UserPrivate
   @JsonIgnore
   var sharedHash: String = makeSharedHash(20), /* static server-computed size */
 
+  /**
+   * Password for the user
+   */
   @UserPrivate /* should be set to another value in controller level */
   @JsonIgnore
   @Size(min = 256 / 4, max = 256 / 4) /* SHA-256 hex representation hash */
   var hash: String = "68e656b251e67e8358bef8483ab0d51c6619f3e7a1a9f0e75838d41ff368f728",
 
+  /**
+   * User's registration date
+   */
   @Temporal(TemporalType.TIMESTAMP)
   val createdAt: Date = Date(),
 
   /* Weak field */
+  /**
+   * Followers number
+   */
   @CounterFor("user")
   var followersCount: Int = 0
 ): Serializable {
   companion object {
+    /**
+     * Admin token (doge token)
+     */
     val KEY: String = System.getProperty("geekapk.key", "dolphins")
+    /**
+     * Internal bot user ID used to send system messages
+     */
     val BOT_UID: UserId = System.getProperty("geekapk.bot", "0").toInt()
-    val BOT_OVERRIDE: AppId? = System.getProperty("geekapk.botMessageAppOverride").toLongOrNull()
+    /**
+     * By default, GeekApk send all system broadcasts to admin user's meta app (if none, the feature will be disabled)
+     * set this to -1 to disable sending
+     */
+    val BOT_OVERRIDE: AppId? = System.getProperty("geekapk.botMessageAppOverride", "").toLongOrNull()
 
-    const val FLAG_NONE = 0b0
-    const val FLAG_READONLY = 0b1
+    /**
+     * Dummy flag implies "no-login" user
+     */
+    const val FLAG_NOBODY = -0b1
+    /**
+     * Banned user
+     */
     const val FLAG_BANNED = 0b10
+    /**
+     * "Muted" users
+     */
+    const val FLAG_READONLY = 0b1
+    /**
+     * Basic user permissions
+     */
+    const val FLAG_NONE = 0b0
+    /**
+     * Administors
+     */
     const val FLAG_ADMIN = 0b11
 
     @Suppress("SpellCheckingInspection")
@@ -87,6 +151,9 @@ data class GeekUser (
 
     private val makeNewShared64CharKey = { makeSharedHash(64) }
 
+    /**
+     * Function to make a new user
+     */
     private fun makeUserProto(hash: () -> String = makeNewShared64CharKey) = fun (name: String): GeekUser {
       return GeekUser(username = name, hash = hash())
     }

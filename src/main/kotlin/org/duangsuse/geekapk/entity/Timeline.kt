@@ -9,18 +9,33 @@ import java.io.Serializable
 import java.util.*
 import javax.persistence.*
 
+/**
+ * A user's public timeline
+ */
 @Appendage("user")
 @Entity
 data class Timeline (
   @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
   val id: TimelineId = 0,
 
+  /**
+   * Published user
+   */
   @LinkTo("user", rel = Relation.BELONGING)
   val owner: UserId,
 
+  /**
+   * Timeline type
+   */
   val type: Int = JUST_FORWARD_WIDEN_CID,
+  /**
+   * Associated data
+   */
   val data: Int = 0,
 
+  /**
+   * Created time
+   */
   @Temporal(TemporalType.TIMESTAMP)
   val createdAt: Date = Date()
 ): Serializable {

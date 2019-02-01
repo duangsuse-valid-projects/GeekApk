@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.CrudRepository
 
 interface AppUpdateRepository : CrudRepository<AppUpdate, AppUpdateId> {
-  @Query("SELECT x FROM #{#name} x WHERE x.forApp = ?1")
+  @Query("SELECT x FROM #{#entityName} x WHERE x.forApp = ?1")
   fun allForApp(appId: AppId): MutableList<AppUpdate>
 }
