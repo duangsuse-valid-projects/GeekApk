@@ -6,12 +6,13 @@ import org.duangsuse.geekapk.annotation.JustRelation
 import org.duangsuse.geekapk.annotation.LinkTo
 import org.duangsuse.geekapk.annotation.Relation
 import java.io.Serializable
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
+import javax.persistence.*
 
+/**
+ * Follow relation between user and user
+ */
 @JustRelation("user", "user", rel = "user >`following` ~ `followed`< user")
+@Table(name = "rel_user_user_follow")
 @Entity
 data class RelationUserUserFollow (
   @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

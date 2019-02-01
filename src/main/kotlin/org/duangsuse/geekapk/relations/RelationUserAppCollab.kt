@@ -7,13 +7,14 @@ import org.duangsuse.geekapk.annotation.JustRelation
 import org.duangsuse.geekapk.annotation.LinkTo
 import org.duangsuse.geekapk.annotation.Relation
 import java.io.Serializable
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
+import javax.persistence.*
 
+/**
+ * Collaborator relation between user and app
+ */
 @JustRelation("user", "app", rel = "user >`collaborate to` ~ `has collaborator`< app")
 @Entity
+@Table(name = "rel_user_app_collab")
 data class RelationUserAppCollab (
   @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
   val id: CollabRelId = 0,
