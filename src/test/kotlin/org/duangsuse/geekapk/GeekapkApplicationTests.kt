@@ -1,8 +1,8 @@
 package org.duangsuse.geekapk
 
 import org.duangsuse.geekapk.entity.GeekUser
-import org.duangsuse.geekapk.helpers.loopFor
-import org.duangsuse.geekapk.helpers.times
+import org.duangsuse.geekapk.helper.loopFor
+import org.duangsuse.geekapk.helper.times
 import org.hamcrest.number.IsCloseTo
 import org.junit.Assert
 import org.junit.Test

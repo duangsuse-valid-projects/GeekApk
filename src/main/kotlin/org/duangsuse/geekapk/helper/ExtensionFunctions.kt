@@ -1,4 +1,4 @@
-package org.duangsuse.geekapk.helpers
+package org.duangsuse.geekapk.helper
 
 /**
  * Let a block be repeated for n times

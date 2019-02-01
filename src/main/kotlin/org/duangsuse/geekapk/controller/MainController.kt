@@ -1,19 +1,11 @@
 package org.duangsuse.geekapk.controller
 
 import org.springframework.boot.SpringBootVersion
-import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpStatus
-import org.springframework.http.converter.HttpMessageConverter
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.bind.annotation.ResponseStatus
-import org.springframework.web.servlet.config.annotation.CorsRegistry
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 import java.lang.management.ManagementFactory
 import java.util.*
 import javax.servlet.http.HttpServletRequest
@@ -219,34 +211,5 @@ class MainController {
      */
     val serverDetail = makeServerDetail()
     val bootUpAt = { Date() } /* must be call-by-need (why not `by` lazy?) */
-  }
-}
-
-/* makes no difference on my machine... */
-@Configuration("cors")
-class CorsConfiguration : WebMvcConfigurer {
-  override fun addCorsMappings(registry: CorsRegistry) {
-    registry.addMapping("/**")
-      .allowedOrigins("*")
-      .allowedMethods("GET", "POST", "DELETE", "PUT")
-      .maxAge(3600)
-  }
-}
-
-@Configuration /* not efficient, don't enable this in production environment */
-class MainJsonPrettyPrintConfiguration : WebMvcConfigurationSupport() {
-  override fun extendMessageConverters(converters: MutableList<HttpMessageConverter<*>>) {
-    for (converter in converters)
-      if (converter is MappingJackson2HttpMessageConverter)
-        (converter as? MappingJackson2HttpMessageConverter)?.run { setPrettyPrint(true) }
-  }
-}
-
-@Bean
-fun corsConfigurer(): WebMvcConfigurer {
-  return object : WebMvcConfigurerAdapter() {
-    override fun addCorsMappings(registry: CorsRegistry) {
-      registry.addMapping("/**").allowedOrigins("*")
-    }
   }
 }

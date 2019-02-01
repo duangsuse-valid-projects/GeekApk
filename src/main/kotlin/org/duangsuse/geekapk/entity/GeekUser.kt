@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import org.duangsuse.geekapk.AppId
 import org.duangsuse.geekapk.UserId
 import org.duangsuse.geekapk.annotation.*
-import org.duangsuse.geekapk.helpers.loopFor
-import org.duangsuse.geekapk.helpers.times
+import org.duangsuse.geekapk.helper.loopFor
+import org.duangsuse.geekapk.helper.times
 import org.jetbrains.annotations.Nls
 import java.io.Serializable
 import java.util.*

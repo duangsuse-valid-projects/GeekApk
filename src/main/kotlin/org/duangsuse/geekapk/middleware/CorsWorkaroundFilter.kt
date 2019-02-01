@@ -1,4 +1,4 @@
-package org.duangsuse.geekapk.middlewares
+package org.duangsuse.geekapk.middleware
 
 import org.springframework.web.filter.OncePerRequestFilter
 import java.io.IOException

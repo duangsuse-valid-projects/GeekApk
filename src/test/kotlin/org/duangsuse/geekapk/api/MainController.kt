@@ -1,7 +1,7 @@
 package org.duangsuse.geekapk.api
 
 import org.duangsuse.geekapk.controller.MainController
-import org.duangsuse.geekapk.middlewares.CorsFilter
+import org.duangsuse.geekapk.middleware.CorsFilter
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
