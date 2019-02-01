@@ -81,11 +81,21 @@ class MainController {
     ),
 
     "timeline" to mapOf(
-      description to "GeekApk user timeline functions"
+      description to "GeekApk user timeline functions",
+      schema to "ALL INTERFACES REQUIRES NONE",
+      "readUserTimeline(uid,type,sliceFrom?,sliceTo?) -> array:timeline" to "timeline/{uid}",
+      "readAllTimeline(type,sliceFrom?,sliceTo?) -> array:timeline" to "timeline/all",
+      "bulkReadUserTimeline(uids,type,sliceFrom?,sliceTo?) -> array:timeline" to "timeline/bulk/{uids}"
     ),
+
     "notification" to mapOf(
-      description to "GeekApk user private notification APIs"
+      description to "GeekApk user private notification APIs",
+      schema to "ALL INTERFACES REQUIRES Cookie(gaHash, gaUser) BE `valid login`",
+      "readMineNotifications() -> array:notification" to "notification/active",
+      "readAllMineNotifications(sliceFrom?,sliceTo?) -> array:notification" to "notification/all",
+      "markNotifications(start,end?,stat{r,u}) -> number" to "notification/mark"
     ),
+
     "app" to mapOf(
       description to "GeekApk Android application metadata APIs"
     ),
