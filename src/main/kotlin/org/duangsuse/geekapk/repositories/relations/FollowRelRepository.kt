@@ -10,5 +10,5 @@ interface FollowRelRepository : CrudRepository<RelationUserUserFollow, FollowRel
   @Query("SELECT x.follower FROM #{#entityName} x WHERE x.followee = ?1")
   fun allFollowers(uid: UserId): MutableList<UserId>
   @Query("SELECT x.followee FROM #{#entityName} x WHERE x.follower = ?1")
-  fun allFollowed(uid: UserId): MutableList<UserId>
+  fun allFollowing(uid: UserId): MutableList<UserId>
 }

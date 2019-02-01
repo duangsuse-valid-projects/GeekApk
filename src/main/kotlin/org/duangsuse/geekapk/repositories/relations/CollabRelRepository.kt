@@ -9,7 +9,7 @@ import org.springframework.data.repository.CrudRepository
 
 interface CollabRelRepository : CrudRepository<RelationUserAppCollab, CollabRelId> {
   @Query("SELECT x.app FROM #{#entityName} x WHERE x.collaborator = ?1")
-  fun allHasCollab(collabUid: UserId): MutableList<AppId>
+  fun allHasCollaborator(uid: UserId): MutableList<AppId>
   @Query("SELECT x.collaborator FROM #{#entityName} x WHERE x.app = ?1")
-  fun allCollabUsers(appId: AppId): MutableList<UserId>
+  fun allCollaboratedUsers(aid: AppId): MutableList<UserId>
 }
