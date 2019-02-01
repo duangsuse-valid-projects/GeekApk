@@ -5,6 +5,7 @@ import org.duangsuse.geekapk.CommentId
 import org.duangsuse.geekapk.UserId
 import org.duangsuse.geekapk.annotations.*
 import org.jetbrains.annotations.Nls
+import java.io.Serializable
 import java.util.*
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
@@ -34,4 +35,4 @@ data class Comment (
   /* Weak field */
   @CounterFor("comment")
   var repliesCount: Long = 0
-)
+): Serializable

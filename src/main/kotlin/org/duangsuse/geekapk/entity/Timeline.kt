@@ -5,6 +5,7 @@ import org.duangsuse.geekapk.UserId
 import org.duangsuse.geekapk.annotations.Appendage
 import org.duangsuse.geekapk.annotations.LinkTo
 import org.duangsuse.geekapk.annotations.Relation
+import java.io.Serializable
 import java.util.*
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
@@ -24,7 +25,7 @@ data class Timeline (
   val data: Int = 0,
 
   val createdAt: Date = Date()
-) {
+): Serializable {
   companion object {
     const val NEW_FOLLOW = 0
     const val NEW_APP = 1

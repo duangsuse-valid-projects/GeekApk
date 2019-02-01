@@ -17,7 +17,7 @@ class BaseDataTests {
   @Autowired lateinit var categories: CategoryRepository
   @Autowired lateinit var comments: CommentRepository
   @Autowired lateinit var notifications: NotificationRepository
-  @Autowired lateinit var timelines: TimelineRepository
+  @Autowired lateinit var timeline: TimelineRepository
   @Autowired lateinit var users: UserRepository
 
   @Test

@@ -6,6 +6,7 @@ import org.duangsuse.geekapk.UserId
 import org.duangsuse.geekapk.annotations.*
 import org.jetbrains.annotations.Nls
 import org.jetbrains.annotations.NonNls
+import java.io.Serializable
 import java.util.*
 import javax.persistence.*
 import javax.validation.constraints.Size
@@ -47,4 +48,4 @@ data class App (
   var starsCount: Int = 0,
   @CounterFor("comment")
   var commentsCount: Int = 0
-)
+): Serializable

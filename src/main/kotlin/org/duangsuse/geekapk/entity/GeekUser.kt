@@ -6,6 +6,7 @@ import org.duangsuse.geekapk.annotations.*
 import org.duangsuse.geekapk.helpers.loopFor
 import org.duangsuse.geekapk.helpers.times
 import org.jetbrains.annotations.Nls
+import java.io.Serializable
 import java.util.*
 import javax.persistence.*
 import javax.validation.constraints.Size
@@ -46,7 +47,7 @@ data class GeekUser (
   /* Weak field */
   @CounterFor("user")
   var followersCount: Int = 0
-) {
+): Serializable {
   companion object {
     val KEY: String = System.getProperty("geekapk.key", "dolphins")
     val BOT_UID: UserId = System.getProperty("geekapk.bot", "0").toInt()

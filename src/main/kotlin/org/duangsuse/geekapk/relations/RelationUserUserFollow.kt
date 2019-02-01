@@ -5,6 +5,7 @@ import org.duangsuse.geekapk.UserId
 import org.duangsuse.geekapk.annotations.JustRelation
 import org.duangsuse.geekapk.annotations.LinkTo
 import org.duangsuse.geekapk.annotations.Relation
+import java.io.Serializable
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
@@ -20,4 +21,4 @@ data class RelationUserUserFollow (
   val follower: UserId,
   @LinkTo("user", Relation.EQUIVALENT)
   val followee: UserId
-)
+): Serializable

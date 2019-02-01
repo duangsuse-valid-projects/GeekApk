@@ -7,6 +7,7 @@ import org.duangsuse.geekapk.annotations.LinkTo
 import org.duangsuse.geekapk.annotations.Markdown
 import org.duangsuse.geekapk.annotations.Relation
 import org.jetbrains.annotations.Nls
+import java.io.Serializable
 import java.util.*
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
@@ -36,4 +37,4 @@ data class AppUpdate (
   var installLink: String = "no-source:to-be-filled",
 
   val createdAt: Date = Date()
-)
+): Serializable

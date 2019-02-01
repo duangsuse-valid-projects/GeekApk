@@ -5,6 +5,7 @@ import org.duangsuse.geekapk.UserId
 import org.duangsuse.geekapk.annotations.Appendage
 import org.duangsuse.geekapk.annotations.LinkTo
 import org.duangsuse.geekapk.annotations.Relation
+import java.io.Serializable
 import java.util.*
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
@@ -26,7 +27,7 @@ data class Notification (
   val createdAt: Date = Date(),
 
   var pass: Boolean = false
-) {
+): Serializable {
   companion object {
     const val NEW_REPLY = 0
     const val REPLY_DELETED = 1
