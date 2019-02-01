@@ -60,19 +60,19 @@ data class App (
    * Markdown readme text
    */
   @Size(message = "expected readme text size to be in (0, 32768)", min = 0, max = 32768)
-  @Markdown @Nls var readme: String = "",
+  @Markdown @Lob @Nls var readme: String = "",
 
   /**
    * Application icon
    */
   @Size(message = "~ ..500", min = 0, max = 500)
-  @NonNls var icon: String = "",
+  @NonNls @Lob var icon: String = "",
 
   /**
    * Application screenshot URLs text may containing AppType (type=typeName) and other attributes which are not searchable
    */
   @Size(message = "~ ..1000", min = 0, max = 1000)
-  @NonNls var screenshots: String = "(hasShots=false)(reasonText=:()",
+  @NonNls @Lob var screenshots: String = "(hasShots=false)(reasonText=:()",
 
   /**
    * Creation date

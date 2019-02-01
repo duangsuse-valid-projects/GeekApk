@@ -49,7 +49,7 @@ data class AppUpdate (
    * Updates description document
    */
   @Size(message = "update log too large or short (~ 0..32768)", min = 0, max = 1024 * 16 * 2)
-  @Markdown @Nls var updates: String = "(none)",
+  @Markdown @Lob @Nls var updates: String = "(none)",
 
   /**
    * Minimal Android Runtime version required to parse the package
@@ -60,7 +60,7 @@ data class AppUpdate (
    * GeekLink to perform install operation
    */
   @Size(message = "install url length should be in [0, 32768)", min = 1, max = 1024 * 16 * 2)
-  var installLink: String = "no-source:to-be-filled",
+  @Lob var installLink: String = "no-source:to-be-filled",
 
   /**
    * Creation time for this update

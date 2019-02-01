@@ -41,7 +41,7 @@ data class Comment (
    * It's content markdown text
    */
   @Size(message = "comment too long (at most 6k characters)", min = 0, max = 6000)
-  @Markdown @Nls var content: String = "",
+  @Markdown @Lob @Nls var content: String = "",
 
   /**
    * Created at timestamp

@@ -44,7 +44,7 @@ data class GeekUser (
    * User's avatar bitmap image link
    */
   @Size(message = "avatar url too large (~ ..600)", min = 0, max = 600)
-  var avatarUrl: String = "",
+  @Lob var avatarUrl: String = "",
 
   /**
    * User's meta application ID, may null
@@ -56,7 +56,7 @@ data class GeekUser (
    * User's markdown bio text
    */
   @Size(message = "bio too long (~ ..6k)", min = 0, max = 6000)
-  @Markdown @Nls var bio: String = "_No bio provided QAQ_",
+  @Markdown @Lob @Nls var bio: String = "_No bio provided QAQ_",
 
   /**
    * User status flags
