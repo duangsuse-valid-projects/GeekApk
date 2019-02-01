@@ -123,7 +123,7 @@ data class GeekUser (
      */
     const val FLAG_NONE = 0b0
     /**
-     * Administors
+     * Administers
      */
     const val FLAG_ADMIN = 0b11
 

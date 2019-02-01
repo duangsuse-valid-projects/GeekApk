@@ -11,7 +11,7 @@ import java.util.*
 import javax.servlet.http.HttpServletRequest
 
 /**
- * Main (server-related information) controller logics
+ * Main (server-related information) controller logic
  *
  * @author duangsuse
  * @version 1.0
