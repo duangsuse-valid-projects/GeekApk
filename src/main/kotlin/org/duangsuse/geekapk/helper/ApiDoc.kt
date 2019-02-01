@@ -25,6 +25,9 @@ object ApiDoc {
   val server = fun (hsr: HttpServletRequest) = "server" to mapOf(
     description to "GeekApk server information related APIs",
     schema to "ALL INTERFACES REQUIRES NONE",
+    "serverSpec" to "JsonRpc",
+    "projectIndex" to "https://github.com/duangsuse/GeekApk",
+    "apiVersion" to "v1.0",
     "index() -> object<category,object<operation,linkTemplate>>" to "".href(hsr),
     "version() -> plain" to "serverVersion".href(hsr),
     "desc() -> plain" to "serverDescription".href(hsr),
@@ -37,18 +40,18 @@ object ApiDoc {
     /* `admin flag` in GeekApk JUST a flag, modTok is required for non-deleteApp,transAppCategory,deleteComment operations */
     schema to "ALL INTERFACES BUT (deleteApp,transferAppCategory,deleteComment,flagUser)#a REQUIRES Cookie(gaModTok) BE " +
       "`geekapk admin token` AND (Cookie(gaUser), Cookie(gaHash) BE `valid login`)#b; #a REQUIRES REWRITE #b `valid superuser login`",
-    "POST@createUser(username) -> object:user" to "makeUser".href(hsr),
-    "PUT@resetSharedHash(uid,shash?) -> plain" to "resetMetaHash/{uid}".href(hsr),
-    "DELETE@deleteUser(uid) -> object:user" to "dropUser/{uid}".href(hsr),
-    "PUT@flagUser(uid,flag) -> object:user" to "flagUser/{uid}".href(hsr),
-    "POST@createCategory(name) -> object:category" to "makeCategory".href(hsr),
-    "PUT@renameCategory(id,name) -> object:category" to "nameCategory/{id}".href(hsr),
-    "DELETE@deleteCategory(id) -> object:category" to "dropCategory/{id}".href(hsr),
-    "DELETE@deleteApp(aid) -> object:app" to "dropApp/{aid}".href(hsr),
-    "PUT@transferAppCategory(aid,cid) -> object:[aid,old,new]" to "moveApp/{aid}".href(hsr),
-    "PUT@transferAppOwner(aid,uid) -> object:[aid,old,new]" to "transferApp/{aid}".href(hsr),
-    "DELETE@deleteAppUpdate(aid,rev) -> object:appUpdate" to "dropAppUpdate/{aid}/{rev}".href(hsr),
-    "DELETE@deleteComment(cid) -> object:[comment,deletedSubCommentsCount]" to "dropComment/{cid}".href(hsr)
+    "POST@createUser(username) -> object:user" to "admin/makeUser".href(hsr),
+    "PUT@resetSharedHash(uid,shash?) -> plain" to "admin/resetMetaHash/{uid}".href(hsr),
+    "DELETE@deleteUser(uid) -> object:user" to "admin/dropUser/{uid}".href(hsr),
+    "PUT@flagUser(uid,flag) -> object:user" to "admin/flagUser/{uid}".href(hsr),
+    "POST@createCategory(name) -> object:category" to "admin/makeCategory".href(hsr),
+    "PUT@renameCategory(id,name) -> object:category" to "admin/nameCategory/{id}".href(hsr),
+    "DELETE@deleteCategory(id) -> object:category" to "admin/dropCategory/{id}".href(hsr),
+    "DELETE@deleteApp(aid) -> object:app" to "admin/dropApp/{aid}".href(hsr),
+    "PUT@transferAppCategory(aid,cid) -> object:[aid,old,new]" to "admin/moveApp/{aid}".href(hsr),
+    "PUT@transferAppOwner(aid,uid) -> object:[aid,old,new]" to "admin/transferApp/{aid}".href(hsr),
+    "DELETE@deleteAppUpdate(aid,rev) -> object:appUpdate" to "admin/dropAppUpdate/{aid}/{rev}".href(hsr),
+    "DELETE@deleteComment(cid) -> object:[comment,deletedSubCommentsCount]" to "admin/dropComment/{cid}".href(hsr)
   )
 
   val category = fun (hsr: HttpServletRequest) = "category" to mapOf( /* trivially */
