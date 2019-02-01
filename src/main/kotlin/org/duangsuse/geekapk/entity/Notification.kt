@@ -2,15 +2,12 @@ package org.duangsuse.geekapk.entity
 
 import org.duangsuse.geekapk.NotificationId
 import org.duangsuse.geekapk.UserId
-import org.duangsuse.geekapk.annotations.Appendage
-import org.duangsuse.geekapk.annotations.LinkTo
-import org.duangsuse.geekapk.annotations.Relation
+import org.duangsuse.geekapk.annotation.Appendage
+import org.duangsuse.geekapk.annotation.LinkTo
+import org.duangsuse.geekapk.annotation.Relation
 import java.io.Serializable
 import java.util.*
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
+import javax.persistence.*
 
 @Appendage("user")
 @Entity
@@ -24,6 +21,7 @@ data class Notification (
   val type: Int = SYSTEM,
   val data: Int = 0,
 
+  @Temporal(TemporalType.TIMESTAMP)
   val createdAt: Date = Date(),
 
   var pass: Boolean = false

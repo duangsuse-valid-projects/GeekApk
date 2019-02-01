@@ -8,8 +8,8 @@ import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.CrudRepository
 
 interface StarRelRepository : CrudRepository<RelationUserAppStar, StarRelId> {
-  @Query("SELECT x.starred FROM #{#entityName} x WHERE x.starer = ?1")
+  @Query("SELECT x.starred FROM #{#name} x WHERE x.starer = ?1")
   fun allUserStars(uid: UserId): MutableList<AppId>
-  @Query("SELECT x.starer FROM #{#entityName} x WHERE x.starred = ?1")
+  @Query("SELECT x.starer FROM #{#name} x WHERE x.starred = ?1")
   fun allStaredUsers(appId: AppId): MutableList<UserId>
 }

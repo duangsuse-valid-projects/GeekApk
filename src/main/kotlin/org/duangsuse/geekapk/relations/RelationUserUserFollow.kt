@@ -2,9 +2,9 @@ package org.duangsuse.geekapk.relations
 
 import org.duangsuse.geekapk.FollowRelId
 import org.duangsuse.geekapk.UserId
-import org.duangsuse.geekapk.annotations.JustRelation
-import org.duangsuse.geekapk.annotations.LinkTo
-import org.duangsuse.geekapk.annotations.Relation
+import org.duangsuse.geekapk.annotation.JustRelation
+import org.duangsuse.geekapk.annotation.LinkTo
+import org.duangsuse.geekapk.annotation.Relation
 import java.io.Serializable
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue

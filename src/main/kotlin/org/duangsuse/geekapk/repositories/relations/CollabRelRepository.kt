@@ -8,8 +8,8 @@ import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.CrudRepository
 
 interface CollabRelRepository : CrudRepository<RelationUserAppCollab, CollabRelId> {
-  @Query("SELECT x.app FROM #{#entityName} x WHERE x.collaborator = ?1")
+  @Query("SELECT x.app FROM #{#name} x WHERE x.collaborator = ?1")
   fun allHasCollab(collabUid: UserId): MutableList<AppId>
-  @Query("SELECT x.collaborator FROM #{#entityName} x WHERE x.app = ?1")
+  @Query("SELECT x.collaborator FROM #{#name} x WHERE x.app = ?1")
   fun allCollabUsers(appId: AppId): MutableList<UserId>
 }

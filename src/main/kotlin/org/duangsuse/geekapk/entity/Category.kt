@@ -1,7 +1,7 @@
 package org.duangsuse.geekapk.entity
 
 import org.duangsuse.geekapk.CategoryId
-import org.duangsuse.geekapk.annotations.StandaloneEntity
+import org.duangsuse.geekapk.annotation.StandaloneEntity
 import org.jetbrains.annotations.Nls
 import java.io.Serializable
 import javax.persistence.*
@@ -11,7 +11,7 @@ import javax.validation.constraints.Size
 @Entity
 data class Category (
   @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-  val tid: CategoryId = 0,
+  val id: CategoryId = 0,
 
   @Version var version: Long = 0,
 

@@ -1,8 +1,9 @@
 package org.duangsuse.geekapk.entity
 
+import com.fasterxml.jackson.annotation.JsonIgnore
 import org.duangsuse.geekapk.AppId
 import org.duangsuse.geekapk.UserId
-import org.duangsuse.geekapk.annotations.*
+import org.duangsuse.geekapk.annotation.*
 import org.duangsuse.geekapk.helpers.loopFor
 import org.duangsuse.geekapk.helpers.times
 import org.jetbrains.annotations.Nls
@@ -17,7 +18,7 @@ import kotlin.math.roundToInt
 @Entity
 data class GeekUser (
   @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-  val uid: UserId = 0,
+  val id: UserId = 0,
   @Version var version: Long = 0,
 
   @Size(message = "username must be greater than 1 char and smaller than 21 char count", min = 2, max = 20)
@@ -37,11 +38,15 @@ data class GeekUser (
   var flags: Int = FLAG_NONE,
 
   @UserPrivate
+  @JsonIgnore
   var sharedHash: String = makeSharedHash(20), /* static server-computed size */
+
   @UserPrivate /* should be set to another value in controller level */
+  @JsonIgnore
   @Size(min = 256 / 4, max = 256 / 4) /* SHA-256 hex representation hash */
   var hash: String = "68e656b251e67e8358bef8483ab0d51c6619f3e7a1a9f0e75838d41ff368f728",
 
+  @Temporal(TemporalType.TIMESTAMP)
   val createdAt: Date = Date(),
 
   /* Weak field */
@@ -57,8 +62,14 @@ data class GeekUser (
     const val FLAG_READONLY = 0b1
     const val FLAG_BANNED = 0b10
     const val FLAG_ADMIN = 0b11
+
     @Suppress("SpellCheckingInspection")
-    private val SHARED_HASH_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_".toCharArray()
+    private const val A_TO_Z = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    @Suppress("SpellCheckingInspection")
+    private const val LOWERCASE_A_TO_Z = "abcdefghijklmnopqrstuvwxyz"
+    private const val DIGITS = "0123456789"
+    @Suppress("SpellCheckingInspection")
+    private val SHARED_HASH_CHARS = "$A_TO_Z$LOWERCASE_A_TO_Z${DIGITS}_".toCharArray()
 
     /** Generate random [A-Za-z0-9] strings */
     @JvmStatic

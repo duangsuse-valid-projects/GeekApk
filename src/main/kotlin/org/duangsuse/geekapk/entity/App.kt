@@ -3,7 +3,7 @@ package org.duangsuse.geekapk.entity
 import org.duangsuse.geekapk.AppId
 import org.duangsuse.geekapk.CategoryId
 import org.duangsuse.geekapk.UserId
-import org.duangsuse.geekapk.annotations.*
+import org.duangsuse.geekapk.annotation.*
 import org.jetbrains.annotations.Nls
 import org.jetbrains.annotations.NonNls
 import java.io.Serializable
@@ -15,7 +15,7 @@ import javax.validation.constraints.Size
 @StandaloneEntity("app")
 data class App (
   @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-  val aid: AppId = 0,
+  val id: AppId = 0,
 
   @Version var version: Long = 0,
 
@@ -38,7 +38,9 @@ data class App (
   @Size(message = "~ ..1000", min = 0, max = 1000)
   @NonNls var screenshots: String = "",
 
+  @Temporal(TemporalType.TIMESTAMP)
   val createdAt: Date = Date(),
+  @Temporal(TemporalType.TIMESTAMP)
   var updatedAt: Date = Date(),
 
   /* Weak fields */

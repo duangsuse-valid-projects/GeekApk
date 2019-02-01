@@ -2,17 +2,14 @@ package org.duangsuse.geekapk.entity
 
 import org.duangsuse.geekapk.AppId
 import org.duangsuse.geekapk.AppUpdateId
-import org.duangsuse.geekapk.annotations.Appendage
-import org.duangsuse.geekapk.annotations.LinkTo
-import org.duangsuse.geekapk.annotations.Markdown
-import org.duangsuse.geekapk.annotations.Relation
+import org.duangsuse.geekapk.annotation.Appendage
+import org.duangsuse.geekapk.annotation.LinkTo
+import org.duangsuse.geekapk.annotation.Markdown
+import org.duangsuse.geekapk.annotation.Relation
 import org.jetbrains.annotations.Nls
 import java.io.Serializable
 import java.util.*
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
+import javax.persistence.*
 import javax.validation.constraints.Size
 
 @Appendage("app")
@@ -36,5 +33,6 @@ data class AppUpdate (
   @Size(message = "install url length should be in [0, 32768)", min = 1, max = 1024 * 16 * 2)
   var installLink: String = "no-source:to-be-filled",
 
+  @Temporal(TemporalType.TIMESTAMP)
   val createdAt: Date = Date()
 ): Serializable

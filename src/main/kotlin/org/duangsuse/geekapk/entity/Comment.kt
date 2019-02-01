@@ -3,21 +3,18 @@ package org.duangsuse.geekapk.entity
 import org.duangsuse.geekapk.AppId
 import org.duangsuse.geekapk.CommentId
 import org.duangsuse.geekapk.UserId
-import org.duangsuse.geekapk.annotations.*
+import org.duangsuse.geekapk.annotation.*
 import org.jetbrains.annotations.Nls
 import java.io.Serializable
 import java.util.*
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.GenerationType
-import javax.persistence.Id
+import javax.persistence.*
 import javax.validation.constraints.Size
 
 @StandaloneEntity("comment")
 @Entity
 data class Comment (
   @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-  val cid: CommentId = 1,
+  val id: CommentId = 1,
 
   @LinkTo("user", rel = Relation.BELONGING)
   val author: UserId,
@@ -29,7 +26,9 @@ data class Comment (
   @Size(message = "comment too long (at most 6k characters)", min = 0, max = 6000)
   @Markdown @Nls var content: String = "",
 
+  @Temporal(TemporalType.TIMESTAMP)
   val createdAt: Date = Date(),
+  @Temporal(TemporalType.TIMESTAMP)
   var updatedAt: Date = Date(),
 
   /* Weak field */
