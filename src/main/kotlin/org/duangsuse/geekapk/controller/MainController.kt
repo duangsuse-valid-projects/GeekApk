@@ -1,5 +1,6 @@
 package org.duangsuse.geekapk.controller
 
+import org.duangsuse.geekapk.helper.ApiDoc
 import org.springframework.boot.SpringBootVersion
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Controller
@@ -19,120 +20,10 @@ import javax.servlet.http.HttpServletRequest
  */
 @Controller
 class MainController {
-  /**
-   * Generate something like `request_location/string`
-   *
-   * @param req Input request
-   * @receiver appended hierarchical part
-   * @return intern string like request-location/this
-   */
-  fun String.href(req: HttpServletRequest) = "${req.scheme}://${req.localAddr}:${req.localPort}/$this".intern()
-
   /* This is API document(R */
   @GetMapping("/")
   @ResponseBody
-  /** must be fun */ fun apiHint(hsr: HttpServletRequest): Map<String, Map<String, String>> = mapOf(
-    "server" to mapOf(
-      description to "GeekApk server information related APIs",
-      schema to "ALL INTERFACES REQUIRES NONE",
-      "index() -> object<category,object<operation,linkTemplate>>" to "".href(hsr),
-      "version() -> plain" to "serverVersion".href(hsr),
-      "desc() -> plain" to "serverDescription".href(hsr),
-      "upTime() -> (string|number):datetime" to "serverBoot".href(hsr),
-      "detailedInfo() -> object:<prop,desc>" to "serverDetail".href(hsr)
-    ),
-
-    "admin" to mapOf(
-      description to "GeekApk community administration functions",
-      /* `admin flag` in GeekApk JUST a flag, modTok is required for non-deleteApp,transAppCategory,deleteComment operations */
-      schema to "ALL INTERFACES BUT (deleteApp,transferAppCategory,deleteComment,flagUser)#a REQUIRES Cookie(gaModTok) BE " +
-        "`geekapk admin token` AND (Cookie(gaUser), Cookie(gaHash) BE `valid login`)#b; #a REQUIRES REWRITE #b `valid superuser login`",
-      "POST@createUser(username) -> object:user" to "makeUser".href(hsr),
-      "PUT@resetSharedHash(uid,shash?) -> plain" to "resetMetaHash/{uid}".href(hsr),
-      "DELETE@deleteUser(uid) -> object:user" to "dropUser/{uid}".href(hsr),
-      "PUT@flagUser(uid,flag) -> object:user" to "flagUser/{uid}".href(hsr),
-      "POST@createCategory(name) -> object:category" to "makeCategory".href(hsr),
-      "PUT@renameCategory(id,name) -> object:category" to "nameCategory/{id}".href(hsr),
-      "DELETE@deleteCategory(id) -> object:category" to "dropCategory/{id}".href(hsr),
-      "DELETE@deleteApp(aid) -> object:app" to "dropApp/{aid}".href(hsr),
-      "PUT@transferAppCategory(aid,cid) -> object:[aid,old,new]" to "moveApp/{aid}".href(hsr),
-      "PUT@transferAppOwner(aid,uid) -> object:[aid,old,new]" to "transferApp/{aid}".href(hsr),
-      "DELETE@deleteAppUpdate(aid,rev) -> object:appUpdate" to "dropAppUpdate/{aid}/{rev}".href(hsr),
-      "DELETE@deleteComment(cid) -> object:[comment,deletedSubCommentsCount]" to "dropComment/{cid}".href(hsr)
-    ),
-
-    "category" to mapOf( /* trivially */
-      description to "Application Categories",
-      schema to "ALL INTERFACES REQUIRES NONE",
-      "categoryList() -> array:category" to "category/all".href(hsr),
-      "categoryName(id) -> plain" to "category/{id}".href(hsr)
-    ),
-
-    "user" to mapOf(
-      description to "GeekApk user APIs",
-      schema to "INTERFACE updateUser REQUIRES Cookie(gaHash) BE `valid hash`",
-      "readUser(id) -> object:user" to "user/{id}".href(hsr),
-      "PUT@updateUser(id,prop{username,nickname,avatar,bio,metaApp},value) -> [user,prop,old,new]" to "user/{id}".href(hsr),
-      "PUT@resetHash(id,shash,hash) -> [id,newShash,newHash]" to "user/{id}/hash".href(hsr),
-      "checkHash(id,hash) -> [valid,message]" to "user/{id}/checkHash".href(hsr),
-      "listUser(sort?{created,followers},sliceFrom?,sliceTo?) -> array:object:user" to "user/all".href(hsr),
-      "listMetaUser(sort?{created,followers},sliceFrom?,sliceTo?) -> array:object:user" to "user/allHasMetaApp".href(hsr),
-      "searchUser(type?{username,nickname,bio},kw,sort?{created,followers}) -> array:object:user" to "user/search/{kw}".href(hsr)
-    ),
-
-    "timeline" to mapOf(
-      description to "GeekApk user timeline functions",
-      schema to "ALL INTERFACES REQUIRES NONE",
-      "readUserTimeline(uid,type,sliceFrom?,sliceTo?) -> array:timeline" to "timeline/{uid}",
-      "readAllTimeline(type,sliceFrom?,sliceTo?) -> array:timeline" to "timeline/all",
-      "bulkReadUserTimeline(uids,type,sliceFrom?,sliceTo?) -> array:timeline" to "timeline/bulk/{uids}"
-    ),
-
-    "notification" to mapOf(
-      description to "GeekApk user private notification APIs",
-      schema to "ALL INTERFACES REQUIRES Cookie(gaHash, gaUser) BE `valid login`",
-      "readMineNotifications() -> array:notification" to "notification/active",
-      "readAllMineNotifications(sliceFrom?,sliceTo?) -> array:notification" to "notification/all",
-      "markNotifications(start,end?,stat{r,u}) -> number" to "notification/mark"
-    ),
-
-    "app" to mapOf(
-      description to "GeekApk Android application metadata APIs"
-    ),
-    "appUpdate" to mapOf(
-      description to "GeekApk Android application reversion metadata APIs"
-    ),
-
-    "comment" to mapOf(
-      description to "GeekApk User->App comment interfaces",
-      schema to "ALL NON GET INTERFACE REQUIRES Cookie(gaUser), Cookie(gaHash) BE `valid non-readonly login`",
-      "searchComment(inApp?,user?,repliesTo?,content) -> array:object:comment" to "comment/search/{content}".href(hsr),
-      "listCommentInApp(aid,sliceFrom?,sliceTo?) -> array:object:comment" to "comment/{aid}".href(hsr),
-      "listSubComment(cid) -> array:object:comment" to "comment/subOf/{cid}".href(hsr),
-      "listAllComment(inApp?,user?,sliceFrom?,sliceTo?) -> array:object:comment" to "comment/all".href(hsr),
-      "POST@createComment(aid,content) -> object:comment" to "comment/{aid}".href(hsr),
-      "PUT@editComment(cid) -> [oldContent,newContent]" to "comment/edit/{cid}".href(hsr),
-      "DELETE@deleteComment(cid) -> object:comment" to "comment/delete/{cid}".href(hsr)
-    ),
-
-    "follow" to mapOf(
-      description to "GeekApk User->User follow relation operations",
-        schema to "ALL NON GET INTERFACE REQUIRES Cookie(gaUser), Cookie(gaHash) BE `valid non-banned login`",
-        "POST@follow(uid) -> [oldCount,newCount]" to "follow/{uid}".href(hsr),
-        "DELETE@unfollow(uid) -> [oldCount,newCount]" to "follow/{uid}".href(hsr),
-        "followers(uid) -> array:object:user" to "follow/followers/{uid}".href(hsr),
-        "following(uid) -> array:object:user" to "follow/{uid}".href(hsr)
-    ),
-
-    "star" to mapOf(
-      description to "GeekApk User->App star functions",
-      schema to "ALL NON GET INTERFACE REQUIRES Cookie(gaUser), Cookie(gaHash) BE `valid non-banned login`",
-      "POST@star(aid) -> [oldCount,newCount]" to "star/{aid}".href(hsr),
-      "DELETE@unStar(aid) -> [oldCount,newCount]" to "star/{aid}".href(hsr),
-      "stargazers(aid) -> array:object:user" to "star/{aid}".href(hsr),
-      "stars(uid) -> array:object:app" to "star/user/{uid}".href(hsr)
-    )
-  )
+  /** must be fun */ fun apiHint(hsr: HttpServletRequest): Map<String, Map<String, String>> = ApiDoc.root(hsr)
 
   /* useless but fun */
   @GetMapping("/mustError")
