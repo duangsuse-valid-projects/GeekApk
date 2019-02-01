@@ -12,11 +12,11 @@ GeekApk Spring server built with (\*v\*) and Kotlin and SpringBoot
 
 ### Main
 
-+ [/](http://geekapk.h2h2.org/) API Index, help message
-+ [/serverVersion](http://geekapk.h2h2.org/serverVersion) Server version string
-+ [/serverDescription](http://geekapk.h2h2.org/serverDescription) description string
-+ [/serverBoot](http://geekapk.h2h2.org/serverBoot) bootUp datetime
-+ [/detail](http://geekapk.h2h2.org/serverDetail) server detail map
++ [/](http://geekapk.h2o2.org/) API Index, help message
++ [/serverVersion](http://geekapk.h2o2.org/serverVersion) Server version string
++ [/serverDescription](http://geekapk.h2o2.org/serverDescription) description string
++ [/serverBoot](http://geekapk.h2o2.org/serverBoot) bootUp datetime
++ [/detail](http://geekapk.h2o2.org/serverDetail) server detail map
 
 ## References
 
