@@ -3,6 +3,7 @@ package org.duangsuse.geekapk.api
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.duangsuse.geekapk.controller.MainController
 import org.duangsuse.geekapk.middleware.CorsFilter
+import org.hamcrest.core.IsEqual
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
@@ -57,6 +58,7 @@ class MainControllerTests {
       .andExpect(jsonPath("$.encoding").isString)
       .andExpect(jsonPath("$.os").exists())
       .andExpect(jsonPath("$.spring").value(SpringBootVersion.getVersion()!!))
+      .andExpect(jsonPath("$.webServerVersion").value<String>(IsEqual("Unknown")))
   }
 
   @Test
