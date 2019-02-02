@@ -12,14 +12,14 @@ import java.util.*
 
 @ServletComponentScan
 @SpringBootApplication
-class GeekapkApplication {
+class GeekApkApplication {
   @Bean fun initialize() = CommandLineRunner {
     args ->
     println(":: Starting GeekApk Spring server @ ${Date()}")
 
     handleCommandLine(args)
 
-    val ini = GeekapkApplication::class.java.getResource("/info.ini")
+    val ini = GeekApkApplication::class.java.getResource("/info.ini")
 
     val file = ini.openStream().let(::BufferedInputStream)
     val buffer = ByteArray(file.available())
@@ -33,11 +33,11 @@ class GeekapkApplication {
     // load user config
     arrayOf("/geekapk.ini", "/translations.ini").forEach {
       println("=== Processing external properties file $it ===")
-      val configFile = GeekapkApplication::class.java.getResource(it)
+      val configFile = GeekApkApplication::class.java.getResource(it)
       parseGeekINIBuffer(configFile.openStream().let(::BufferedInputStream).readBytes())
     }
 
-    println(":: Bootstrap SpringBoot Application ${GeekapkApplication::class}")
+    println(":: Bootstrap SpringBoot Application ${GeekApkApplication::class}")
   }
 
   /**
@@ -59,7 +59,7 @@ class GeekapkApplication {
 }
 
 fun main(args: Array<String>) {
-  val spring = runApplication<GeekapkApplication>(*args)
+  val spring = runApplication<GeekApkApplication>(*args)
 
   spring.setId("GeekApk @ ${Thread.currentThread()}")
   spring.registerShutdownHook()
