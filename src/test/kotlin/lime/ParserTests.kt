@@ -20,6 +20,8 @@
  * SOFTWARE.
  */
 
+package lime
+
 import lime.text.Lexer
 import lime.text.Parser
 import lime.type.SexpList

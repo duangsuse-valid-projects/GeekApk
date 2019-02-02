@@ -20,7 +20,8 @@
  * SOFTWARE.
  */
 
-import lime.Lime
+package lime
+
 import lime.type.Macro
 import lime.type.SexpList
 import lime.type.Symbol
@@ -58,7 +59,7 @@ class MacroFillingTest {
   }
 
   @Test(expected = RuntimeException::class)
-  fun throwsArgSizeMismatch() {
+  fun throwsExceptionWhenArgSizeMismatch() {
     val sexp = Lime.parse("(a b c)")
     val args = List(2) {
       when (it) {
