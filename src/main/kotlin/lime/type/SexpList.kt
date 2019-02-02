@@ -22,15 +22,17 @@
 
 package lime.type
 
+import java.util.*
+
 /** Items in the list maybe null */
-typealias SexpressionList = ArrayList<Any?>
+typealias SexpressionList = LinkedList<Any?>
 
 /**
  * Lime S-expression list type
  * <br>
  * Lime simply go through each nullable element of a s-exp list to expand macro calls
  *
- * @see ArrayList wrapped type of Maybe<Any>
+ * @see LinkedList wrapped type of Maybe<Any>
  * @author duangsuse
  * @since 1.0
  */

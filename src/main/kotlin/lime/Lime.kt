@@ -442,11 +442,8 @@ class Lime(private val sexp: SexpList) {
     @Suppress("unused")
     val VERSION: String = "1.1"
 
-    @JvmStatic
-    val onLoadHookName = "onLoad"
-
-    @JvmStatic
-    val onUnLoadHookName = "onUnload"
+    const val onLoadHookName = "onLoad"
+    const val onUnLoadHookName = "onUnload"
 
     @JvmStatic
     @Suppress("unused")

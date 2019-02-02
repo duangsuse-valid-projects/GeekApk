@@ -64,12 +64,12 @@ class Macro(private val args: List<Symbol>, private val body: SexpList, val appe
    * @return replaced list
    */
   private fun fullFill(list: SexpList, sym: Symbol, obj: Any?): SexpList {
-    val newList = SexpList()
+    val newList = SexpList() // create a new list for each linkedList
     for (i in list) {
       when (i) {
-        is SexpList -> newList.add(fullFill(i, sym, obj))
-        sym -> newList.add(obj)
-        else -> newList.add(i)
+        is SexpList -> newList.add(fullFill(i, sym, obj)) // flat deep replace
+        sym -> newList.add(obj) // replace occur
+        else -> newList.add(i) // or simply ignore
       }
     }
     return newList

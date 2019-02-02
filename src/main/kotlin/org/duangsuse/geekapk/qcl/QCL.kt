@@ -1,7 +1,13 @@
 package org.duangsuse.geekapk.qcl
 
-// TODO import code from KtLime
+import lime.type.SexpList
+
 // TODO refactor KtLime
 // TODO implement QCL functions
 class QCL {
+  companion object {
+      fun execute(code: String): SexpList {
+        TODO("Please implement QCL interpreter methods")
+      }
+  }
 }

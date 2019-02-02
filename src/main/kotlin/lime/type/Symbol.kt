@@ -30,7 +30,7 @@ package lime.type
  * @since 1.0
  * @param id identifier string
  */
-class Symbol(private val id: String) {
+class Symbol(private val id: String): Any(), CharSequence, Comparable<Symbol> {
   /**
    * Convert to human-readable string
    *
@@ -45,7 +45,7 @@ class Symbol(private val id: String) {
    * @return true if objects value equal
    */
   override operator fun equals(other: Any?): Boolean {
-    if (other !is Symbol)
+    if (other == null || other !is Symbol)
       return false
     return id == other.id
   }
@@ -69,4 +69,10 @@ class Symbol(private val id: String) {
   override fun hashCode(): Int {
     return id.hashCode()
   }
+
+  override val length: Int = id.length
+  operator fun plus(other: Any?): String = id.plus(other)
+  override fun get(index: Int): Char = id[index]
+  override fun subSequence(startIndex: Int, endIndex: Int): CharSequence = id.subSequence(startIndex, endIndex)
+  override operator fun compareTo(other: Symbol): Int = id.compareTo(other.id)
 }
