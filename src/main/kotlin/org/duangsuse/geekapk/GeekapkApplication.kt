@@ -14,8 +14,6 @@ class GeekapkApplication
 // TODO migrate program and refactor
 // TODO support i18n ini file
 // TODO support default settings ini and override
-// TODO support new GeekINI format
-// TODO news, badges, pictures metaApp interfaces
 fun main(args: Array<String>) {
   println(":: Starting GeekApk Spring server @ ${Date()}")
 
@@ -27,11 +25,38 @@ fun main(args: Array<String>) {
   try { file.read(buffer) }
   catch (ioe : IOException) { println("==! Failed to read INI.") }
 
+  // load defaults
+  parseGeekINIBuffer(buffer)
+
+  println(":: Bootstrap SpringBoot Application ${GeekapkApplication::class}")
+
+  val spring = runApplication<GeekapkApplication>(*args)
+
+  spring.setId("GeekApk @ ${Thread.currentThread()}")
+  spring.registerShutdownHook()
+}
+
+/**
+ * Simple UNIX-style naive text processing util with unbelievable time complexity
+ *
+ * Sets system properties
+ *
+ * @author duangsuse
+ */
+private fun parseGeekINIBuffer(buffer: ByteArray) {
+  var tag = ""
+
   String(buffer).lines().forEach setProp@{
     println("==> $it")
 
     if (it.trimStart().startsWith('#') or it.isBlank())
       return@setProp
+
+    if (it.startsWith('[') && it.endsWith(']')) {
+      tag = it.substring(1 until it.lastIndex)
+      println("== Configure section [$tag]")
+      return@setProp
+    }
 
     val pair = it.split('=')
 
@@ -41,15 +66,9 @@ fun main(args: Array<String>) {
     }
 
     val (key, value) = (pair[0] to pair[1])
-    System.setProperty(key, value)
+    val realPre = if (tag.isEmpty()) "" else tag.plus(".")
+    System.setProperty("$realPre$key", value)
 
-    println("== Setup ($key) to ($value)")
+    println("== Setup $tag($key) to ($value)")
   }
-
-  println(":: Bootstrap SpringBoot Application ${GeekapkApplication::class}")
-
-  val spring = runApplication<GeekapkApplication>(*args)
-
-  spring.setId("GeekApk @ ${Thread.currentThread()}")
-  spring.registerShutdownHook()
 }
