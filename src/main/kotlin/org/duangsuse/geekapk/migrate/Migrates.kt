@@ -28,7 +28,7 @@ class Migrates {
 
   companion object {
     fun dump(@Suppress("unused") migration: Migration) {
-      TODO()
+      TODO("Dump to file")
     }
   }
 }
