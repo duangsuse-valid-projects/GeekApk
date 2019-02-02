@@ -17,9 +17,6 @@ object ApiDoc {
   private val badgeApp = mustGetGeekApkConfig("badgeMetaApp")
   private val pictureApp = mustGetGeekApkConfig("pictureMetaApp")
 
-  // TODO Add GetXXXXCount interfaces
-  // TODO Update user online status APIs
-
   // TODO later GeekHits and rate limit APIs
   // TODO later Query Combination Language APIs
   // TODO laterGeekPush Feature
@@ -96,7 +93,8 @@ object ApiDoc {
     "checkHash(id,hash) -> [valid,message]" to "user/{id}/checkHash".href(hsr),
     "listUser(sort?{created,followers},sliceFrom?,sliceTo?) -> array:object:user" to "user/all".href(hsr),
     "listMetaUser(sort?{created,followers},sliceFrom?,sliceTo?) -> array:object:user" to "user/allHasMetaApp".href(hsr),
-    "searchUser(type?{username,nickname,bio},kw,sort?{created,followers}) -> array:object:user" to "user/search/{kw}".href(hsr)
+    "searchUser(type?{username,nickname,bio},kw,sort?{created,followers}) -> array:object:user" to "user/search/{kw}".href(hsr),
+    "PUT@updateOnlineTime(uid)" to "user/{id}/online".href(hsr)
   )
 
   val timeline = fun (hsr: HttpServletRequest) = "timeline" to mapOf(
@@ -105,7 +103,9 @@ object ApiDoc {
     schema to "ALL INTERFACES REQUIRES NONE",
     "readUserTimeline(uid,type,sliceFrom?,sliceTo?) -> array:timeline" to "timeline/{uid}".href(hsr),
     "readAllTimeline(type,sliceFrom?,sliceTo?) -> array:timeline" to "timeline/all".href(hsr),
-    "bulkReadUserTimeline(uids,type,sliceFrom?,sliceTo?) -> array:timeline" to "timeline/bulk/{uids}".href(hsr)
+    "bulkReadUserTimeline(uids,type,sliceFrom?,sliceTo?) -> array:timeline" to "timeline/bulk/{uids}".href(hsr),
+    "getUserTimelineCount(uid) -> number" to "timeline/check/{uid}".href(hsr),
+    "getBulkUserTimelineCount(uids) -> number" to "timeline/check/{uid}".href(hsr)
   )
 
   val notification = fun (hsr: HttpServletRequest) = "notification" to mapOf(
@@ -114,7 +114,8 @@ object ApiDoc {
     schema to "ALL INTERFACES REQUIRES Cookie(gaHash, gaUser) BE `valid login`",
     "readMineNotifications() -> array:notification" to "notification/active".href(hsr),
     "readAllMineNotifications(sliceFrom?,sliceTo?) -> array:notification" to "notification/all".href(hsr),
-    "markNotifications(start,end?,stat{r,u}) -> number" to "notification/mark".href(hsr)
+    "markNotifications(start,end?,stat{r,u}) -> number" to "notification/mark".href(hsr),
+    "getNotificationCount() -> number" to "notification/count".href(hsr)
   )
 
   val app = fun (hsr: HttpServletRequest) = "app" to mapOf(
