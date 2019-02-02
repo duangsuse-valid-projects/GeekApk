@@ -1,10 +1,25 @@
-# Spring GeekApk Server
+# Spring GeekApk Server [![code size](https://img.shields.io/github/languages/code-size/duangsuse/GeekApk.svg?style=flat-square)](https://github.com/duangsuse/GeekApk/pulse) [![agpl-3.0](https://img.shields.io/github/license/duangsuse/GeekApk.svg?style=flat-square)](https://www.gnu.org/licenses/agpl-3.0.html)
 
 <p align="center"><img width="40%" src="https://user-images.githubusercontent.com/10570123/52161551-8321ed00-2701-11e9-963b-18e5791d553c.png" alt="Cup - The Mascot for GeekApk" /></p>
+
+> The way to get started is to quit talking and begin doing.
+_— Walt Disney_
 
 ## Introduction
 
 GeekApk Spring server built with (\*v\*) and Kotlin and SpringBoot
+
+## Features in version 1.0♭
+
+- [ ] Migrations
+- [x] RPC interfaces (server, admin, category, user, app/collab, reversion, comment, star, follow, timeline, notification)
+- [x] User last online, App pinned comment
+- [x] GeekApk bot i18n
+- [x] Minial counter check before Data pull 
+- [x] MetaApp for users
+- [x] AppType, GeekApk bot
+- [ ] Query Combinating Language support (bulkquery)
+- [ ] Lexical scoping (lambda calculus) for QCL Interpreter
 
 ## Deploying
 
