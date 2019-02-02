@@ -11,9 +11,6 @@ import java.util.*
 @SpringBootApplication
 class GeekapkApplication
 
-// TODO migrate program and refactor
-// TODO support i18n ini file
-// TODO support default settings ini and override
 fun main(args: Array<String>) {
   println(":: Starting GeekApk Spring server @ ${Date()}")
 
@@ -23,10 +20,17 @@ fun main(args: Array<String>) {
   val buffer = ByteArray(file.available())
 
   try { file.read(buffer) }
-  catch (ioe : IOException) { println("==! Failed to read INI.") }
+  catch (ioe : IOException) { println("==! Failed to read initialization INI.") }
 
   // load defaults
   parseGeekINIBuffer(buffer)
+
+  // load user config
+  arrayOf("/geekapk.ini", "/translations.ini").forEach {
+    println("=== Processing external properties file $it ===")
+    val configFile = GeekapkApplication::class.java.getResource(it)
+    parseGeekINIBuffer(configFile.openStream().let(::BufferedInputStream).readBytes())
+  }
 
   println(":: Bootstrap SpringBoot Application ${GeekapkApplication::class}")
 
