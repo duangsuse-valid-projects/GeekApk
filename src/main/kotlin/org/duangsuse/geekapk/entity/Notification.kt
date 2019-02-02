@@ -14,6 +14,7 @@ import javax.persistence.*
  */
 @Appendage("user")
 @Entity
+@Table(name = "notifications")
 data class Notification (
   @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
   val id: NotificationId = 0,

@@ -25,6 +25,7 @@ import javax.validation.constraints.Size
  */
 @Entity
 @StandaloneEntity("app")
+@Table(name = "apps")
 data class App (
   @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
   val id: AppId = 0,
