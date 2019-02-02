@@ -45,7 +45,7 @@ class MainControllerTests {
   @Test
   fun indexShowsHref() {
     mock.perform(get("/"))
-      .andExpect(jsonPath("$.admin.['POST@createUser(username) -> object:user']").value("http://127.0.0.1:80/makeUser"))
+      .andExpect(jsonPath("$.admin.['POST@createUser(username) -> object:user']").value("http://127.0.0.1:80/admin/makeUser"))
   }
 
   @Test
