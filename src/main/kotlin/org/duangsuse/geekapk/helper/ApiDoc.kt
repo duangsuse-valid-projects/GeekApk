@@ -109,11 +109,21 @@ object ApiDoc {
     "markNotifications(start,end?,stat{r,u}) -> number" to "notification/mark".href(hsr)
   )
 
-  // TODO fill this
   val app = fun (hsr: HttpServletRequest) = "app" to mapOf(
     baseUrl("app")(hsr),
     description to "GeekApk Android application metadata APIs",
-    schema to ""
+    schema to "ALL NON GET INTERFACE REQUIRES Cookie(gaUser), Cookie(gaHash) BE `valid non-readonly login`",
+    "readApp(aid) -> object:app" to "app/{aid}".href(hsr),
+    "PUT@updateApp(aid,attr{package,icon,name,screenshots,readme},val) -> [attr,oldVal]" to "app/{aid}".href(hsr),
+    "POST@createApp(package,category) -> object:app" to "app".href(hsr),
+    "findAppWithPackage(package) -> object:app" to "app/package/{package}".href(hsr),
+    "listApp(inCategory?,sort,sliceFrom?,sliceTo?) -> array:app" to "app/all".href(hsr),
+    "DELETE@dropApp(aid) -> object:app" to "app/{aid}".href(hsr),
+    "searchApp(inCategory?,content,type{name,package,icon,readme},sort{updated,comments,stars,created})" to "app/search/{content}".href(hsr),
+    "POST@addCollab(uid,aid)" to "app/{aid}/collab".href(hsr),
+    "DELETE@removeCollab(uid,aid)" to "app/{aid}/collab".href(hsr),
+    "collaborators(aid) -> array:number" to "app/collaborators/{aid}".href(hsr),
+    "collaborated(uid) -> array:number" to "app/collaborated/{uid}".href(hsr)
   )
 
   val appUpdate = fun (hsr: HttpServletRequest) = "appUpdate" to mapOf(
