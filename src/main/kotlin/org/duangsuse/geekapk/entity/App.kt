@@ -2,6 +2,7 @@ package org.duangsuse.geekapk.entity
 
 import org.duangsuse.geekapk.AppId
 import org.duangsuse.geekapk.CategoryId
+import org.duangsuse.geekapk.CommentId
 import org.duangsuse.geekapk.UserId
 import org.duangsuse.geekapk.annotation.*
 import org.jetbrains.annotations.Nls
@@ -73,6 +74,13 @@ data class App (
    */
   @Size(message = "~ ..1000", min = 0, max = 1000)
   @NonNls @Lob var screenshots: String = "(hasShots=false)(reasonText=:()",
+
+  /**
+   * Applications can have one pinned-to-top comment
+   * handled by clients
+   */
+  @LinkTo("comment", rel = Relation.HAS_ONE)
+  var pinned: CommentId? = null,
 
   /**
    * Creation date

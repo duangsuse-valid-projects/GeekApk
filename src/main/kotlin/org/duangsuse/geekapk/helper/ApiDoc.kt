@@ -13,6 +13,12 @@ object ApiDoc {
   private const val description = "description"
   private const val schema = "schema"
 
+  // TODO Add GetXXXXCount interfaces
+  // TODO Update user online status APIs
+  // TODO GeekHits and rate limit APIs
+  // TODO Query Combination Language APIs
+  // TODO GeekPush Feature
+
   /**
    * Generate something like `request_location/string`
    *

@@ -14,6 +14,7 @@ class GeekapkApplication
 // TODO migrate program and refactor
 // TODO support i18n ini file
 // TODO support default settings ini and override
+// TODO support new GeekINI format
 fun main(args: Array<String>) {
   println(":: Starting GeekApk Spring server @ ${Date()}")
 

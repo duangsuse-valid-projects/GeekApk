@@ -64,6 +64,15 @@ data class GeekUser (
   var flags: Int = FLAG_NONE,
 
   /**
+   * User last-online-at
+   *
+   * A user can simply not to update online stat if he/she wants to be "invisible"
+   * GeekApk Stream in 2.0 will give real-time online stat
+   */
+  @Temporal(TemporalType.TIMESTAMP)
+  var lastOnline: Date = Date(),
+
+  /**
    * "Distributed" Password
    */
   @UserPrivate
@@ -105,6 +114,8 @@ data class GeekUser (
      * set this to -1 to disable sending
      */
     val BOT_OVERRIDE: AppId? = System.getProperty("geekapk.botMessageAppOverride", "").toLongOrNull()
+
+    /* nobody -> banned -> readonly -> user -> admin */
 
     /**
      * Dummy flag implies "no-login" user
