@@ -1,39 +1,64 @@
 package org.duangsuse.geekapk
 
+import org.duangsuse.geekapk.controller.MainController
+import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.boot.web.servlet.ServletComponentScan
+import org.springframework.context.annotation.Bean
 import java.io.BufferedInputStream
 import java.io.IOException
 import java.util.*
 
 @ServletComponentScan
 @SpringBootApplication
-class GeekapkApplication
+class GeekapkApplication {
+  @Bean fun initialize() = CommandLineRunner {
+    args ->
+    println(":: Starting GeekApk Spring server @ ${Date()}")
 
-fun main(args: Array<String>) {
-  println(":: Starting GeekApk Spring server @ ${Date()}")
+    handleCommandLine(args)
 
-  val ini = GeekapkApplication::class.java.getResource("/info.ini")
+    val ini = GeekapkApplication::class.java.getResource("/info.ini")
 
-  val file = ini.openStream().let(::BufferedInputStream)
-  val buffer = ByteArray(file.available())
+    val file = ini.openStream().let(::BufferedInputStream)
+    val buffer = ByteArray(file.available())
 
-  try { file.read(buffer) }
-  catch (ioe : IOException) { println("==! Failed to read initialization INI.") }
+    try { file.read(buffer) }
+    catch (ioe : IOException) { println("==! Failed to read initialization INI.") }
 
-  // load defaults
-  parseGeekINIBuffer(buffer)
+    // load defaults
+    parseGeekINIBuffer(buffer)
 
-  // load user config
-  arrayOf("/geekapk.ini", "/translations.ini").forEach {
-    println("=== Processing external properties file $it ===")
-    val configFile = GeekapkApplication::class.java.getResource(it)
-    parseGeekINIBuffer(configFile.openStream().let(::BufferedInputStream).readBytes())
+    // load user config
+    arrayOf("/geekapk.ini", "/translations.ini").forEach {
+      println("=== Processing external properties file $it ===")
+      val configFile = GeekapkApplication::class.java.getResource(it)
+      parseGeekINIBuffer(configFile.openStream().let(::BufferedInputStream).readBytes())
+    }
+
+    println(":: Bootstrap SpringBoot Application ${GeekapkApplication::class}")
   }
 
-  println(":: Bootstrap SpringBoot Application ${GeekapkApplication::class}")
+  /**
+   * Why not use shift-dispatch method to make this more flexible?
+   */
+  fun handleCommandLine(args: Array<String>) {
+    when (args.size) {
+      0 -> return
+      1 -> when (args.first()) {
+        "--version", "version" -> println(MainController.programVersion)
+        "--help", "help" -> println("Program usage: geekapk [version|help|licence]" +
+          "Find help at https://github.com/duangsuse/GeekApk")
+        "--licence", "licence" -> println("Copyright (C) 2019 duangsuse, GeekApk Spring, licenced under GNU AGPL-3.0")
+        else -> println("Warning: unknown operation")
+      }
+      else -> println("Warning: unexpected argument vector length: ${args.size}")
+    }
+  }
+}
 
+fun main(args: Array<String>) {
   val spring = runApplication<GeekapkApplication>(*args)
 
   spring.setId("GeekApk @ ${Thread.currentThread()}")

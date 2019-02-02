@@ -3,7 +3,6 @@ package org.duangsuse.geekapk.api
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.duangsuse.geekapk.controller.MainController
 import org.duangsuse.geekapk.middleware.CorsFilter
-import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
@@ -33,13 +32,6 @@ import javax.servlet.annotation.WebFilter
 class MainControllerTests {
   @Autowired
   private lateinit var mock: MockMvc
-
-  @Before
-  fun setNecessaryProperties() {
-    System.setProperty("geekapk.newsMetaApp", "")
-    System.setProperty("geekapk.badgeMetaApp", "")
-    System.setProperty("geekapk.pictureMetaApp", "")
-  }
 
   @Test
   fun hasIndex() {
