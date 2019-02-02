@@ -1,7 +1,9 @@
 package org.duangsuse.geekapk.api
 
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.duangsuse.geekapk.controller.MainController
 import org.duangsuse.geekapk.middleware.CorsFilter
+import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
@@ -31,6 +33,13 @@ import javax.servlet.annotation.WebFilter
 class MainControllerTests {
   @Autowired
   private lateinit var mock: MockMvc
+
+  @Before
+  fun setNecessaryProperties() {
+    System.setProperty("geekapk.newsMetaApp", "")
+    System.setProperty("geekapk.badgeMetaApp", "")
+    System.setProperty("geekapk.pictureMetaApp", "")
+  }
 
   @Test
   fun hasIndex() {
@@ -100,5 +109,11 @@ class MainControllerTests {
     assert(CorsFilter::class.annotations.map(Annotation::toString).single().contains(WebFilter::class.simpleName!!))
   }
 
-  // TODO write APIDoc link tests
+  @Test
+  fun indexAPILinksAreRight() {
+    mock.perform(get("/")).andDo {
+      val mapper = ObjectMapper()
+      val json = mapper.readValue(it.response.contentAsString, HashMap<String, String>()::class.java)
+    }
+  }
 }
