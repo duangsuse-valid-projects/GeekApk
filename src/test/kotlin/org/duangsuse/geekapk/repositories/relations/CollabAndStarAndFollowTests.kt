@@ -8,9 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.junit4.SpringRunner
 
+/**
+ * Relation-only repositories tests
+ */
 @RunWith(SpringRunner::class)
 @SpringBootTest
-class CollabAndStarAndFollow {
+class CollabAndStarAndFollowTests {
   @Autowired lateinit var clr: CollabRelRepository
   @Autowired lateinit var asr: StarRelRepository
   @Autowired lateinit var ufr: FollowRelRepository

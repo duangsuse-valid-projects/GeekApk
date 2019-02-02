@@ -89,10 +89,12 @@ object ApiDoc {
     "markNotifications(start,end?,stat{r,u}) -> number" to "notification/mark".href(hsr)
   )
 
+  // TODO fill this
   val app = fun (hsr: HttpServletRequest) = "app" to mapOf(
     description to "GeekApk Android application metadata APIs"
   )
 
+  // TODO fill this
   val appUpdate = fun (hsr: HttpServletRequest) = "appUpdate" to mapOf(
     description to "GeekApk Android application reversion metadata APIs"
   )
@@ -127,6 +129,9 @@ object ApiDoc {
     "stars(uid) -> array:object:app" to "star/user/{uid}".href(hsr)
   )
 
+  /**
+   * Root API documentation
+   */
   val root = fun (hsr: HttpServletRequest) = mapOf(
     server(hsr),
     admin(hsr),

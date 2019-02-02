@@ -1,5 +1,7 @@
 package org.duangsuse.geekapk
 
+/* Available in the whole package */
+
 /* Standalone Model IDs */
 typealias UserId = Int
 typealias CategoryId = Int

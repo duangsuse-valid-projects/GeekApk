@@ -5,6 +5,7 @@ package org.duangsuse.geekapk.annotation
  *
  * @param name name of the standalone entity
  */
+@MustBeDocumented
 /* Stand-alone REST entity */
 @Target(AnnotationTarget.CLASS)
 @Retention(AnnotationRetention.SOURCE)

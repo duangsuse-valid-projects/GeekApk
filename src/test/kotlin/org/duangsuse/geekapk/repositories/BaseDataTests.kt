@@ -9,6 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.junit4.SpringRunner
 
+/**
+ * All data model and logic tests
+ *
+ * since there were no @InSequence found on my machine
+ * sequenced tests should be placed in one method
+ */
 @RunWith(SpringRunner::class)
 @SpringBootTest
 class BaseDataTests {

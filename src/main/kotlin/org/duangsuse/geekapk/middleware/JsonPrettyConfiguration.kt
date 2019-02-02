@@ -5,6 +5,9 @@ import org.springframework.http.converter.HttpMessageConverter
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport
 
+/**
+ * JsonRpc Set message pretty (for development usage only)
+ */
 @Configuration /* not efficient, don't enable this in production environment */
 class MainJsonPrettyPrintConfiguration : WebMvcConfigurationSupport() {
   override fun extendMessageConverters(converters: MutableList<HttpMessageConverter<*>>) {

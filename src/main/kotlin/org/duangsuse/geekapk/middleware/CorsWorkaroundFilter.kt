@@ -8,6 +8,13 @@ import javax.servlet.annotation.WebFilter
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
+/**
+ * Cross-origin request fake security
+ *
+ * Allow all.
+ *
+ * Copied from StackOverFlow
+ */
 @WebFilter
 class CorsFilter : OncePerRequestFilter() {
 

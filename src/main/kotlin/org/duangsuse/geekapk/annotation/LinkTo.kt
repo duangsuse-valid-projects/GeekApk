@@ -6,6 +6,7 @@ package org.duangsuse.geekapk.annotation
  * @param entity Another entity to be linked
  * @param rel Relation between this domain object and other
  */
+@MustBeDocumented
 @Target(AnnotationTarget.FIELD)
 @Retention(AnnotationRetention.SOURCE)
 annotation class LinkTo(val entity: String, val rel: Relation)

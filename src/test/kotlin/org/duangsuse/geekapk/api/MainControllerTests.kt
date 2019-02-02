@@ -28,7 +28,7 @@ import javax.servlet.annotation.WebFilter
 * */
 @RunWith(SpringRunner::class)
 @WebMvcTest(MainController::class)
-class MainController {
+class MainControllerTests {
   @Autowired
   private lateinit var mock: MockMvc
 
@@ -99,4 +99,6 @@ class MainController {
 
     assert(CorsFilter::class.annotations.map(Annotation::toString).single().contains(WebFilter::class.simpleName!!))
   }
+
+  // TODO write APIDoc link tests
 }
