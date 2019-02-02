@@ -19,25 +19,22 @@ class GeekApkApplication {
 
     handleCommandLine(args)
 
-    val ini = GeekApkApplication::class.java.getResource("/info.ini")
+    if (!iniLoaded) {
+      initializeINIConfig()
 
-    val file = ini.openStream().let(::BufferedInputStream)
-    val buffer = ByteArray(file.available())
+      // load user config
+      initializeINIShadowChain()
+    } else println("==! INI Already loaded, skipping...")
 
-    try { file.read(buffer) }
-    catch (ioe : IOException) { println("==! Failed to read initialization INI.") }
+    println(":: Bootstrap SpringBoot Application ${GeekApkApplication::class} with configuration below:")
 
-    // load defaults
-    parseGeekINIBuffer(buffer)
-
-    // load user config
-    arrayOf("/geekapk.ini", "/translations.ini").forEach {
-      println("=== Processing external properties file $it ===")
-      val configFile = GeekApkApplication::class.java.getResource(it)
-      parseGeekINIBuffer(configFile.openStream().let(::BufferedInputStream).readBytes())
+    fun escapePrintln(entry: Map.Entry<Any, Any>) {
+      print("  ")
+      println("${entry.key}: ${entry.value}")
     }
+    System.getProperties().filter { it.key.toString().startsWith("geekapk") }.forEach(::escapePrintln)
 
-    println(":: Bootstrap SpringBoot Application ${GeekApkApplication::class}")
+    println("GeekApk Server is now running...")
   }
 
   /**
@@ -56,9 +53,42 @@ class GeekApkApplication {
       else -> println("Warning: unexpected argument vector length: ${args.size}")
     }
   }
+
+  companion object {
+      @Volatile var iniLoaded: Boolean = false
+  }
+}
+
+private fun initializeINIShadowChain() {
+  arrayOf("/geekapk.ini", "/translations.ini").forEach {
+    println("=== Processing external properties file $it ===")
+    val configFile = GeekApkApplication::class.java.getResource(it)
+    parseGeekINIBuffer(configFile.openStream().let(::BufferedInputStream).readBytes())
+  }
+  GeekApkApplication.iniLoaded = true
+}
+
+private fun initializeINIConfig() {
+  val ini = GeekApkApplication::class.java.getResource("/info.ini")
+
+  val file = ini.openStream().let(::BufferedInputStream)
+  val buffer = ByteArray(file.available())
+
+  try {
+    file.read(buffer)
+  } catch (ioe: IOException) {
+    println("==! Failed to read initialization INI.")
+  }
+
+  // load defaults
+  parseGeekINIBuffer(buffer)
 }
 
 fun main(args: Array<String>) {
+  // Should set initialize properties first
+  initializeINIConfig()
+  initializeINIShadowChain()
+
   val spring = runApplication<GeekApkApplication>(*args)
 
   spring.setId("GeekApk @ ${Thread.currentThread()}")
