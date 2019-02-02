@@ -13,6 +13,10 @@ object ApiDoc {
   private const val description = "description"
   private const val schema = "schema"
 
+  private val newsApp = mustGetGeekApkConfig("newsMetaApp")
+  private val badgeApp = mustGetGeekApkConfig("badgeMetaApp")
+  private val pictureApp = mustGetGeekApkConfig("pictureMetaApp")
+
   // TODO Add GetXXXXCount interfaces
   // TODO Update user online status APIs
   // TODO GeekHits and rate limit APIs
@@ -43,6 +47,9 @@ object ApiDoc {
     "serverSpec" to "JsonRpc",
     "projectIndex" to "https://github.com/duangsuse/GeekApk",
     "apiVersion" to "v1.0",
+    "newsMetaAppId" to newsApp,
+    "badgeMetaAppId" to badgeApp,
+    "pictureMetaAppId" to pictureApp,
     "index() -> object<category,object<operation,linkTemplate>>" to "".href(hsr),
     "version() -> plain" to "serverVersion".href(hsr),
     "desc() -> plain" to "serverDescription".href(hsr),
