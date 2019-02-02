@@ -28,7 +28,16 @@ object ApiDoc {
    */
   private fun String.href(req: HttpServletRequest) = "${req.scheme}://${req.localAddr}:${req.localPort}/$this".intern()
 
+  /**
+   * Base url property document
+   *
+   * @param url api base path
+   * @return "basePath" to url
+   */
+  private fun baseUrl(url: String): (HttpServletRequest) -> Pair<String, String> = { hsr -> "basePath" to url.href(hsr) }
+
   val server = fun (hsr: HttpServletRequest) = "server" to mapOf(
+    baseUrl("")(hsr),
     description to "GeekApk server information related APIs",
     schema to "ALL INTERFACES REQUIRES NONE",
     "serverSpec" to "JsonRpc",
@@ -42,6 +51,7 @@ object ApiDoc {
   )
 
   val admin = fun (hsr: HttpServletRequest) = "admin" to mapOf(
+    baseUrl("admin")(hsr),
     description to "GeekApk community administration functions",
     /* `admin flag` in GeekApk JUST a flag, modTok is required for non-deleteApp,transAppCategory,deleteComment operations */
     schema to "ALL INTERFACES BUT (deleteApp,transferAppCategory,deleteComment,flagUser)#a REQUIRES Cookie(gaModTok) BE " +
@@ -61,6 +71,7 @@ object ApiDoc {
   )
 
   val category = fun (hsr: HttpServletRequest) = "category" to mapOf( /* trivially */
+    baseUrl("category")(hsr),
     description to "Application Categories",
     schema to "ALL INTERFACES REQUIRES NONE",
     "categoryList() -> array:category" to "category/all".href(hsr),
@@ -68,6 +79,7 @@ object ApiDoc {
   )
 
   val user = fun (hsr: HttpServletRequest) = "user" to mapOf(
+    baseUrl("user")(hsr),
     description to "GeekApk user APIs",
     schema to "INTERFACE updateUser REQUIRES Cookie(gaHash) BE `valid hash`",
     "readUser(id) -> object:user" to "user/{id}".href(hsr),
@@ -80,6 +92,7 @@ object ApiDoc {
   )
 
   val timeline = fun (hsr: HttpServletRequest) = "timeline" to mapOf(
+    baseUrl("timeline")(hsr),
     description to "GeekApk user timeline functions",
     schema to "ALL INTERFACES REQUIRES NONE",
     "readUserTimeline(uid,type,sliceFrom?,sliceTo?) -> array:timeline" to "timeline/{uid}".href(hsr),
@@ -88,6 +101,7 @@ object ApiDoc {
   )
 
   val notification = fun (hsr: HttpServletRequest) = "notification" to mapOf(
+    baseUrl("notification")(hsr),
     description to "GeekApk user private notification APIs",
     schema to "ALL INTERFACES REQUIRES Cookie(gaHash, gaUser) BE `valid login`",
     "readMineNotifications() -> array:notification" to "notification/active".href(hsr),
@@ -97,10 +111,13 @@ object ApiDoc {
 
   // TODO fill this
   val app = fun (hsr: HttpServletRequest) = "app" to mapOf(
-    description to "GeekApk Android application metadata APIs"
+    baseUrl("app")(hsr),
+    description to "GeekApk Android application metadata APIs",
+    schema to ""
   )
 
   val appUpdate = fun (hsr: HttpServletRequest) = "appUpdate" to mapOf(
+    baseUrl("appUpdate")(hsr),
     description to "GeekApk Android application reversion metadata APIs",
     schema to "ALL NON GET INTERFACE REQUIRES Cookie(gaUser), Cookie(gaHash) BE `valid non-readonly login`",
     "readReversions(aid) -> array:object:reversion" to "appUpdate/{aid}".href(hsr),
@@ -112,6 +129,7 @@ object ApiDoc {
   )
 
   val comment = fun (hsr: HttpServletRequest) = "comment" to mapOf(
+    baseUrl("comment")(hsr),
     description to "GeekApk User->App comment interfaces",
     schema to "ALL NON GET INTERFACE REQUIRES Cookie(gaUser), Cookie(gaHash) BE `valid non-readonly login`",
     "searchComment(inApp?,user?,repliesTo?,content) -> array:object:comment" to "comment/search/{content}".href(hsr),
@@ -124,6 +142,7 @@ object ApiDoc {
   )
 
   val follow = fun (hsr: HttpServletRequest) = "follow" to mapOf(
+    baseUrl("follow")(hsr),
     description to "GeekApk User->User follow relation operations",
     schema to "ALL NON GET INTERFACE REQUIRES Cookie(gaUser), Cookie(gaHash) BE `valid non-banned login`",
     "POST@follow(uid) -> [oldCount,newCount]" to "follow/{uid}".href(hsr),
@@ -133,6 +152,7 @@ object ApiDoc {
   )
 
   val star = fun (hsr: HttpServletRequest) = "star" to mapOf(
+    baseUrl("star")(hsr),
     description to "GeekApk User->App star functions",
     schema to "ALL NON GET INTERFACE REQUIRES Cookie(gaUser), Cookie(gaHash) BE `valid non-banned login`",
     "POST@star(aid) -> [oldCount,newCount]" to "star/{aid}".href(hsr),
