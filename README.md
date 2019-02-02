@@ -1,5 +1,7 @@
 # Spring GeekApk Server
 
+<p align="center"><img width="40%" src="https://user-images.githubusercontent.com/10570123/52161551-8321ed00-2701-11e9-963b-18e5791d553c.png" alt="Cup - The Mascot for GeekApk" /></p>
+
 ## Introduction
 
 GeekApk Spring server built with (\*v\*) and Kotlin and SpringBoot
