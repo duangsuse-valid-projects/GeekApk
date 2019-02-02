@@ -100,9 +100,15 @@ object ApiDoc {
     description to "GeekApk Android application metadata APIs"
   )
 
-  // TODO fill this
   val appUpdate = fun (hsr: HttpServletRequest) = "appUpdate" to mapOf(
-    description to "GeekApk Android application reversion metadata APIs"
+    description to "GeekApk Android application reversion metadata APIs",
+    schema to "ALL NON GET INTERFACE REQUIRES Cookie(gaUser), Cookie(gaHash) BE `valid non-readonly login`",
+    "readReversions(aid) -> array:object:reversion" to "appUpdate/{aid}".href(hsr),
+    "checkLastReversions(aids) -> array:number" to "appUpdate/check/{aids}".href(hsr),
+    "readReversion(aid,rev) -> object:reversion" to "appUpdate/{aid}/{rev}".href(hsr),
+    "POST@createReversion(aid,rev) -> [aid,rev]" to "appUpdate/{aid}/{rev}".href(hsr),
+    "PUT@updateReversion(aid,rev,attr{version,install,updates,minsdk},val) -> [attr,oldVal]" to "appUpdate/{aid}/{rev}".href(hsr),
+    "DELETE@dropReversion(aid,rev) -> object:reversion" to "appUpdate/{aid}/{rev}".href(hsr)
   )
 
   val comment = fun (hsr: HttpServletRequest) = "comment" to mapOf(
