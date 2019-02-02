@@ -15,14 +15,20 @@ typealias RelationMigrationRepositories = Triple<CollabRelRepository, FollowRelR
 // TODO later implement binary migrate (data dump) program
 class Migrates {
   class Migration(val a: MigrationRepositoriesA, val b: MigrationRepositoriesB, val c: MigrationRepositoriesC) {
-    fun dump() { TODO("Dump to file") }
+    fun dump() {
+      TODO("Dump to file")
+    }
   }
 
   class RelationsMigration(val data: RelationMigrationRepositories) {
-    fun dump() { TODO("Dump to file") }
+    fun dump() {
+      TODO("Dump to file")
+    }
   }
 
   companion object {
-      fun dump(migration: Migration) {}
+    fun dump(@Suppress("unused") migration: Migration) {
+      TODO()
+    }
   }
 }
