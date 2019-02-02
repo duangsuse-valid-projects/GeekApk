@@ -113,7 +113,14 @@ class MainControllerTests {
   fun indexAPILinksAreRight() {
     mock.perform(get("/")).andDo {
       val mapper = ObjectMapper()
-      val json = mapper.readValue(it.response.contentAsString, HashMap<String, String>()::class.java)
+      val json = mapper.readValue(it.response.contentAsString, HashMap<String, HashMap<String, String>>()::class.java)
+      val serverBase = json["server"]!!["basePath"]!!
+      val serverInfo = json["server"]!!["detailedInfo() -> object:<prop,desc>"]!!
+
+      mock.perform(get(serverBase)).andExpect(status().isOk)
+      mock.perform(get("$serverInfo/").contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk)
+        .andExpect(jsonPath("$").isMap)
     }
   }
 }
