@@ -20,6 +20,8 @@
  * SOFTWARE.
  */
 
+package lime
+
 import lime.text.Lexer
 import lime.text.Token
 import org.junit.Assert
@@ -35,6 +37,9 @@ import org.junit.Test
 class LexerTests {
   private fun assertEquals(a: Any?, b: Any?, msg: String = "Failed to assert $a == $b") = Assert.assertEquals(msg, a, b)
 
+  /**
+   * Simple lexer text
+   */
   @Test
   fun worksBasically() {
     assertLexEquals(lex("123 123 345 ;ruby is good\n '' jit ruby #t #f () ( ) 2N"), "123 123 345 '' jit ruby #t #f () ( ) 2N")
@@ -42,8 +47,11 @@ class LexerTests {
     assertLex("123 445 332\n123 345 211", "123 445 332 123 345 211")
   }
 
+  /**
+   * Lexer adds token debug information
+   */
   @Test
-  fun addsDebug() {
+  fun addsDebugInformation() {
     val result = lex("a b c \"ss\" '' \"\" as up ;233\n () )")
     assertEquals(1, result[0].line)
     assertEquals(1, result[0].col)
@@ -81,36 +89,36 @@ class LexerTests {
   fun dropsComments() = assertLex("ass;\nb", "ass b")
 
   @Test
-  fun itsGoodLexicalSyntax() = assertLex("123() \"\"'' 233", "123 () \"\" '' 233")
+  fun handlesGoodLexicalSyntax() = assertLex("123() \"\"'' 233", "123 () \"\" '' 233")
 
   @Test(expected = RuntimeException::class)
-  fun singleThrowsWhenUnterminated() {
+  fun singleThrowsExceptionWhenUnterminated() {
     lex("ass 123 ' 32s \n ' as 1 '")
   }
 
   @Test(expected = RuntimeException::class)
-  fun doubleThrowsWhenUnterminated() {
+  fun doubleThrowsExceptionWhenUnterminated() {
     lex("\" \n\"")
     lex("\" ass we can")
   }
 
   @Test(expected = RuntimeException::class)
-  fun doubleThrowsWhenBadEscaped() {
+  fun doubleThrowsExceptionWhenBadEscaped() {
     lex("\"\\u\"")
   }
 
   @Test(expected = RuntimeException::class)
-  fun numberThrowsBadTypeId() {
+  fun numberThrowsExceptionWhenBadTypeId() {
     lex("122D 3234x")
   }
 
   @Test(expected = RuntimeException::class)
-  fun fragmentThrowsBadFragment() {
+  fun fragmentThrowsExceptionWhenBadFragment() {
     lex("#x")
   }
 
   @Test
-  fun fragmentNotThrowingBadSingleFragment() {
+  fun fragmentNotThrowsExceptionWhenBadSingleFragment() {
     lex("# ")
   }
 
@@ -127,18 +135,13 @@ class LexerTests {
    * @throws AssertionError if src and expected not equals
    */
   private fun assertLexEquals(src: List<Token>, expected: String) {
-    val sb = StringBuilder()
-    src.forEach {
-      sb.append(it.toString()).append(' ')
-    }
-    sb.deleteCharAt(sb.lastIndex)
-    assertEquals(sb.toString(), expected, "Failed to assert lex equals")
+    assertEquals(src.joinToString(" "), expected, "Failed to assert lex equals")
   }
 
   /**
-   * Lex code, returning result
+   * Perform lexical analytics with code, returning result
    *
-   * @return lex result
+   * @return lexer result
    */
   private fun lex(code: String): List<Token> {
     val lexer = Lexer(code)
