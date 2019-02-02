@@ -355,6 +355,7 @@ class Lime(private val sexp: SexpList) {
    *
    * @since 1.0
    */
+  @FunctionalInterface
   interface ILimeTraceFunc {
     fun trace(ctx: Lime, obj: Any)
   }
@@ -364,6 +365,7 @@ class Lime(private val sexp: SexpList) {
    *
    * @since 1.0
    */
+  @FunctionalInterface
   interface ILimeReplacement {
     fun replace(ctx: Lime, obj: Any): Any
   }
