@@ -4,7 +4,10 @@
   let head = xs => xs[0]
 }
 
-GeekSpec = specs:(_ ApiSpec _)* { return specs.map(x => head(filterIsNotArray(x))); }
+GeekSpec = specs:(__ ApiSpec __)* { return specs.map(x => head(filterIsNotArray(x))); }
+
+SingleLineComment
+  = "#" !lineTerminator .*
 
 entityName = letter+
 interfaceName = letter+
@@ -37,7 +40,7 @@ ApiSpec =
       method: method,
       name: name.join(''),
       args: a == null ? [] : [a].concat(as.map(ra => ra[3])),
-      return : isNotUndef(typeof rtxd) ? rtxd[2] : null,
+      return : isNotUndef(typeof rtxd) ? (rtxd == null ? null : rtxd[2]) : null,
       url: url.join('')
     };
   }
@@ -74,5 +77,11 @@ DictItem
 _ "whitespace"
   = [ \t\n\r]*
 
+__ "comment or whitespace"
+  = SingleLineComment / _
+
 letter "letter"
-  = [A-Za-z0-9_\-]
+  = [A-Za-z0-9_\-:]
+
+lineTerminator
+  = [\n\r\u2028\u2029]

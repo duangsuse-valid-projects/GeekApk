@@ -1,0 +1,9 @@
+# Server section
+POST@createUser(username-String) -> object:user = /server/makeUser
+PUT@resetSharedHash(uid-UserId) = resetMetaHash/{uid}
+
+# Admin section
+
+
+
+
