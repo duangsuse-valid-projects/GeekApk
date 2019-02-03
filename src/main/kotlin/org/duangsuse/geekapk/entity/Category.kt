@@ -27,4 +27,8 @@ data class Category (
    */
   @Size(message = "category name too long (~ ..60)", min = 0, max = 60)
   @Nls var name: String = "(none)"
-): Serializable
+): Serializable {
+  companion object {
+    fun makeNew(name: String) = Category(name = name)
+  }
+}
