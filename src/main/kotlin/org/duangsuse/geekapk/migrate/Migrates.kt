@@ -13,6 +13,13 @@ typealias MigrationRepositoriesC = Pair<CategoryRepository, RelationMigrationRep
 typealias RelationMigrationRepositories = Triple<CollabRelRepository, FollowRelRepository, StarRelRepository>
 
 // TODO later implement binary migrate (data dump) program
+/**
+ * The binary data dump program for geekapk
+ * made for server program data commutation
+ *
+ * @author duangsuse
+ * @since v1
+ */
 class Migrates {
   class Migration(val a: MigrationRepositoriesA, val b: MigrationRepositoriesB, val c: MigrationRepositoriesC) {
     fun dump() {

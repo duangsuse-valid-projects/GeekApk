@@ -16,16 +16,16 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 import javax.servlet.annotation.WebFilter
 
-/*
-* SUMMARY
+/**
+* ## Test SUMMARY
 *
-* main controller(GET)
+* > main controller(GET)
 *
-* object index: /
-* object serverDetail: /serverDetail
-* plain serverVersion: /serverVersion
-* plain serverDescription: /serverDescription
-* string.datetime serverBootUp: /serverBoot
+* + object index: /
+* + object serverDetail: /serverDetail
+* + plain serverVersion: /serverVersion
+* + plain serverDescription: /serverDescription
+* + string.datetime serverBootUp: /serverBoot
 *
 * */
 @RunWith(SpringRunner::class)

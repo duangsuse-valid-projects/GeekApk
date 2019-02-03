@@ -7,8 +7,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupp
 
 /**
  * JsonRpc Set message pretty (for development usage only)
+ *
+ * @since 1.0b
  */
-@Configuration /* not efficient, don't enable this in production environment */
+@Configuration("json-pretty") /* not efficient, don't enable this in production environment */
 class MainJsonPrettyPrintConfiguration : WebMvcConfigurationSupport() {
   override fun extendMessageConverters(converters: MutableList<HttpMessageConverter<*>>) {
     for (converter in converters)

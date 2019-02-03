@@ -14,6 +14,11 @@ import org.springframework.web.bind.annotation.ResponseBody
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
+/**
+ * GeekApk categories
+ *
+ * @version 1.0
+ */
 @Controller
 @RequestMapping("category")
 class CategoryController {

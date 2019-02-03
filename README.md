@@ -45,10 +45,13 @@ Set up the GeekApk database with following commands
 
 ```bash
 psql -c 'CREATE DATABASE geekapk_db;' -U postgres # Create database in pg clusters for geekapk with user postgres
+sudo -u postgres psql
+```
 
-CREATE USER geekapk WITH PASSWORD 'password'; # Create geekapk application database user
+```sql
+CREATE USER geekapk WITH PASSWORD 'password'; -- Create geekapk application database user
 
-GRANT ALL PRIVILEGES ON DATABASE geekapk_db TO geekapk; # Make this database geekapk owned
+GRANT ALL PRIVILEGES ON DATABASE geekapk_db TO geekapk; -- Make this database geekapk owned
 ```
 
 To make a usable database for GeekApk
