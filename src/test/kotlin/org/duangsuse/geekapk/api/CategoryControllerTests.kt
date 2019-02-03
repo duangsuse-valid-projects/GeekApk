@@ -1,29 +1,27 @@
 package org.duangsuse.geekapk.api
 
-import org.duangsuse.geekapk.controller.CategoryController
 import org.duangsuse.geekapk.entity.Category
 import org.duangsuse.geekapk.repositories.CategoryRepository
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
-import org.springframework.boot.test.mock.mockito.MockBean
-import org.springframework.test.context.ContextConfiguration
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
+import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.junit4.SpringRunner
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
-@ContextConfiguration
 @RunWith(SpringRunner::class)
-@WebMvcTest(CategoryController::class)
+@SpringBootTest
+@AutoConfigureMockMvc
 class CategoryControllerTests {
   @Autowired
   private lateinit var mock: MockMvc
 
-  @Autowired @MockBean
+  @Autowired
   private lateinit var categories: CategoryRepository
 
   val utils = Category.makeNew("Utils")
