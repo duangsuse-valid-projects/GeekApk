@@ -1,33 +1,89 @@
 # All APIs for GeekApk v1.0b except apiHint
-# Server api section
+
+## Server Info API section
+
+serverDetail() -> object:detailMap
+  = /serverDetail
+
+serverVersion() -> plain
+  = /serverVersion
+
+serverDescription() -> plain
+  = /serverDescription
+
+serverBoot() -> datetime
+  = /serverBoot
+
+## Server ADMIN api section
+
 POST@createUser(username:String) -> object:GeekUser
-  = /server/makeUser
+  = /admin/makeUser
+
 PUT@resetSharedHash(uid-path:UserId, shash:String?) -> plain
-  = /server/resetMetaHash/{uid}
+  = /admin/resetMetaHash/{uid}
+
 DELETE@deleteUser(uid-path:UserId) -> object:GeekUser
-  = /server/dropUser/{uid}
+  = /admin/dropUser/{uid}
+
 PUT@flagUser(uid-path:UserId, flag:Int) -> object:GeekUser
-  = /server/flagUser/{uid}
+  = /admin/flagUser/{uid}
+
 POST@createCategory(name:String) -> object:Category
-  = /server/makeCategory
+  = /admin/makeCategory
+
 PUT@renameCategory(id-path:CategoryId, name:String) -> object:Category
-  = /server/nameCategory/{id}
+  = /admin/nameCategory/{id}
+
 DELETE@deleteCategory(id-path:CategoryId) -> object:Category
-  = /server/dropCategory/{id}
+  = /admin/dropCategory/{id}
 
 DELETE@deleteApp(aid-path:AppId) -> object:App
-  = /server/dropApp/{aid}
+  = /admin/dropApp/{aid}
+
 PUT@transferAppCategory(aid-path:AppId, cid:CategoryId) -> [$aid:number, $old:number, $new:number]
-  = /server/moveApp/{aid}
+  = /admin/moveApp/{aid}
+
 PUT@transferAppOwner(aid-path:AppId, uid:UserId) -> [$aid:number, $old:number, $new:number]
-  = /server/transferApp/{aid}
+  = /admin/transferApp/{aid}
+
 DELETE@deleteAppUpdate(aid-path:AppId, rev-path:Int) -> object:AppUpdate
-  = /server/dropAppUpdate/{aid}/{rev}
+  = /admin/dropAppUpdate/{aid}/{rev}
+
 DELETE@deleteComment(cid-path:CommentId) -> [$cid:number, $deletedSubComments:number]
-  = /server/dropComment/{cid}
+  = /admin/dropComment/{cid}
 
-# Admin section
+## GeekApk Categories section
 
+categoryList() -> array:Category
+  = category/all
 
+categoryName(id-path:CategoryId) -> plain
+  = category/{id}
 
+## GeekApk Users section
+
+readUser(id-path:UserId) -> object:GeekUser
+  = user/{id}
+
+updateUser(id-path:UserId, prop:String, value-body:String) -> object:string
+  = user/{id}
+
+resetHash(id-path:UserId, shash:String, hash:String) -> object:string
+  = user/{id}/hash
+ 
+checkHash(id-path:UserId, hash:String) -> object:string
+  = user/{id}/checkHash
+ 
+listUser(sort:String?, sliceFrom:UserSize?, sliceTo:UserSize?) -> array:GeekUser
+  = user/all
+  
+listMetaUser(sort:String?, sliceFrom:UserSize?, sliceTo:UserSize?) -> array:GeekUser
+  = user/allHasMetaApp
+ 
+searchUser(type:String?, kw-path:String, sort:String?) -> array:GeekUser
+  = user/search/{kw}
+ 
+updateOnlineTime(id-path:UserId)
+  = user/{id}/online
+ 
 
