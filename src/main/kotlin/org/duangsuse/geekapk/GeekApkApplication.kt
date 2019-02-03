@@ -2,6 +2,7 @@ package org.duangsuse.geekapk
 
 import org.duangsuse.geekapk.controller.MainController
 import org.springframework.boot.CommandLineRunner
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.boot.web.servlet.ServletComponentScan
@@ -18,6 +19,7 @@ import java.util.*
  */
 @ServletComponentScan
 @SpringBootApplication
+@EnableAutoConfiguration
 class GeekApkApplication {
   /**
    * Print welcome message and (may process initialization files)
