@@ -21,6 +21,7 @@ buildscript {
 }
 
 apply plugin: 'kotlin'
+apply plugin: 'application'
 apply plugin: 'kotlin-spring'
 apply plugin: 'kotlin-jpa'
 apply plugin: 'org.springframework.boot'
@@ -29,6 +30,8 @@ apply plugin: 'io.spring.dependency-management'
 group = 'org.duangsuse'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
+
+mainClassName = 'org.duangsuse.GeekApk.GeekApkApplication'
 
 repositories { RepositoryHandler x -> aliMavenCentral(x) }
 

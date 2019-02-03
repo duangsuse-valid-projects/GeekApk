@@ -27,7 +27,7 @@ class Migrates {
   }
 
   companion object {
-    fun dump(@Suppress("unused") migration: Migration) {
+    fun dumpAll(@Suppress("UNUSED_PARAMETER") migration: Migration) {
       TODO("Dump to file")
     }
   }

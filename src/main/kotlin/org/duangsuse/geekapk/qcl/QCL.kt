@@ -6,7 +6,7 @@ import lime.type.SexpList
 // TODO implement QCL functions
 class QCL {
   companion object {
-    fun execute(@Suppress("unused") code: String): SexpList {
+    fun execute(@Suppress("UNUSED_PARAMETER") code: String): SexpList {
       TODO("Please implement QCL interpreter operators")
     }
   }

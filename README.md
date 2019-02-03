@@ -7,23 +7,141 @@ _— Walt Disney_
 
 ## Introduction
 
-GeekApk Spring server built with (\*v\*) and Kotlin and SpringBoot
+GeekApk Spring server built with (\*v\*) and Kotlin/SpringBoot
 
 ## Features in version 1.0♭
 
-- [ ] Migrations
+- [ ] Migrations (Export data tables to binary file)
 - [x] RPC interfaces (server, admin, category, user, app/collab, reversion, comment, star, follow, timeline, notification)
 - [x] User last online, App pinned comment
 - [x] GeekApk bot i18n
-- [x] Minial counter check before Data pull 
+- [x] Minimal counter check before Data pull 
 - [x] MetaApp for users
 - [x] AppType, GeekApk bot
-- [ ] Query Combinating Language support (bulkquery)
+- [ ] Query Combating Language support (bulk query)
 - [ ] Lexical scoping (lambda calculus) for QCL Interpreter
 
 ## Deploying
 
+### Java Runtime
+
+> GeekApk Spring is a simple application, or microservice (and transitively, [JavaEE](https://javaee.github.io/) *Platform* Application) built against [SpringBoot](https://start.spring.io/)
+
+A Java Runtime with sufficient dynamic linking requirements (like spring boot runtime dependencies) is required to run GeekApk
+
+This project's Kotlin compiler is configured to generate code for JVM 1.8, which is popular in nowadays Java server-side development 
+
+Requirements: JRE 1.8 or above
+
+Recommended: [Oracle JDK/JRE](https://java.net) or [OpenJDK 8-11](https://adoptopenjdk.net/) 
+
+[GraalVM](https://www.graalvm.org/) with Ahead-Of-Time optimizations is also a good option for the server program runtime (since SpringBoot has been [migrated to SubstrateVM](https://github.com/spring-projects/spring-framework/issues/21529))
+
+### Required configuration properties
+
+Since GeekApk is a RDBMS-based web backend application, a working [PostgreSQL](https://www.postgresql.org) instance is required to run GeekApk
+
+Set up the GeekApk database with following commands
+
+```bash
+psql -c 'CREATE DATABASE geekapk_db;' -U postgres # Create database in pg clusters for geekapk with user postgres
+
+CREATE USER geekapk WITH PASSWORD 'password'; # Create geekapk application database user
+
+GRANT ALL PRIVILEGES ON DATABASE geekapk_db TO geekapk; # Make this database geekapk owned
+```
+
+To make a usable database for GeekApk
+
+For database connection and authentication, you may need to change cluster's `pg_hba.conf`, please make sure that PostgreSQL is only accepting
+connections from local loopback for server security.
+
+All microservice properties is in `application.properties` from application classpath 
+
+### Make GeekApk a service (continuous running)
+
+[Systemd](https://en.wikipedia.org/wiki/Systemd) is a popular daemon service manager in modern GNU/Linux distributions, and it's recommended to use when making microservices continuous running
+
+create a file with these content in `/lib/systemd/system/geekapk_spring.service`:
+
+```ini
+[Unit]
+Description=GeekApk Spring server
+After=network.target
+
+[Service]
+ExecStart=#Your start command
+
+Restart=always
+RestartSec=1
+
+Environment=K=V
+Environment=K=V
+```
+
+Then you can use `sudo systemctl start geekapk_spring` to start the server
+
+For server status checking, execute shell command `sudo systemctl status geekapk_spring.service`
+
+Process control daemon [Supervisor](http://supervisord.org/) is also a good option for this case
+
+[man page for systemd](https://www.freedesktop.org/software/systemd/man/systemd.service.html) | [related practice](https://gitlab.com/duangsuse/naive_fortunes/blob/master/bootstrap.sh)
+
+### (Optional) Make a reverse proxy
+
+#### Nginx configuration
+
+```
+user www-data;
+worker_processes 4;
+pid /run/nginx.pid;
+
+events {
+    worker_connections 65535;
+    multi_accept on;
+}
+
+http {
+    include mime.types;
+    upstream geeksvc {
+        server localhost:233;
+    }
+
+    server {
+        listen 80;
+        server_name api.geekapk.org;
+
+        location / {
+            proxy_pass http://geeksvc;
+            proxy_redirect off;
+            proxy_set_header Host $host;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        }
+    }
+}
+```
+
+#### Apache configuration
+
+```
+LoadModule proxy_module modules/mod_proxy.so
+LoadModule proxy_http_module modules/mod_proxy_http.so
+
+<VirtualHost *:443>
+    ServerName api.geekapk.org
+    ProxyPass / http://localhost:233/
+    ProxyPassReverse / http://localhost:233/
+</VirtualHost>
+```
+
 ## Configuration
+
+All GeekApk application related properties (e.g. server access password) is in `info.ini` (default settings)
+and can be overridden in `geekapk.ini`, message translations (string templates) can be found in `translations.ini`
+
+Add your configuration override file paths separated by column `:` in environment variable `GEEKAPK_INI`
+
+Those configuration files are self-documented, just read inline comments and set the values on your purpose
 
 ## API Mapping
 

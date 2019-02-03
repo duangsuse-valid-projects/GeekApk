@@ -10,12 +10,21 @@ import java.io.BufferedInputStream
 import java.io.IOException
 import java.util.*
 
+/**
+ * The GeekApk Spring Application
+ *
+ * @version 1.0
+ * @author duangsuse
+ */
 @ServletComponentScan
 @SpringBootApplication
 class GeekApkApplication {
+  /**
+   * Print welcome message and (may process initialization files)
+   */
   @Bean fun initialize() = CommandLineRunner {
     args ->
-    println(":: Starting GeekApk Spring server @ ${Date()}")
+    println(":: Post-starting GeekApk Spring server @ ${Date()}")
 
     handleCommandLine(args)
 
@@ -38,7 +47,7 @@ class GeekApkApplication {
   }
 
   /**
-   * Why not use shift-dispatch method to make this more flexible?
+   * Why not to use shift-dispatch method to make this more flexible?
    */
   fun handleCommandLine(args: Array<String>) {
     when (args.size) {
@@ -55,12 +64,27 @@ class GeekApkApplication {
   }
 
   companion object {
+    /**
+     * Is initialization file processed?
+     */
       @Volatile var iniLoaded: Boolean = false
   }
 }
 
+/**
+ * Environment variable to store external ini paths `:`
+ */
+const val geekIni = "GEEKAPK_INI"
+
+/**
+ * Process initialize ini chain
+ */
 private fun initializeINIShadowChain() {
-  arrayOf("/geekapk.ini", "/translations.ini").forEach {
+  val iniList = mutableSetOf("/geekapk.ini", "/translations.ini")
+  if (System.getenv().containsKey(geekIni))
+    iniList.addAll(System.getenv(geekIni).split(':'))
+
+  iniList.forEach {
     println("=== Processing external properties file $it ===")
     val configFile = GeekApkApplication::class.java.getResource(it)
     parseGeekINIBuffer(configFile.openStream().let(::BufferedInputStream).readBytes())
@@ -68,7 +92,10 @@ private fun initializeINIShadowChain() {
   GeekApkApplication.iniLoaded = true
 }
 
-private fun initializeINIConfig() {
+/**
+ * Process default config file
+ */
+internal fun initializeINIConfig() {
   val ini = GeekApkApplication::class.java.getResource("/info.ini")
 
   val file = ini.openStream().let(::BufferedInputStream)
@@ -84,6 +111,9 @@ private fun initializeINIConfig() {
   parseGeekINIBuffer(buffer)
 }
 
+/**
+ * The application entrance
+ */
 fun main(args: Array<String>) {
   // Should set initialize properties first
   initializeINIConfig()
@@ -102,7 +132,7 @@ fun main(args: Array<String>) {
  *
  * @author duangsuse
  */
-private fun parseGeekINIBuffer(buffer: ByteArray) {
+internal fun parseGeekINIBuffer(buffer: ByteArray) {
   var tag = ""
 
   String(buffer).lines().forEach setProp@{
