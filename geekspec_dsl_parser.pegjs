@@ -59,6 +59,7 @@ OptionVals = '{' _ pv:possibleValue? pvs:(_ ',' _ possibleValue)* _ '}' {
 
 ReturnType
   = axo:("array" / "object") ':' a:Atom { return { type: axo, of: ((typeof a != 'string') ? a.join('') : a) }; }
+  / Atom
 
 Atom = "boolean" / "number"
      / "string" / "datetime"

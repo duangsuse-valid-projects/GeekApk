@@ -1,6 +1,8 @@
 # Server section
-POST@createUser(username-String) -> object:user = /server/makeUser
-PUT@resetSharedHash(uid-UserId) = resetMetaHash/{uid}
+POST@createUser(username:String) -> object:user = /server/makeUser
+PUT@resetSharedHash(uid-path:UserId, shash:String?) -> object:plain = /server/resetMetaHash/{uid}
+DELETE@deleteUser(uid-path:UserId) -> object:user = /server/dropUser/{uid}
+PUT@flagUser(uid-path:UserId, flag:Int) -> object:user = /server/flagUser/{uid}
 
 # Admin section
 
