@@ -14,7 +14,7 @@ interfaceName = letter+
 urlPath "url letters" = (letter / [:/.{}?&=%])+
 argName = letter+
 possibleValue = letter+
-fieldName = letter+
+fieldName = simpleletter+
 
 httpMethod
   = "GET" / "POST"
@@ -59,7 +59,7 @@ OptionVals = '{' _ pv:possibleValue? pvs:(_ ',' _ possibleValue)* _ '}' {
 
 ReturnType
   = axo:("array" / "object") ':' a:Atom { return { type: axo, of: ((typeof a != 'string') ? a.join('') : a) }; }
-  / Atom
+  / a:Atom { return ((typeof a != 'string') ? a.join('') : a); }
 
 Atom = "boolean" / "number"
      / "string" / "datetime"
@@ -70,7 +70,7 @@ Dict = '[' _ di:DictItem? dis:(_ ',' _ DictItem)* _ ']' {
 }
 
 DictItem
-  = ReturnType
+  = !'$' rt:ReturnType { return { type: rt }; }
   / '$' name:fieldName ':' rt:ReturnType {
     return { name: name.join(''), type: rt };
 }
@@ -83,6 +83,9 @@ __ "comment or whitespace"
 
 letter "letter"
   = [A-Za-z0-9_\-:]
+
+simpleletter "simple letter"
+  = [A-Za-z0-9_\-]
 
 lineTerminator
   = [\n\r\u2028\u2029]

@@ -1,8 +1,30 @@
-# Server section
-POST@createUser(username:String) -> object:user = /server/makeUser
-PUT@resetSharedHash(uid-path:UserId, shash:String?) -> object:plain = /server/resetMetaHash/{uid}
-DELETE@deleteUser(uid-path:UserId) -> object:user = /server/dropUser/{uid}
-PUT@flagUser(uid-path:UserId, flag:Int) -> object:user = /server/flagUser/{uid}
+# All APIs for GeekApk v1.0b except apiHint
+# Server api section
+POST@createUser(username:String) -> object:GeekUser
+  = /server/makeUser
+PUT@resetSharedHash(uid-path:UserId, shash:String?) -> plain
+  = /server/resetMetaHash/{uid}
+DELETE@deleteUser(uid-path:UserId) -> object:GeekUser
+  = /server/dropUser/{uid}
+PUT@flagUser(uid-path:UserId, flag:Int) -> object:GeekUser
+  = /server/flagUser/{uid}
+POST@createCategory(name:String) -> object:Category
+  = /server/makeCategory
+PUT@renameCategory(id-path:CategoryId, name:String) -> object:Category
+  = /server/nameCategory/{id}
+DELETE@deleteCategory(id-path:CategoryId) -> object:Category
+  = /server/dropCategory/{id}
+
+DELETE@deleteApp(aid-path:AppId) -> object:App
+  = /server/dropApp/{aid}
+PUT@transferAppCategory(aid-path:AppId, cid:CategoryId) -> [$aid:number, $old:number, $new:number]
+  = /server/moveApp/{aid}
+PUT@transferAppOwner(aid-path:AppId, uid:UserId) -> [$aid:number, $old:number, $new:number]
+  = /server/transferApp/{aid}
+DELETE@deleteAppUpdate(aid-path:AppId, rev-path:Int) -> object:AppUpdate
+  = /server/dropAppUpdate/{aid}/{rev}
+DELETE@deleteComment(cid-path:CommentId) -> [$cid:number, $deletedSubComments:number]
+  = /server/dropComment/{cid}
 
 # Admin section
 
