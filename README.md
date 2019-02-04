@@ -1,6 +1,9 @@
 # Spring GeekApk Server [![code size](https://img.shields.io/github/languages/code-size/duangsuse/GeekApk.svg?style=flat-square)](https://github.com/duangsuse/GeekApk/pulse) [![agpl-3.0](https://img.shields.io/github/license/duangsuse/GeekApk.svg?style=flat-square)](https://www.gnu.org/licenses/agpl-3.0.html)
 
-<p align="center"><img width="40%" src="https://user-images.githubusercontent.com/10570123/52161551-8321ed00-2701-11e9-963b-18e5791d553c.png" alt="Cup - The Mascot for GeekApk" /></p>
+<p align="center">
+    <img width="40%" src="https://user-images.githubusercontent.com/10570123/52161551-8321ed00-2701-11e9-963b-18e5791d553c.png" alt="Cup - The Mascot for GeekApk" /><br>
+    <i><sub>(illustration by duangsuse)</sub></i>
+</p>
 
 > The way to get started is to quit talking and begin doing.
 _— Walt Disney_
