@@ -19,16 +19,20 @@ function walkOption(o) {
 
 function walkOptions(os) {
   if (os == null) return "";
-  return "/* {" + os.map(walkOption).join(",") + "} */";
+  return "/* Maybe " + os.map(walkOption).join(" or ") + " */";
 }
 
 function walkArg(a) {
-  function translateArgLocation(l, n) {
-    if (l == 'body')
+  function translateArgLocation(l, n, optional = false) {
+    if (l == 'body') {
+      if (optional) console.log("// WARNING: Body parameters should not be optional, ignoring");
       return `@RequestBody`;
+    }
 
-    if (l == 'path')
-      return `@PathVariable("${n}")`;
+    if (l == 'path') {
+      if (optional) return `@PathVariable(name = "${n}", required = false)`;
+      else return `@PathVariable("${n}")`;
+    }
 
     return l;
   }
@@ -37,21 +41,27 @@ function walkArg(a) {
 
   if (match) {
     let {groups: {name_, type_}} = match
-    if (typeof name_ != 'undefined')
-      return `@RequestParam("${name_}") ${name_}: ${type_}`;
+    if (typeof name_ != 'undefined') {
+      if (!a.required)
+        return `@RequestParam(name = "${name_}", required = false) ${name_}: ${type_}?${walkOptions(a.options)}`;
+      else return `@RequestParam("${name_}") ${name_}: ${type_}${walkOptions(a.options)}`;
+    }
   }
 
   let match_ = a.name.match(/^(?<name>[a-z]+)\-(?<location>[a-z]+):(?<type>[A-Z][a-zA-Z]+)/);
 
   if (match_) {
     let {groups: {name, location, type}} = match_
-    if (typeof name != 'undefined')
-      return `${translateArgLocation(location, name)} ${name}: ${type}`;
+    if (typeof name != 'undefined') {
+      if (a.required)
+        return `${translateArgLocation(location, name)} ${name}: ${type}${walkOptions(a.options)}`;
+      else return `${translateArgLocation(location, name, true)} ${name}: ${type}?${walkOptions(a.options)}`;
+    }
   }
 
   if (a.required)
     return `@RequestParam("${a.name}") ${a.name}: ${a.type} ${walkOptions(a.options)}`;
-  else return `@RequestParam(name = "${a.name.split(':')[0]}", required = false) ${a.name}? ${walkOptions(a.options)}`;
+  else return `@RequestParam(name = "${a.name.split(':')[0]}", required = false) ${a.name}?${walkOptions(a.options)}`;
 }
 
 function walkArgs(as) {
@@ -87,11 +97,34 @@ function translateDictReturnType(name, type) {
   return `/* ${name}: ${type} */`;
 }
 
+function selectPossibleType(dicts) {
+  let d = new Map();
+  let set = new Set();
+
+  dicts.forEach(function (e) {
+    //console.log(e);
+    for (var name of Object.getOwnPropertyNames(e)) {
+      d[name] = e[name];
+      //console.log(`// ${name}: ${e[name]}`);
+    }
+  });
+
+  for (var i in d) {
+     if (i == 'type') set.add(d[i]);
+  }
+
+  if (set.size == 1)
+    return translatePlainTypeName(set.values().next().value);
+  else console.log(`// Failed to select a possible type for ${JSON.stringify(d)}, expecting single typeId but found ${JSON.stringify(set)}`);
+
+  return "Any?";
+}
+
 function walkReturn(r) {
   if (r == null) return "Unit";
   if (typeof r != 'object') return translatePlainTypeName(r);
   if (Array.isArray(r)) {
-    return "Map<String, String> " + r.map(e => translateDictReturnType(e.name, e.type)).join('')
+    return `Map<String, ${selectPossibleType(r)}> ` + r.map(e => translateDictReturnType(e.name, e.type)).join('')
   }
   return translateReturnType(r.type, r.of);
 }

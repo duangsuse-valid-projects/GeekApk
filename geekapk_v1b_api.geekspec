@@ -80,7 +80,7 @@ listUser(sort:String?, sliceFrom:UserSize?, sliceTo:UserSize?) -> array:GeekUser
 listMetaUser(sort:String?, sliceFrom:UserSize?, sliceTo:UserSize?) -> array:GeekUser
   = user/allHasMetaApp
  
-searchUser(type:String?, kw-path:String, sort:String?) -> array:GeekUser
+searchUser(type:String?{username,nickname,bio}, kw-path:String, sort:String?{created,followers}) -> array:GeekUser
   = user/search/{kw}
  
 updateOnlineTime(id-path:UserId)
