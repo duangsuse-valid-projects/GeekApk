@@ -2,7 +2,7 @@
 
 ## Server Info API section
 
-serverDetail() -> object:detailMap
+serverDetail() -> object:string
   = /serverDetail
 
 serverVersion() -> plain

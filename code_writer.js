@@ -11,7 +11,7 @@ console.log("\n\n\n")
 
 let ast = parser.parse(code);
 
-console.log(ast);
+console.log(JSON.stringify(ast, null, 2));
 
 function walkOption(o) {
   return o;
