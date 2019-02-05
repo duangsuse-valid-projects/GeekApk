@@ -87,7 +87,7 @@ function translatePlainTypeName(name) {
 
 function translateReturnType(type, name) {
   if (type == 'array')
-    return `List<${name}>`;
+    return `List<${translatePlainTypeName(name)}>`;
   if (type == 'object') {
     if (name.match(/^[A-Z][A-Za-z0-9_].*/))
       return name;
