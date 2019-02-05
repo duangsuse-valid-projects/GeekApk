@@ -108,4 +108,76 @@ getUserTimelineCount(uid-path:UserId) -> number
 getBulkUserTimelineCount(uids-path:String) -> number
   = /timeline/check/{uids}
 
+## GeekApk notifications section
+
+readMineNotifications() -> array:Notification
+  = /notification/active
+
+readAllMineNotifications(sliceFrom:NotificationSize?, sliceTo:NotificationSize?) -> array:Notification
+  = /notification/all
+
+markNotifications(start:NotificationSize, end:NotificationSize?, stat:String{active, inactive}) -> number
+  = /notification/mark
+
+getNotificationCount() -> number
+  = /notification/count
+
+## GeekApk Apps section
+
+readApp(aid-path:AppId) -> object:App
+  = /app/{aid}
+
+PUT@updateApp(aid-path:AppId, attr:String{package, icon, name, screenshots, readme}, val-body:String)
+  -> [$attr:String, $oldVal:String]
+  = /app/{aid}
+
+POST@createApp(package:String, category:CategoryId) -> object:App
+  = /app
+
+findAppWithPackageName(package-path:String) -> object:App
+  = /app/package/{package}
+
+listApp(inCategory:CategoryId?, sort:String?{updated, comments, stars, created}, sliceFrom:AppSize?, sliceTo:AppSize?)
+  -> array:App = /app/all
+
+DELETE@dropApp(aid-path:AppId) -> object:App
+  = /app/{aid}
+
+searchApp(inCategory:CategoryId?, content-path:String, type:String{name, package, icon, readme}, sort:String?{updated, comments, stars, created})
+  = /app/search/{content}
+
+### GeekApk app collaborators
+POST@addCollab(uid:UserId, aid-path:AppId)
+  = /app/{aid}/collab
+
+DELETE@removeCollab(uid:UserId, aid-path:AppId)
+  = /app/{aid}/collab
+
+collaborators(aid-path:AppId) -> array:number
+  = /app/collaborators/{aid}
+
+collaborated(uid-path:UserId) -> array:number
+  = /app/collaborated/{uid}
+
+
+## GeekApk Application updates
+
+readReversions(aid-path:AppId) -> array:AppUpdate
+  = /appUpdate/{aid}
+
+checkLastReversions(aids-path:String) -> array:number
+  = /appUpdate/check/{aids}
+
+readReversion(aid-path:AppId, rev-path:Int) -> object:AppUpdate
+  = /appUpdate/{aid}/{rev}
+
+POST@createReversion(aid-path:AppId, rev-path:Int) -> [$aid:number, $rev:number]
+  = /appUpdate/{aid}/{rev}
+
+PUT@updateReversion(aid-path:AppId, rev-path:Int, attr:String{version, install, updates, minsdk}, val-body:String) -> [$attr:string, $oldVal:string]
+  = /appUpdate/{aid}/{rev}
+
+DELETE@dropReversion(aid-path:AppId, rev-path:Int) -> object:AppUpdate
+  = /appUpdate/{aid}/{rev}
+
 
