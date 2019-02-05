@@ -22,7 +22,7 @@ function walkOptions(os) {
   return "/* Maybe " + os.map(walkOption).join(" or ") + " */";
 }
 
-function walkArg(a) {
+function walkArg(a, url) {
   function translateArgLocation(l, n, optional = false) {
     if (l == 'body') {
       if (optional) console.log("// WARNING: Body parameters should not be optional, ignoring");
@@ -30,6 +30,8 @@ function walkArg(a) {
     }
 
     if (l == 'path') {
+      if (typeof url != 'undefined' && !url.toString().includes(`{${n}}`))
+        console.log(`// WARNING: Path parameter ${n} not included in url ${url}`)
       if (optional) return `@PathVariable(name = "${n}", required = false)`;
       else return `@PathVariable("${n}")`;
     }
@@ -60,12 +62,12 @@ function walkArg(a) {
   }
 
   if (a.required)
-    return `@RequestParam("${a.name}") ${a.name}: ${a.type} ${walkOptions(a.options)}`;
+    return `@RequestParam("${a.name.split(':')[0]}}") ${a.name}${walkOptions(a.options)}`;
   else return `@RequestParam(name = "${a.name.split(':')[0]}", required = false) ${a.name}?${walkOptions(a.options)}`;
 }
 
-function walkArgs(as) {
-  return as.map(walkArg)
+function walkArgs(as, u) {
+  return as.map(a => walkArg(a, u))
     .join(', ')
 }
 
@@ -97,11 +99,11 @@ function translateDictReturnType(name, type) {
   return `/* ${name}: ${type} */`;
 }
 
-function selectPossibleType(dicts) {
+function selectPossibleType(dict) {
   let d = new Map();
   let set = new Set();
 
-  dicts.forEach(function (e) {
+  dict.forEach(function (e) {
     //console.log(e);
     for (var name of Object.getOwnPropertyNames(e)) {
       d[name] = e[name];
@@ -130,14 +132,17 @@ function walkReturn(r) {
 }
 
 function translatePathBindingAnnotations(verb, url) {
-  let perfix = verb[0].toUpperCase() + verb.substring(1, verb.length).toLowerCase()
-  return `@${perfix}Mapping("${url}")`
+  let prefix = verb[0].toUpperCase() + verb.substring(1, verb.length).toLowerCase()
+  return `@${prefix}Mapping("${url}")`
 }
 
 
 function walkInterface(i) {
   console.log()
-  console.log(`${translatePathBindingAnnotations(i.method, i.url)}\n@ResponseBody\nfun ${i.name}(${walkArgs(i.args)}): ${walkReturn(i.return)} {\n  TODO()\n}\n`);
+  var rb = ""
+  if (i.return) { rb += "@ResponseBody\n" }
+
+  console.log(`${translatePathBindingAnnotations(i.method, i.url)}\n${rb}fun ${i.name}(${walkArgs(i.args, i.url)}): ${walkReturn(i.return)} {\n  TODO()\n}\n`);
 }
 
 
