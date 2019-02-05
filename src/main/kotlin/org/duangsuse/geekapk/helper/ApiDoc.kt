@@ -45,6 +45,7 @@ object ApiDoc {
     "serverSpec" to "JsonRpc",
     "projectIndex" to "https://github.com/duangsuse/GeekApk",
     "apiVersion" to "v1.0",
+    "geekSpec" to "https://raw.githubusercontent.com/duangsuse/GeekApk/master/geekapk_v1b_api.geekspec",
     "newsMetaAppId" to newsApp,
     "badgeMetaAppId" to badgeApp,
     "pictureMetaAppId" to pictureApp,

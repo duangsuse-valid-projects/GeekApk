@@ -17,14 +17,14 @@ class AppController {
   @ResponseBody
   fun apiHint(hsr: HttpServletRequest) = ApiDoc.app(hsr).second
 
-  @GetMapping("/app/{aid}")
+  @GetMapping("/{aid}")
   @ResponseBody
   fun readApp(@PathVariable("aid") aid: AppId): App {
     TODO()
   }
 
 
-  @PutMapping("/app/{aid}")
+  @PutMapping("/{aid}")
   @ResponseBody
   fun updateApp(@PathVariable("aid") aid: AppId, @RequestParam("attr") attr: String/* Maybe package or icon or name or screenshots or readme */,
                 @RequestBody value: String): Map<String, String> /* attr: String *//* oldVal: String */ {
@@ -32,21 +32,21 @@ class AppController {
   }
 
 
-  @PostMapping("/app")
+  @PostMapping("/")
   @ResponseBody
   fun createApp(@RequestParam("package") packageName: String, @RequestParam("category") category: CategoryId): App {
     TODO()
   }
 
 
-  @GetMapping("/app/package/{package}")
+  @GetMapping("/package/{package}")
   @ResponseBody
   fun findAppWithPackageName(@PathVariable("package") packageName: String): App {
     TODO()
   }
 
 
-  @GetMapping("/app/all")
+  @GetMapping("/all")
   @ResponseBody
   fun listApp(@RequestParam(name = "inCategory", required = false) inCategory: CategoryId?,
               @RequestParam(name = "sort", required = false) sort: String?/* Maybe updated or comments or stars or created */,
@@ -55,14 +55,14 @@ class AppController {
   }
 
 
-  @DeleteMapping("/app/{aid}")
+  @DeleteMapping("/{aid}")
   @ResponseBody
   fun dropApp(@PathVariable("aid") aid: AppId): App {
     TODO()
   }
 
 
-  @GetMapping("/app/search/{content}")
+  @GetMapping("/search/{content}")
   fun searchApp(@RequestParam(name = "inCategory", required = false) inCategory: CategoryId?, @PathVariable("content") content: String,
                 @RequestParam("type") type: String/* Maybe name or package or icon or readme */,
                 @RequestParam(name = "sort", required = false) sort: String?/* Maybe updated or comments or stars or created */) {
@@ -70,26 +70,26 @@ class AppController {
   }
 
 
-  @PostMapping("/app/{aid}/collab")
+  @PostMapping("/{aid}/collab")
   fun addCollab(@RequestParam("uid") uid: UserId, @PathVariable("aid") aid: AppId) {
     TODO()
   }
 
 
-  @DeleteMapping("/app/{aid}/collab")
+  @DeleteMapping("/{aid}/collab")
   fun removeCollab(@RequestParam("uid") uid: UserId, @PathVariable("aid") aid: AppId) {
     TODO()
   }
 
 
-  @GetMapping("/app/collaborators/{aid}")
+  @GetMapping("/collaborators/{aid}")
   @ResponseBody
   fun collaborators(@PathVariable("aid") aid: AppId): List<Int> {
     TODO()
   }
 
 
-  @GetMapping("/app/collaborated/{uid}")
+  @GetMapping("/collaborated/{uid}")
   @ResponseBody
   fun collaborated(@PathVariable("uid") uid: UserId): List<Int> {
     TODO()
