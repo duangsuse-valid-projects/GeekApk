@@ -13,3 +13,7 @@
 + 写 wiki 也不错
 + ~~这里是 GeekApk API 服务器的一个实现，你还可以写其他实现~~
 + [第一版设计文案在此](https://gist.github.com/duangsuse/8b343e8ebe8f625ff74cf3472b94720b)
+
+## Future Reading
+
+[About commit signature verification](https://help.github.com/articles/about-commit-signature-verification/)
