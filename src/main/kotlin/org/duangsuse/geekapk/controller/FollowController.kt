@@ -13,28 +13,28 @@ class FollowController {
   @GetMapping
   @ResponseBody fun apiHint(hsr: HttpServletRequest) = ApiDoc.follow(hsr).second
 
-  @PostMapping("/follow/{uid}")
+  @PostMapping("/{uid}")
   @ResponseBody
   fun follow(@PathVariable("uid") uid: UserId): Map<String, Int> /* oldCount: number *//* newCount: number */ {
     TODO()
   }
 
 
-  @DeleteMapping("/follow/{uid}")
+  @DeleteMapping("/{uid}")
   @ResponseBody
   fun unfollow(@PathVariable("uid") uid: UserId): Map<String, Int> /* oldCount: number *//* newCount: number */ {
     TODO()
   }
 
 
-  @GetMapping("/follow/followers/{uid}")
+  @GetMapping("/followers/{uid}")
   @ResponseBody
   fun followers(@PathVariable("uid") uid: UserId): List<GeekUser> {
     TODO()
   }
 
 
-  @GetMapping("/follow/{uid}")
+  @GetMapping("/{uid}")
   @ResponseBody
   fun following(@PathVariable("uid") uid: UserId): List<GeekUser> {
     TODO()

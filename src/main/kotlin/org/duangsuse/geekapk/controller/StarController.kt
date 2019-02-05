@@ -15,28 +15,28 @@ class StarController {
   @ResponseBody
   fun apiHint(hsr: HttpServletRequest) = ApiDoc.star(hsr).second
 
-  @PostMapping("/star/{aid}")
+  @PostMapping("/{aid}")
   @ResponseBody
   fun star(@PathVariable("aid") aid: AppId): Map<String, Int> /* oldCount: number *//* newCount: number */ {
     TODO()
   }
 
 
-  @DeleteMapping("/star/{aid}")
+  @DeleteMapping("/{aid}")
   @ResponseBody
   fun unStar(@PathVariable("aid") aid: AppId): Map<String, Int> /* oldCount: number *//* newCount: number */ {
     TODO()
   }
 
 
-  @GetMapping("/star/{aid}")
+  @GetMapping("/{aid}")
   @ResponseBody
   fun stargazers(@PathVariable("aid") aid: AppId): List<App> {
     TODO()
   }
 
 
-  @GetMapping("/star/user/{uid}")
+  @GetMapping("/user/{uid}")
   @ResponseBody
   fun stars(@PathVariable("uid") uid: UserId): List<App> {
     TODO()
