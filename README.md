@@ -153,15 +153,15 @@ Those configuration files are self-documented, just read inline comments and set
 
 ### Main
 
-+ [/](http://geekapk.h2o2.moe/) API Index, help message
-+ [/serverVersion](http://geekapk.h2o2.moe/serverVersion) Server version string
-+ [/serverDescription](http://geekapk.h2o2.moe/serverDescription) description string
-+ [/serverBoot](http://geekapk.h2o2.moe/serverBoot) bootUp datetime
-+ [/detail](http://geekapk.h2o2.moe/serverDetail) server detail map
++ [/](http://api.geekapk.moe/) API Index, help message
++ [/serverVersion](http://api.geekapk.moe/serverVersion) Server version string
++ [/serverDescription](http://api.geekapk.moe/serverDescription) description string
++ [/serverBoot](http://api.geekapk.moe/serverBoot) bootUp datetime
++ [/detail](http://api.geekapk.moe/serverDetail) server detail map
 
 ### Others
 
-The GeekApk API Server has built-in API documents, see [API Index](http://geekapk.h2o2.moe/) 
+The GeekApk API Server has built-in API documents, see [API Index](http://api.geekapk.moe/) 
 
 ## References
 
