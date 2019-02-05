@@ -1,0 +1,20 @@
+language: java
+sudo: false
+jdk: openjdk8
+
+services:
+  - postgresql
+
+before_script:
+  - psql -c 'CREATE DATABASE geekapk;' -U postgres
+  - psql -c "CREATE USER geekapk with password 'a1234567';" -U postgres
+  - psql -c "GRANT ALL PRIVILEGES ON DATABASE geekapk TO geekapk;" -U postgres
+
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+
+cache:
+  directories:
+  - $HOME/.gradle/caches/
+  - $HOME/.gradle/wrapper/
