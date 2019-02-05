@@ -22,3 +22,4 @@ typealias FollowRelId = Long
 typealias UserSize = UserId
 typealias TimelineSize = TimelineId
 typealias NotificationSize = NotificationId
+typealias AppSize = AppId
