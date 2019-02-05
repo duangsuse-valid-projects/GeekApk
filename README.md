@@ -73,7 +73,7 @@ create a file with these content in `/lib/systemd/system/geekapk_spring.service`
 ```ini
 [Unit]
 Description=GeekApk Spring server
-After=network.target
+After=network.target postgresql.service
 
 [Service]
 ExecStart=#Your start command
@@ -94,6 +94,8 @@ Process control daemon [Supervisor](http://supervisord.org/) is also a good opti
 [man page for systemd](https://www.freedesktop.org/software/systemd/man/systemd.service.html) | [related practice](https://gitlab.com/duangsuse/naive_fortunes/blob/master/bootstrap.sh)
 
 ### (Optional) Make a reverse proxy
+
+[CloudFlare](https://www.cloudflare.com/) is also a usable option for reverse proxying the service
 
 #### Nginx configuration
 
@@ -139,6 +141,28 @@ LoadModule proxy_http_module modules/mod_proxy_http.so
     ProxyPassReverse / http://localhost:233/
 </VirtualHost>
 ```
+
+### Server stress testing
+
+You can use wrk / siege / ab for server stress testing
+
+You SHOULD NOT stress testing on the production environment GeekApk API service,
+run stress tests on private machines.
+
+```bash
+# Using Apache HTTP server benchmarking tool
+ab -n request_num -t timeout -c concurrency -m http_method -C cookie http://127.0.0.1:8080/
+
+# Using Siege, a HTTP/FTP load tester and benchmarking utility
+# -b means "no delays between requests"
+siege -b -n request_num -t timeout -c concurrency -H "Cookie: ${cookies}" http://127.0.0.1:8080/
+
+# use man ab / siege for documents
+
+# Wrk is not packaged for most distributions, through.
+# You can install it from scratch with the documentation from https://github.com/wg/wrk/wiki/Installing-Wrk-on-Linux
+```
+
 
 ## Configuration
 
