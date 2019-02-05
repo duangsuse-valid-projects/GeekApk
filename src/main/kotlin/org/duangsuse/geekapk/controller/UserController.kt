@@ -19,44 +19,44 @@ class UserController {
   @GetMapping
   @ResponseBody fun apiHint(hsr: HttpServletRequest) = ApiDoc.user(hsr).second
 
-  @GetMapping("user/{id}")
+  @GetMapping("/{id}")
   @ResponseBody fun readUser(@PathVariable("id") uid: UserId): GeekUser {
     TODO()
   }
 
-  @PutMapping("user/{id}")
+  @PutMapping("/{id}")
   @ResponseBody fun updateUser(@PathVariable("id") id: UserId, @RequestParam("prop") prop: String, @RequestBody value: String): Map<String, String> {
     TODO()
   }
 
-  @PutMapping("user/{id}/hash")
+  @PutMapping("/{id}/hash")
   @ResponseBody fun resetHash(@PathVariable("id") id: UserId, @RequestParam("shash") shash: String, @RequestParam("hash") hash: String): Map<String, String> {
     TODO()
   }
 
-  @GetMapping("user/{id}/checkHash")
+  @GetMapping("/{id}/checkHash")
   @ResponseBody fun checkHash(@PathVariable("id") id: UserId, @RequestParam("hash") hash: String): Map<String, String> {
     TODO()
   }
 
-  @GetMapping("user/all")
+  @GetMapping("/all")
   @ResponseBody fun listUser(@RequestParam(name = "sort", required = false) sort: String,
                              @RequestParam(name = "sliceFrom", required = false) sliceFrom: UserSize, @RequestParam(name = "sliceTo", required = false) sliceTo: UserSize): List<GeekUser> {
     TODO()
   }
 
-  @GetMapping("user/allHasMetaApp")
+  @GetMapping("/allHasMetaApp")
   @ResponseBody fun listMetaUser(@RequestParam(name = "sort", required = false) sort: String,
                              @RequestParam(name = "sliceFrom", required = false) sliceFrom: UserSize, @RequestParam(name = "sliceTo", required = false) sliceTo: UserSize): List<GeekUser> {
     TODO()
   }
 
-  @GetMapping("user/search/{kw}")
+  @GetMapping("/search/{kw}")
   @ResponseBody fun searchUser(@RequestParam(name = "type", required = false) type: String, @PathVariable("kw") kw: String, @RequestParam(name = "sort", required = false) sort: String): List<GeekUser> {
     TODO()
   }
 
-  @PutMapping("user/{id}/online")
+  @PutMapping("/{id}/online")
   @ResponseBody fun updateOnlineTime(@PathVariable("id") uid: UserId) {
     TODO()
   }

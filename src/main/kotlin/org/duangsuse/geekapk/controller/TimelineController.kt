@@ -15,35 +15,35 @@ class TimelineController {
   @ResponseBody
   fun apiHint(hsr: HttpServletRequest) = ApiDoc.timeline(hsr).second
 
-  @GetMapping("/timeline/{uid}")
+  @GetMapping("/{uid}")
   @ResponseBody
   fun readUserTimeline(@PathVariable("uid") uid: UserId, @RequestParam(name = "type", required = false) type: Int?, @RequestParam(name = "sliceFrom", required = false) sliceFrom: TimelineSize?, @RequestParam(name = "sliceTo", required = false) sliceTo: TimelineSize?): List<Timeline> {
     TODO()
   }
 
 
-  @GetMapping("/timeline/all")
+  @GetMapping("/all")
   @ResponseBody
   fun readAllTimeline(@RequestParam(name = "type", required = false) type: Int?, @RequestParam(name = "sliceFrom", required = false) sliceFrom: TimelineSize?, @RequestParam(name = "sliceTo", required = false) sliceTo: TimelineSize?): List<Timeline> {
     TODO()
   }
 
 
-  @GetMapping("/timeline/bulk/{uids}")
+  @GetMapping("/bulk/{uids}")
   @ResponseBody
   fun bulkReadUserTimeline(@PathVariable("uids") uids: String, @RequestParam(name = "type", required = false) type: Int?, @RequestParam(name = "sliceFrom", required = false) sliceFrom: TimelineSize?, @RequestParam(name = "sliceTo", required = false) sliceTo: TimelineSize?): List<Timeline> {
     TODO()
   }
 
 
-  @GetMapping("/timeline/check/{uid}")
+  @GetMapping("/check/{uid}")
   @ResponseBody
   fun getUserTimelineCount(@PathVariable("uid") uid: UserId): Int {
     TODO()
   }
 
 
-  @GetMapping("/timeline/check/{uids}")
+  @GetMapping("/check/{uids}")
   @ResponseBody
   fun getBulkUserTimelineCount(@PathVariable("uids") uids: String): Int {
     TODO()
