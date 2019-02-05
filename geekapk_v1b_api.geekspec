@@ -252,5 +252,5 @@ DELETE@unStar(aid-path:AppId) -> [$oldCount:number, $newCount:number]
 stargazers(aid-path:AppId) -> array:App
   = /star/{aid}
 
-stars(uid) -> array:App
+stars(uid-path:UserId) -> array:App
   = /star/user/{uid}

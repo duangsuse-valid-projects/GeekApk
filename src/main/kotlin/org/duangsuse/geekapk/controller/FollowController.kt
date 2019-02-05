@@ -1,10 +1,10 @@
 package org.duangsuse.geekapk.controller
 
+import org.duangsuse.geekapk.UserId
+import org.duangsuse.geekapk.entity.GeekUser
 import org.duangsuse.geekapk.helper.ApiDoc
 import org.springframework.stereotype.Controller
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.ResponseBody
+import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpServletRequest
 
 @Controller
@@ -12,4 +12,31 @@ import javax.servlet.http.HttpServletRequest
 class FollowController {
   @GetMapping
   @ResponseBody fun apiHint(hsr: HttpServletRequest) = ApiDoc.follow(hsr).second
+
+  @PostMapping("/follow/{uid}")
+  @ResponseBody
+  fun follow(@PathVariable("uid") uid: UserId): Map<String, Int> /* oldCount: number *//* newCount: number */ {
+    TODO()
+  }
+
+
+  @DeleteMapping("/follow/{uid}")
+  @ResponseBody
+  fun unfollow(@PathVariable("uid") uid: UserId): Map<String, Int> /* oldCount: number *//* newCount: number */ {
+    TODO()
+  }
+
+
+  @GetMapping("/follow/followers/{uid}")
+  @ResponseBody
+  fun followers(@PathVariable("uid") uid: UserId): List<GeekUser> {
+    TODO()
+  }
+
+
+  @GetMapping("/follow/{uid}")
+  @ResponseBody
+  fun following(@PathVariable("uid") uid: UserId): List<GeekUser> {
+    TODO()
+  }
 }
