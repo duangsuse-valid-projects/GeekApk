@@ -194,6 +194,13 @@ The GeekApk API Server has built-in API documents, see [API Index](http://api.ge
 
 + [GeekApkSpecShort](https://gist.github.com/duangsuse/335d87276bfb8ca3a4d00c0d0eb71f3f#file-geekapkspecshort-pdf) GitHub Gist
 
+### Future reading
+
++ [GeekApk 参与者公约](CODE_OF_CONDUCT.md)
++ [Pull Request 需知](PULL_REQUEST_TEMPLATE.md)
++ [贡献指南 Contributing guides](CONTRIBUTING.md)
++ [APIs for GeekApk v1.0b](geekapk_v1b_api.geekspec)
+
 ## License
 
     Copyright (C) 2019  duangsuse
