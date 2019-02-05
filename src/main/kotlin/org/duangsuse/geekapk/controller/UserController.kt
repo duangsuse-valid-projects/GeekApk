@@ -1,6 +1,7 @@
 package org.duangsuse.geekapk.controller
 
 import org.duangsuse.geekapk.UserId
+import org.duangsuse.geekapk.UserSize
 import org.duangsuse.geekapk.entity.GeekUser
 import org.duangsuse.geekapk.helper.ApiDoc
 import org.duangsuse.geekapk.repositories.UserRepository
@@ -8,8 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.*
 import javax.servlet.http.HttpServletRequest
-
-private typealias UserSize = UserId
 
 @Controller
 @RequestMapping("user")
