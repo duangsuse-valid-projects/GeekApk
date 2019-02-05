@@ -1,4 +1,7 @@
 import org.duangsuse.geekapk.GeekApkApplicationKt
+import javax.servlet.*
+import javax.servlet.http.*
+import java.security.*
 
 GeekApkApplicationKt.initializeINIConfig()
 
@@ -159,7 +162,7 @@ HttpServletRequest hsr = (new HttpServletRequest() {
     }
 
     @Override
-    def T upgrade(Class<T> httpUpgradeHandlerClass) throws IOException, ServletException {
+    def HttpUpgradeHandler upgrade(Class httpUpgradeHandlerClass) throws IOException, ServletException {
         return null
     }
 
@@ -348,6 +351,8 @@ HttpServletRequest hsr = (new HttpServletRequest() {
         return null
     }
 })
+
+import org.duangsuse.geekapk.helper.ApiDoc
 
 map = ApiDoc.root.invoke(hsr)
 
