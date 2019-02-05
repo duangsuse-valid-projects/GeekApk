@@ -4,14 +4,17 @@
   let head = xs => xs[0]
 }
 
-GeekSpec = specs:(_ ApiSpec _)* { return specs.map(x => head(filterIsNotArray(x))); }
+GeekSpec = specs:(__ ApiSpec __)* { return specs.map(x => head(filterIsNotArray(x))); }
+
+SingleLineComment
+  = "#" !lineTerminator .*
 
 entityName = letter+
 interfaceName = letter+
 urlPath "url letters" = (letter / [:/.{}?&=%])+
 argName = letter+
 possibleValue = letter+
-fieldName = letter+
+fieldName = simpleletter+
 
 httpMethod
   = "GET" / "POST"
@@ -37,7 +40,7 @@ ApiSpec =
       method: method,
       name: name.join(''),
       args: a == null ? [] : [a].concat(as.map(ra => ra[3])),
-      return : isNotUndef(typeof rtxd) ? rtxd[2] : null,
+      return : isNotUndef(typeof rtxd) ? (rtxd == null ? null : rtxd[2]) : null,
       url: url.join('')
     };
   }
@@ -56,6 +59,7 @@ OptionVals = '{' _ pv:possibleValue? pvs:(_ ',' _ possibleValue)* _ '}' {
 
 ReturnType
   = axo:("array" / "object") ':' a:Atom { return { type: axo, of: ((typeof a != 'string') ? a.join('') : a) }; }
+  / a:Atom { return ((typeof a != 'string') ? a.join('') : a); }
 
 Atom = "boolean" / "number"
      / "string" / "datetime"
@@ -66,7 +70,7 @@ Dict = '[' _ di:DictItem? dis:(_ ',' _ DictItem)* _ ']' {
 }
 
 DictItem
-  = ReturnType
+  = !'$' rt:ReturnType { return { type: rt }; }
   / '$' name:fieldName ':' rt:ReturnType {
     return { name: name.join(''), type: rt };
 }
@@ -74,5 +78,14 @@ DictItem
 _ "whitespace"
   = [ \t\n\r]*
 
+__ "comment or whitespace"
+  = SingleLineComment / _
+
 letter "letter"
+  = [A-Za-z0-9_\-:]
+
+simpleletter "simple letter"
   = [A-Za-z0-9_\-]
+
+lineTerminator
+  = [\n\r\u2028\u2029]

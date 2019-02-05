@@ -17,3 +17,10 @@ typealias TimelineId = Long
 typealias CollabRelId = Int
 typealias StarRelId = Long
 typealias FollowRelId = Long
+
+/* Size aliases */
+typealias UserSize = UserId
+typealias TimelineSize = TimelineId
+typealias NotificationSize = NotificationId
+typealias AppSize = AppId
+typealias CommentSize = CommentId

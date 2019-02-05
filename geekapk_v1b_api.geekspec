@@ -1,0 +1,256 @@
+# All APIs for GeekApk v1.0b except apiHint
+# author duangsuse
+# version 1.0b
+# spec JsonRpc
+# GeekSpec DSL definition: https://github.com/duangsuse/GeekApk/blob/add-controller-template/geekspec_dsl_parser.pegjs
+
+#@ Auth user scheme(Token, Cookie): uid=gaUser tok=gaHash
+#@ Auth serverAdmin scheme(Token, Cookie): uid=gaUser tok=gaHash admin_tok=gaModTok
+
+## Server Info API section
+
+serverVersion() -> plain
+  = /serverVersion
+
+serverDescription() -> plain
+  = /serverDescription
+
+serverBoot() -> datetime
+  = /serverBoot
+
+serverDetail() -> object:string
+  = /serverDetail
+
+
+## Server ADMIN api section
+## All ADMIN apis except deleteApp, transferAppCategory, deleteComment, flagUser should have serverAdmin permission
+
+POST@createUser(username:String) -> object:GeekUser
+  = /admin/makeUser
+
+PUT@resetSharedHash(uid-path:UserId, shash:String?) -> plain
+  = /admin/resetMetaHash/{uid}
+
+DELETE@deleteUser(uid-path:UserId) -> object:GeekUser
+  = /admin/dropUser/{uid}
+
+#### Requires superuser session
+PUT@flagUser(uid-path:UserId, flag:Int) -> object:GeekUser
+  = /admin/flagUser/{uid}
+
+POST@createCategory(name:String) -> object:Category
+  = /admin/makeCategory
+
+PUT@renameCategory(id-path:CategoryId, name:String) -> object:Category
+  = /admin/nameCategory/{id}
+
+DELETE@deleteCategory(id-path:CategoryId) -> object:Category
+  = /admin/dropCategory/{id}
+
+#### Requires superuser session
+DELETE@deleteApp(aid-path:AppId) -> object:App
+  = /admin/dropApp/{aid}
+
+#### Requires superuser session
+PUT@transferAppCategory(aid-path:AppId, cid:CategoryId) -> [$aid:number, $old:number, $new:number]
+  = /admin/moveApp/{aid}
+
+PUT@transferAppOwner(aid-path:AppId, uid:UserId) -> [$aid:number, $old:number, $new:number]
+  = /admin/transferApp/{aid}
+
+DELETE@deleteAppUpdate(aid-path:AppId, rev-path:Int) -> object:AppUpdate
+  = /admin/dropAppUpdate/{aid}/{rev}
+
+#### Requires superuser session
+DELETE@deleteComment(cid-path:CommentId) -> [$cid:number, $deletedSubComments:number]
+  = /admin/dropComment/{cid}
+
+
+
+## GeekApk Categories section
+
+categoryList() -> array:Category
+  = category/all
+
+categoryName(id-path:CategoryId) -> plain
+  = category/{id}
+
+
+
+## GeekApk Users section
+
+readUser(id-path:UserId) -> object:GeekUser
+  = user/{id}
+
+
+### Requires user permission
+PUT@updateUser(id-path:UserId, prop:String{username, nickname, avatar, bio, metaApp}, value-body:String)
+  -> [$user:number, $prop:string, $old:string, $new:string]
+  = user/{id}
+
+PUT@resetHash(id-path:UserId, shash:String, hash:String)
+  -> [$id:number, $newShash:string, $newHash:string]
+  = user/{id}/hash
+
+checkHash(id-path:UserId, hash:String)
+  -> [$valid:boolean, $message:string]
+  = user/{id}/checkHash
+
+listUser(sort:String?{created, followers}, sliceFrom:UserSize?, sliceTo:UserSize?) -> array:GeekUser
+  = user/all
+
+listMetaUser(sort:String?{created, followers}, sliceFrom:UserSize?, sliceTo:UserSize?) -> array:GeekUser
+  = user/allHasMetaApp
+
+searchUser(type:String?{username, nickname, bio}, kw-path:String, sort:String?{created, followers}) -> array:GeekUser
+  = user/search/{kw}
+
+PUT@updateOnlineTime(id-path:UserId)
+  = user/{id}/online
+
+## GeekApk Timeline section
+
+readUserTimeline(uid-path:UserId, type:Int?, sliceFrom:TimelineSize?, sliceTo:TimelineSize?) -> array:Timeline
+  = /timeline/{uid}
+
+readAllTimeline(type:Int?, sliceFrom:TimelineSize?, sliceTo:TimelineSize?) -> array:Timeline
+  = /timeline/all
+
+bulkReadUserTimeline(uids-path:String, type:Int?, sliceFrom:TimelineSize?, sliceTo:TimelineSize?) -> array:Timeline
+  = /timeline/bulk/{uids}
+
+getUserTimelineCount(uid-path:UserId) -> number
+  = /timeline/check/{uid}
+
+getBulkUserTimelineCount(uids-path:String) -> number
+  = /timeline/check/{uids}
+
+## GeekApk notifications section
+### All interface access requires user(owner) permission
+
+readMineNotifications() -> array:Notification
+  = /notification/active
+
+readAllMineNotifications(sliceFrom:NotificationSize?, sliceTo:NotificationSize?) -> array:Notification
+  = /notification/all
+
+markNotifications(start:NotificationSize, end:NotificationSize?, stat:String{active, inactive}) -> number
+  = /notification/mark
+
+getNotificationCount() -> number
+  = /notification/count
+
+## GeekApk Apps section
+### All non-GET interface access requires (readwrite) user(owner) permission
+
+readApp(aid-path:AppId) -> object:App
+  = /app/{aid}
+
+PUT@updateApp(aid-path:AppId, attr:String{package, icon, name, screenshots, readme}, val-body:String)
+  -> [$attr:String, $oldVal:String]
+  = /app/{aid}
+
+POST@createApp(package:String, category:CategoryId) -> object:App
+  = /app
+
+findAppWithPackageName(package-path:String) -> object:App
+  = /app/package/{package}
+
+listApp(inCategory:CategoryId?, sort:String?{updated, comments, stars, created}, sliceFrom:AppSize?, sliceTo:AppSize?)
+  -> array:App = /app/all
+
+DELETE@dropApp(aid-path:AppId) -> object:App
+  = /app/{aid}
+
+searchApp(inCategory:CategoryId?, content-path:String, type:String{name, package, icon, readme}, sort:String?{updated, comments, stars, created})
+  = /app/search/{content}
+
+### GeekApk app collaborators
+POST@addCollab(uid:UserId, aid-path:AppId)
+  = /app/{aid}/collab
+
+DELETE@removeCollab(uid:UserId, aid-path:AppId)
+  = /app/{aid}/collab
+
+collaborators(aid-path:AppId) -> array:number
+  = /app/collaborators/{aid}
+
+collaborated(uid-path:UserId) -> array:number
+  = /app/collaborated/{uid}
+
+
+## GeekApk Application updates
+### All non-GET interface access requires (readwrite) user(owner) permission
+
+readReversions(aid-path:AppId) -> array:AppUpdate
+  = /appUpdate/{aid}
+
+checkLastReversions(aids-path:String) -> array:number
+  = /appUpdate/check/{aids}
+
+readReversion(aid-path:AppId, rev-path:Int) -> object:AppUpdate
+  = /appUpdate/{aid}/{rev}
+
+POST@createReversion(aid-path:AppId, rev-path:Int) -> [$aid:number, $rev:number]
+  = /appUpdate/{aid}/{rev}
+
+PUT@updateReversion(aid-path:AppId, rev-path:Int, attr:String{version, install, updates, minsdk}, val-body:String) -> [$attr:string, $oldVal:string]
+  = /appUpdate/{aid}/{rev}
+
+DELETE@dropReversion(aid-path:AppId, rev-path:Int) -> object:AppUpdate
+  = /appUpdate/{aid}/{rev}
+
+## GeekApk comments
+### All non-GET interface access requires (readwrite) user(owner) permission
+
+searchComment(inApp:AppId?, user:UserId?, repliesTo:CommentId?, content-path:String) -> array:Comment
+  = /comment/search/{content}
+
+listCommentInApp(aid-path:AppId, sliceFrom:CommentSize?, sliceTo:CommentSize?) -> array:Comment
+  = /comment/{aid}
+
+listSubComment(cid-path:CommentId) -> array:Comment
+  = /comment/subOf/{cid}
+
+listAllComment(inApp:AppId?, user:UserId?, sliceFrom:CommentSize?, sliceTo:CommentSize?) -> array:Comment
+  = /comment/all
+
+POST@createComment(aid-path:AppId, content:String) -> object:Comment
+  = /comment/{aid}
+
+PUT@editComment(cid-path:CommentId) -> [$oldContent:string, $newContent:string]
+  = /comment/edit/{cid}
+
+DELETE@deleteComment(cid-path:CommentId) -> object:Comment
+  = /comment/delete/{cid}
+
+## GeekApk App Star and Follow
+### All non-GET interface access requires (non-banned) user(possibly owner) permission
+
+### Star (User -* App)
+
+POST@follow(uid-path:UserId) -> [$oldCount:number, $newCount:number]
+  = /follow/{uid}
+
+DELETE@unfollow(uid-path:UserId) -> [$oldCount:number, $newCount:number]
+  = /follow/{uid}
+
+followers(uid-path:UserId) -> array:GeekUser
+  = /follow/followers/{uid}
+
+following(uid-path:UserId) -> array:GeekUser
+  = /follow/{uid}
+
+### Follow (User -> User)
+
+POST@star(aid-path:AppId) -> [$oldCount:number, $newCount:number]
+  = /star/{aid}
+
+DELETE@unStar(aid-path:AppId) -> [$oldCount:number, $newCount:number]
+  = /star/{aid}
+
+stargazers(aid-path:AppId) -> array:App
+  = /star/{aid}
+
+stars(uid-path:UserId) -> array:App
+  = /star/user/{uid}
