@@ -16,28 +16,28 @@ class NotificationController {
   @GetMapping
   @ResponseBody fun apiHint(hsr: HttpServletRequest) = ApiDoc.notification(hsr).second
 
-  @GetMapping("/notification/active")
+  @GetMapping("/active")
   @ResponseBody
   fun readMineNotifications(): List<Notification> {
     TODO()
   }
 
 
-  @GetMapping("/notification/all")
+  @GetMapping("/all")
   @ResponseBody
   fun readAllMineNotifications(@RequestParam(name = "sliceFrom", required = false) sliceFrom:NotificationSize?, @RequestParam(name = "sliceTo", required = false) sliceTo:NotificationSize?): List<Notification> {
     TODO()
   }
 
 
-  @GetMapping("/notification/mark")
+  @GetMapping("/mark")
   @ResponseBody
   fun markNotifications(@RequestParam("start") start: NotificationSize, @RequestParam(name = "end", required = false) end: NotificationSize?, @RequestParam("stat") stat: String/* Maybe active or inactive */): Int {
     TODO()
   }
 
 
-  @GetMapping("/notification/count")
+  @GetMapping("/count")
   @ResponseBody
   fun getNotificationCount(): Int {
     TODO()
