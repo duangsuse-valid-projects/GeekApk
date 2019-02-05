@@ -17,7 +17,7 @@ class CommentController {
   @ResponseBody
   fun apiHint(hsr: HttpServletRequest) = ApiDoc.comment(hsr).second
 
-  @GetMapping("/comment/search/{content}")
+  @GetMapping("/search/{content}")
   @ResponseBody
   fun searchComment(@RequestParam(name = "inApp", required = false) inApp: AppId?, @RequestParam(name = "user", required = false) user: UserId?,
                     @RequestParam(name = "repliesTo", required = false) repliesTo: CommentId?, @PathVariable("content") content: String): List<Comment> {
@@ -25,7 +25,7 @@ class CommentController {
   }
 
 
-  @GetMapping("/comment/{aid}")
+  @GetMapping("/{aid}")
   @ResponseBody
   fun listCommentInApp(@PathVariable("aid") aid: AppId, @RequestParam(name = "sliceFrom", required = false) sliceFrom: CommentSize?,
                        @RequestParam(name = "sliceTo", required = false) sliceTo: CommentSize?): List<Comment> {
@@ -33,14 +33,14 @@ class CommentController {
   }
 
 
-  @GetMapping("/comment/subOf/{cid}")
+  @GetMapping("/subOf/{cid}")
   @ResponseBody
   fun listSubComment(@PathVariable("cid") cid: CommentId): List<Comment> {
     TODO()
   }
 
 
-  @GetMapping("/comment/all")
+  @GetMapping("/all")
   @ResponseBody
   fun listAllComment(@RequestParam(name = "inApp", required = false) inApp: AppId?, @RequestParam(name = "user", required = false) user: UserId?,
                      @RequestParam(name = "sliceFrom", required = false) sliceFrom: CommentSize?, @RequestParam(name = "sliceTo", required = false) sliceTo: CommentSize?): List<Comment> {
@@ -48,21 +48,21 @@ class CommentController {
   }
 
 
-  @PostMapping("/comment/{aid}")
+  @PostMapping("/{aid}")
   @ResponseBody
   fun createComment(@PathVariable("aid") aid: AppId, @RequestParam("content") content: String): Comment {
     TODO()
   }
 
 
-  @PutMapping("/comment/edit/{cid}")
+  @PutMapping("/edit/{cid}")
   @ResponseBody
   fun editComment(@PathVariable("cid") cid: CommentId): Map<String, String> /* oldContent: string *//* newContent: string */ {
     TODO()
   }
 
 
-  @DeleteMapping("/comment/delete/{cid}")
+  @DeleteMapping("/delete/{cid}")
   @ResponseBody
   fun deleteComment(@PathVariable("cid") cid: CommentId): Comment {
     TODO()
