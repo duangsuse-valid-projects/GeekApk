@@ -6,6 +6,7 @@ import org.duangsuse.geekapk.UserId
 import org.duangsuse.geekapk.annotation.*
 import org.duangsuse.geekapk.helper.loopFor
 import org.duangsuse.geekapk.helper.times
+import org.hibernate.validator.constraints.URL
 import org.jetbrains.annotations.Nls
 import java.io.Serializable
 import java.util.*
@@ -44,7 +45,7 @@ data class GeekUser (
    * User's avatar bitmap image link
    */
   @Size(message = "avatar url too large (~ ..600)", min = 0, max = 600)
-  @Lob var avatarUrl: String = "",
+  @URL @Lob var avatarUrl: String = "",
 
   /**
    * User's meta application ID, may null

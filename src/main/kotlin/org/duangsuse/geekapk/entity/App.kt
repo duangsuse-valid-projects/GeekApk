@@ -5,6 +5,7 @@ import org.duangsuse.geekapk.CategoryId
 import org.duangsuse.geekapk.CommentId
 import org.duangsuse.geekapk.UserId
 import org.duangsuse.geekapk.annotation.*
+import org.hibernate.validator.constraints.URL
 import org.jetbrains.annotations.Nls
 import org.jetbrains.annotations.NonNls
 import java.io.Serializable
@@ -68,7 +69,7 @@ data class App (
    * Application icon
    */
   @Size(message = "~ ..500", min = 0, max = 500)
-  @NonNls @Lob var icon: String = "",
+  @URL @NonNls @Lob var icon: String = "",
 
   /**
    * Application screenshot URLs text may containing AppType (type=typeName) and other attributes which are not searchable
