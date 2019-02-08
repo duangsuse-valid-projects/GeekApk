@@ -2,6 +2,10 @@ language: java
 sudo: false
 jdk: openjdk8
 
+branches:
+  except:
+    - /^add-.*/
+
 services:
   - postgresql
 
