@@ -200,6 +200,8 @@ The GeekApk API Server has built-in API documents, see [API Index](http://api.ge
 + [Pull Request 需知](PULL_REQUEST_TEMPLATE.md)
 + [贡献指南 Contributing guides](CONTRIBUTING.md)
 + [APIs for GeekApk v1.0b](geekapk_v1b_api.geekspec)
++ [Rebase server](https://github.com/imufun/rebase-server/tree/master/src/main/java/com/drakeet/rebase/api/)
++ [Testable Solutions for Modern Applications Book](https://github.com/arquillian/continuous-enterprise-development)
 
 ## License
 
