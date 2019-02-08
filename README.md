@@ -11,6 +11,7 @@ _— Walt Disney_
 ## Introduction
 
 GeekApk Spring server built with (\*v\*) and Kotlin/SpringBoot
+by __♥\\\_(ㇱ)\_/✐__
 
 ## Features in version 1.0♭
 
@@ -42,14 +43,16 @@ Recommended: [Oracle JDK/JRE](https://java.net) or [OpenJDK 8-11](https://adopto
 
 ### Required configuration properties
 
-Since GeekApk is a RDBMS-based web backend application, a working [PostgreSQL](https://www.postgresql.org) instance is required to run GeekApk
+Since GeekApk is a RDBMS-based web backend application, a working [PostgreSQL](https://www.postgresql.org) DBMS instance is required to run GeekApk
 
-Set up the GeekApk database with following commands
+Setup the GeekApk database with following commands
 
 ```bash
 psql -c 'CREATE DATABASE geekapk_db;' -U postgres # Create database in pg clusters for geekapk with user postgres
 sudo -u postgres psql
 ```
+
+(and execute SQL statements)
 
 ```sql
 CREATE USER geekapk WITH PASSWORD 'password'; -- Create geekapk application database user
@@ -59,12 +62,17 @@ GRANT ALL PRIVILEGES ON DATABASE geekapk_db TO geekapk; -- Make this database ge
 
 To make a usable database for GeekApk
 
-For database connection and authentication, you may need to change cluster's `pg_hba.conf`, please make sure that PostgreSQL is only accepting
+For database connection and authentication, you may need to change the cluster's `pg_hba.conf`, please make sure that PostgreSQL is only accepting
 connections from local loopback for server security.
 
-All microservice properties is in `application.properties` from application classpath 
+All microservice properties are in `./application.properties` nested in application classpath 
 
 ### Make GeekApk a service (continuous running)
+
+We suppose that you choose to deploy geekapk service to your own Linux machine, in most cases this means
+you will deploy your service onto your VPS
+
+[Amazon Lambda](https://aws.amazon.com/lambda/) / [OpenShift](https://openshift.com/) and others is not talked here.
 
 [Systemd](https://en.wikipedia.org/wiki/Systemd) is a popular daemon service manager in modern GNU/Linux distributions, and it's recommended to use when making microservices continuous running
 
@@ -76,12 +84,12 @@ Description=GeekApk Spring server
 After=network.target postgresql.service
 
 [Service]
-ExecStart=#Your start command
+ExecStart=#Your server start command
 
 Restart=always
 RestartSec=1
 
-Environment=K=V
+Environment=Key=Value
 Environment=K=V
 ```
 
