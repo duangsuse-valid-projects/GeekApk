@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import org.duangsuse.geekapk.AppId
 import org.duangsuse.geekapk.UserId
 import org.duangsuse.geekapk.annotation.*
+import org.duangsuse.geekapk.constraint.SimpleName
 import org.duangsuse.geekapk.helper.loopFor
 import org.duangsuse.geekapk.helper.times
 import org.hibernate.validator.constraints.URL
@@ -33,7 +34,7 @@ data class GeekUser (
    * User's identical machine name (but not in GeekApk 1.x)
    */
   @Size(message = "username must be greater than 1 char and smaller than 21 char count", min = 2, max = 20)
-  @Nls var username: String = "(generated)",
+  @SimpleName @Nls var username: String = "(generated)",
 
   /**
    * User's display name
