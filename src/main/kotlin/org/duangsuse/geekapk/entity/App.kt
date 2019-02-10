@@ -5,6 +5,7 @@ import org.duangsuse.geekapk.CategoryId
 import org.duangsuse.geekapk.CommentId
 import org.duangsuse.geekapk.UserId
 import org.duangsuse.geekapk.annotation.*
+import org.duangsuse.geekapk.constraint.PackageName
 import org.hibernate.validator.constraints.URL
 import org.jetbrains.annotations.Nls
 import org.jetbrains.annotations.NonNls
@@ -40,7 +41,7 @@ data class App (
    * Package name for the application, unique in the table
    */
   @Size(message = "unexpected package name size, expected size in [0, 64)", min = 1, max = 64)
-  var packageName: String = "(unset)",
+  @PackageName var packageName: String = "(unset)",
 
   /**
    * User owning this application
