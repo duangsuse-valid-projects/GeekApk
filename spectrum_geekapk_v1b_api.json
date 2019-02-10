@@ -1,0 +1,1429 @@
+[
+  {
+    "name": "serverVersion",
+    "args": [
+
+    ],
+    "return": "plain",
+    "method": "GET",
+    "url": "/serverVersion"
+  },
+  {
+    "name": "serverDescription",
+    "args": [
+
+    ],
+    "return": "plain",
+    "method": "GET",
+    "url": "/serverDescription"
+  },
+  {
+    "name": "serverBoot",
+    "args": [
+
+    ],
+    "return": "datetime",
+    "method": "GET",
+    "url": "/serverBoot"
+  },
+  {
+    "name": "serverDetail",
+    "args": [
+
+    ],
+    "return": {
+      "type": "object",
+      "of": "string"
+    },
+    "method": "GET",
+    "url": "/serverDetail"
+  },
+  {
+    "name": "createUser",
+    "args": [
+      {
+        "name": "username:String",
+        "required": true,
+        "options": null
+      }
+    ],
+    "return": {
+      "type": "object",
+      "of": "GeekUser"
+    },
+    "method": "POST",
+    "url": "/admin/makeUser"
+  },
+  {
+    "name": "resetSharedHash",
+    "args": [
+      {
+        "name": "uid-path:UserId",
+        "required": true,
+        "options": null
+      },
+      {
+        "name": "shash:String",
+        "required": false,
+        "options": null
+      }
+    ],
+    "return": "plain",
+    "method": "PUT",
+    "url": "/admin/resetMetaHash/{uid}"
+  },
+  {
+    "name": "deleteUser",
+    "args": [
+      {
+        "name": "uid-path:UserId",
+        "required": true,
+        "options": null
+      }
+    ],
+    "return": {
+      "type": "object",
+      "of": "GeekUser"
+    },
+    "method": "DELETE",
+    "url": "/admin/dropUser/{uid}"
+  },
+  {
+    "name": "flagUser",
+    "args": [
+      {
+        "name": "uid-path:UserId",
+        "required": true,
+        "options": null
+      },
+      {
+        "name": "flag:Int",
+        "required": true,
+        "options": null
+      }
+    ],
+    "return": {
+      "type": "object",
+      "of": "GeekUser"
+    },
+    "method": "PUT",
+    "url": "/admin/flagUser/{uid}"
+  },
+  {
+    "name": "createCategory",
+    "args": [
+      {
+        "name": "name:String",
+        "required": true,
+        "options": null
+      }
+    ],
+    "return": {
+      "type": "object",
+      "of": "Category"
+    },
+    "method": "POST",
+    "url": "/admin/makeCategory"
+  },
+  {
+    "name": "renameCategory",
+    "args": [
+      {
+        "name": "id-path:CategoryId",
+        "required": true,
+        "options": null
+      },
+      {
+        "name": "name:String",
+        "required": true,
+        "options": null
+      }
+    ],
+    "return": {
+      "type": "object",
+      "of": "Category"
+    },
+    "method": "PUT",
+    "url": "/admin/nameCategory/{id}"
+  },
+  {
+    "name": "deleteCategory",
+    "args": [
+      {
+        "name": "id-path:CategoryId",
+        "required": true,
+        "options": null
+      }
+    ],
+    "return": {
+      "type": "object",
+      "of": "Category"
+    },
+    "method": "DELETE",
+    "url": "/admin/dropCategory/{id}"
+  },
+  {
+    "name": "deleteApp",
+    "args": [
+      {
+        "name": "aid-path:AppId",
+        "required": true,
+        "options": null
+      }
+    ],
+    "return": {
+      "type": "object",
+      "of": "App"
+    },
+    "method": "DELETE",
+    "url": "/admin/dropApp/{aid}"
+  },
+  {
+    "name": "transferAppCategory",
+    "args": [
+      {
+        "name": "aid-path:AppId",
+        "required": true,
+        "options": null
+      },
+      {
+        "name": "cid:CategoryId",
+        "required": true,
+        "options": null
+      }
+    ],
+    "return": [
+      {
+        "name": "aid",
+        "type": "number"
+      },
+      {
+        "name": "old",
+        "type": "number"
+      },
+      {
+        "name": "new",
+        "type": "number"
+      }
+    ],
+    "method": "PUT",
+    "url": "/admin/moveApp/{aid}"
+  },
+  {
+    "name": "transferAppOwner",
+    "args": [
+      {
+        "name": "aid-path:AppId",
+        "required": true,
+        "options": null
+      },
+      {
+        "name": "uid:UserId",
+        "required": true,
+        "options": null
+      }
+    ],
+    "return": [
+      {
+        "name": "aid",
+        "type": "number"
+      },
+      {
+        "name": "old",
+        "type": "number"
+      },
+      {
+        "name": "new",
+        "type": "number"
+      }
+    ],
+    "method": "PUT",
+    "url": "/admin/transferApp/{aid}"
+  },
+  {
+    "name": "deleteAppUpdate",
+    "args": [
+      {
+        "name": "aid-path:AppId",
+        "required": true,
+        "options": null
+      },
+      {
+        "name": "rev-path:Int",
+        "required": true,
+        "options": null
+      }
+    ],
+    "return": {
+      "type": "object",
+      "of": "AppUpdate"
+    },
+    "method": "DELETE",
+    "url": "/admin/dropAppUpdate/{aid}/{rev}"
+  },
+  {
+    "name": "deleteComment",
+    "args": [
+      {
+        "name": "cid-path:CommentId",
+        "required": true,
+        "options": null
+      }
+    ],
+    "return": [
+      {
+        "name": "cid",
+        "type": "number"
+      },
+      {
+        "name": "deletedSubComments",
+        "type": "number"
+      }
+    ],
+    "method": "DELETE",
+    "url": "/admin/dropComment/{cid}"
+  },
+  {
+    "name": "categoryList",
+    "args": [
+
+    ],
+    "return": {
+      "type": "array",
+      "of": "Category"
+    },
+    "method": "GET",
+    "url": "category/all"
+  },
+  {
+    "name": "categoryName",
+    "args": [
+      {
+        "name": "id-path:CategoryId",
+        "required": true,
+        "options": null
+      }
+    ],
+    "return": "plain",
+    "method": "GET",
+    "url": "category/{id}"
+  },
+  {
+    "name": "readUser",
+    "args": [
+      {
+        "name": "id-path:UserId",
+        "required": true,
+        "options": null
+      }
+    ],
+    "return": {
+      "type": "object",
+      "of": "GeekUser"
+    },
+    "method": "GET",
+    "url": "user/{id}"
+  },
+  {
+    "name": "updateUser",
+    "args": [
+      {
+        "name": "id-path:UserId",
+        "required": true,
+        "options": null
+      },
+      {
+        "name": "prop:String",
+        "required": true,
+        "options": [
+          "username",
+          "nickname",
+          "avatar",
+          "bio",
+          "metaApp"
+        ]
+      },
+      {
+        "name": "value-body:String",
+        "required": true,
+        "options": null
+      }
+    ],
+    "return": [
+      {
+        "name": "user",
+        "type": "number"
+      },
+      {
+        "name": "prop",
+        "type": "string"
+      },
+      {
+        "name": "old",
+        "type": "string"
+      },
+      {
+        "name": "new",
+        "type": "string"
+      }
+    ],
+    "method": "PUT",
+    "url": "user/{id}"
+  },
+  {
+    "name": "resetHash",
+    "args": [
+      {
+        "name": "id-path:UserId",
+        "required": true,
+        "options": null
+      },
+      {
+        "name": "shash:String",
+        "required": true,
+        "options": null
+      },
+      {
+        "name": "hash:String",
+        "required": true,
+        "options": null
+      }
+    ],
+    "return": [
+      {
+        "name": "id",
+        "type": "number"
+      },
+      {
+        "name": "newShash",
+        "type": "string"
+      },
+      {
+        "name": "newHash",
+        "type": "string"
+      }
+    ],
+    "method": "PUT",
+    "url": "user/{id}/hash"
+  },
+  {
+    "name": "checkHash",
+    "args": [
+      {
+        "name": "id-path:UserId",
+        "required": true,
+        "options": null
+      },
+      {
+        "name": "hash:String",
+        "required": true,
+        "options": null
+      }
+    ],
+    "return": [
+      {
+        "name": "valid",
+        "type": "boolean"
+      },
+      {
+        "name": "message",
+        "type": "string"
+      }
+    ],
+    "method": "GET",
+    "url": "user/{id}/checkHash"
+  },
+  {
+    "name": "listUser",
+    "args": [
+      {
+        "name": "sort:String",
+        "required": false,
+        "options": [
+          "created",
+          "followers"
+        ]
+      },
+      {
+        "name": "sliceFrom:UserSize",
+        "required": false,
+        "options": null
+      },
+      {
+        "name": "sliceTo:UserSize",
+        "required": false,
+        "options": null
+      }
+    ],
+    "return": {
+      "type": "array",
+      "of": "GeekUser"
+    },
+    "method": "GET",
+    "url": "user/all"
+  },
+  {
+    "name": "listMetaUser",
+    "args": [
+      {
+        "name": "sort:String",
+        "required": false,
+        "options": [
+          "created",
+          "followers"
+        ]
+      },
+      {
+        "name": "sliceFrom:UserSize",
+        "required": false,
+        "options": null
+      },
+      {
+        "name": "sliceTo:UserSize",
+        "required": false,
+        "options": null
+      }
+    ],
+    "return": {
+      "type": "array",
+      "of": "GeekUser"
+    },
+    "method": "GET",
+    "url": "user/allHasMetaApp"
+  },
+  {
+    "name": "searchUser",
+    "args": [
+      {
+        "name": "type:String",
+        "required": false,
+        "options": [
+          "username",
+          "nickname",
+          "bio"
+        ]
+      },
+      {
+        "name": "kw-path:String",
+        "required": true,
+        "options": null
+      },
+      {
+        "name": "sort:String",
+        "required": false,
+        "options": [
+          "created",
+          "followers"
+        ]
+      }
+    ],
+    "return": {
+      "type": "array",
+      "of": "GeekUser"
+    },
+    "method": "GET",
+    "url": "user/search/{kw}"
+  },
+  {
+    "name": "updateOnlineTime",
+    "args": [
+      {
+        "name": "id-path:UserId",
+        "required": true,
+        "options": null
+      }
+    ],
+    "return": null,
+    "method": "PUT",
+    "url": "user/{id}/online"
+  },
+  {
+    "name": "readUserTimeline",
+    "args": [
+      {
+        "name": "uid-path:UserId",
+        "required": true,
+        "options": null
+      },
+      {
+        "name": "type:Int",
+        "required": false,
+        "options": null
+      },
+      {
+        "name": "sliceFrom:TimelineSize",
+        "required": false,
+        "options": null
+      },
+      {
+        "name": "sliceTo:TimelineSize",
+        "required": false,
+        "options": null
+      }
+    ],
+    "return": {
+      "type": "array",
+      "of": "Timeline"
+    },
+    "method": "GET",
+    "url": "/timeline/{uid}"
+  },
+  {
+    "name": "readAllTimeline",
+    "args": [
+      {
+        "name": "type:Int",
+        "required": false,
+        "options": null
+      },
+      {
+        "name": "sliceFrom:TimelineSize",
+        "required": false,
+        "options": null
+      },
+      {
+        "name": "sliceTo:TimelineSize",
+        "required": false,
+        "options": null
+      }
+    ],
+    "return": {
+      "type": "array",
+      "of": "Timeline"
+    },
+    "method": "GET",
+    "url": "/timeline/all"
+  },
+  {
+    "name": "bulkReadUserTimeline",
+    "args": [
+      {
+        "name": "uids-path:String",
+        "required": true,
+        "options": null
+      },
+      {
+        "name": "type:Int",
+        "required": false,
+        "options": null
+      },
+      {
+        "name": "sliceFrom:TimelineSize",
+        "required": false,
+        "options": null
+      },
+      {
+        "name": "sliceTo:TimelineSize",
+        "required": false,
+        "options": null
+      }
+    ],
+    "return": {
+      "type": "array",
+      "of": "Timeline"
+    },
+    "method": "GET",
+    "url": "/timeline/bulk/{uids}"
+  },
+  {
+    "name": "getUserTimelineCount",
+    "args": [
+      {
+        "name": "uid-path:UserId",
+        "required": true,
+        "options": null
+      }
+    ],
+    "return": "number",
+    "method": "GET",
+    "url": "/timeline/check/{uid}"
+  },
+  {
+    "name": "getBulkUserTimelineCount",
+    "args": [
+      {
+        "name": "uids-path:String",
+        "required": true,
+        "options": null
+      }
+    ],
+    "return": "number",
+    "method": "GET",
+    "url": "/timeline/check/{uids}"
+  },
+  {
+    "name": "readMineNotifications",
+    "args": [
+
+    ],
+    "return": {
+      "type": "array",
+      "of": "Notification"
+    },
+    "method": "GET",
+    "url": "/notification/active"
+  },
+  {
+    "name": "readAllMineNotifications",
+    "args": [
+      {
+        "name": "sliceFrom:NotificationSize",
+        "required": false,
+        "options": null
+      },
+      {
+        "name": "sliceTo:NotificationSize",
+        "required": false,
+        "options": null
+      }
+    ],
+    "return": {
+      "type": "array",
+      "of": "Notification"
+    },
+    "method": "GET",
+    "url": "/notification/all"
+  },
+  {
+    "name": "markNotifications",
+    "args": [
+      {
+        "name": "start:NotificationSize",
+        "required": true,
+        "options": null
+      },
+      {
+        "name": "end:NotificationSize",
+        "required": false,
+        "options": null
+      },
+      {
+        "name": "stat:String",
+        "required": true,
+        "options": [
+          "active",
+          "inactive"
+        ]
+      }
+    ],
+    "return": "number",
+    "method": "GET",
+    "url": "/notification/mark"
+  },
+  {
+    "name": "getNotificationCount",
+    "args": [
+
+    ],
+    "return": "number",
+    "method": "GET",
+    "url": "/notification/count"
+  },
+  {
+    "name": "readApp",
+    "args": [
+      {
+        "name": "aid-path:AppId",
+        "required": true,
+        "options": null
+      }
+    ],
+    "return": {
+      "type": "object",
+      "of": "App"
+    },
+    "method": "GET",
+    "url": "/app/{aid}"
+  },
+  {
+    "name": "updateApp",
+    "args": [
+      {
+        "name": "aid-path:AppId",
+        "required": true,
+        "options": null
+      },
+      {
+        "name": "attr:String",
+        "required": true,
+        "options": [
+          "package",
+          "icon",
+          "name",
+          "screenshots",
+          "readme"
+        ]
+      },
+      {
+        "name": "val-body:String",
+        "required": true,
+        "options": null
+      }
+    ],
+    "return": [
+      {
+        "name": "attr",
+        "type": "String"
+      },
+      {
+        "name": "oldVal",
+        "type": "String"
+      }
+    ],
+    "method": "PUT",
+    "url": "/app/{aid}"
+  },
+  {
+    "name": "createApp",
+    "args": [
+      {
+        "name": "package:String",
+        "required": true,
+        "options": null
+      },
+      {
+        "name": "category:CategoryId",
+        "required": true,
+        "options": null
+      }
+    ],
+    "return": {
+      "type": "object",
+      "of": "App"
+    },
+    "method": "POST",
+    "url": "/app"
+  },
+  {
+    "name": "findAppWithPackageName",
+    "args": [
+      {
+        "name": "package-path:String",
+        "required": true,
+        "options": null
+      }
+    ],
+    "return": {
+      "type": "object",
+      "of": "App"
+    },
+    "method": "GET",
+    "url": "/app/package/{package}"
+  },
+  {
+    "name": "listApp",
+    "args": [
+      {
+        "name": "inCategory:CategoryId",
+        "required": false,
+        "options": null
+      },
+      {
+        "name": "sort:String",
+        "required": false,
+        "options": [
+          "updated",
+          "comments",
+          "stars",
+          "created"
+        ]
+      },
+      {
+        "name": "sliceFrom:AppSize",
+        "required": false,
+        "options": null
+      },
+      {
+        "name": "sliceTo:AppSize",
+        "required": false,
+        "options": null
+      }
+    ],
+    "return": {
+      "type": "array",
+      "of": "App"
+    },
+    "method": "GET",
+    "url": "/app/all"
+  },
+  {
+    "name": "dropApp",
+    "args": [
+      {
+        "name": "aid-path:AppId",
+        "required": true,
+        "options": null
+      }
+    ],
+    "return": {
+      "type": "object",
+      "of": "App"
+    },
+    "method": "DELETE",
+    "url": "/app/{aid}"
+  },
+  {
+    "name": "searchApp",
+    "args": [
+      {
+        "name": "inCategory:CategoryId",
+        "required": false,
+        "options": null
+      },
+      {
+        "name": "content-path:String",
+        "required": true,
+        "options": null
+      },
+      {
+        "name": "type:String",
+        "required": true,
+        "options": [
+          "name",
+          "package",
+          "icon",
+          "readme"
+        ]
+      },
+      {
+        "name": "sort:String",
+        "required": false,
+        "options": [
+          "updated",
+          "comments",
+          "stars",
+          "created"
+        ]
+      }
+    ],
+    "return": null,
+    "method": "GET",
+    "url": "/app/search/{content}"
+  },
+  {
+    "name": "addCollab",
+    "args": [
+      {
+        "name": "uid:UserId",
+        "required": true,
+        "options": null
+      },
+      {
+        "name": "aid-path:AppId",
+        "required": true,
+        "options": null
+      }
+    ],
+    "return": null,
+    "method": "POST",
+    "url": "/app/{aid}/collab"
+  },
+  {
+    "name": "removeCollab",
+    "args": [
+      {
+        "name": "uid:UserId",
+        "required": true,
+        "options": null
+      },
+      {
+        "name": "aid-path:AppId",
+        "required": true,
+        "options": null
+      }
+    ],
+    "return": null,
+    "method": "DELETE",
+    "url": "/app/{aid}/collab"
+  },
+  {
+    "name": "collaborators",
+    "args": [
+      {
+        "name": "aid-path:AppId",
+        "required": true,
+        "options": null
+      }
+    ],
+    "return": {
+      "type": "array",
+      "of": "number"
+    },
+    "method": "GET",
+    "url": "/app/collaborators/{aid}"
+  },
+  {
+    "name": "collaborated",
+    "args": [
+      {
+        "name": "uid-path:UserId",
+        "required": true,
+        "options": null
+      }
+    ],
+    "return": {
+      "type": "array",
+      "of": "number"
+    },
+    "method": "GET",
+    "url": "/app/collaborated/{uid}"
+  },
+  {
+    "name": "readReversions",
+    "args": [
+      {
+        "name": "aid-path:AppId",
+        "required": true,
+        "options": null
+      }
+    ],
+    "return": {
+      "type": "array",
+      "of": "AppUpdate"
+    },
+    "method": "GET",
+    "url": "/appUpdate/{aid}"
+  },
+  {
+    "name": "checkLastReversions",
+    "args": [
+      {
+        "name": "aids-path:String",
+        "required": true,
+        "options": null
+      }
+    ],
+    "return": {
+      "type": "array",
+      "of": "number"
+    },
+    "method": "GET",
+    "url": "/appUpdate/check/{aids}"
+  },
+  {
+    "name": "readReversion",
+    "args": [
+      {
+        "name": "aid-path:AppId",
+        "required": true,
+        "options": null
+      },
+      {
+        "name": "rev-path:Int",
+        "required": true,
+        "options": null
+      }
+    ],
+    "return": {
+      "type": "object",
+      "of": "AppUpdate"
+    },
+    "method": "GET",
+    "url": "/appUpdate/{aid}/{rev}"
+  },
+  {
+    "name": "createReversion",
+    "args": [
+      {
+        "name": "aid-path:AppId",
+        "required": true,
+        "options": null
+      },
+      {
+        "name": "rev-path:Int",
+        "required": true,
+        "options": null
+      }
+    ],
+    "return": [
+      {
+        "name": "aid",
+        "type": "number"
+      },
+      {
+        "name": "rev",
+        "type": "number"
+      }
+    ],
+    "method": "POST",
+    "url": "/appUpdate/{aid}/{rev}"
+  },
+  {
+    "name": "updateReversion",
+    "args": [
+      {
+        "name": "aid-path:AppId",
+        "required": true,
+        "options": null
+      },
+      {
+        "name": "rev-path:Int",
+        "required": true,
+        "options": null
+      },
+      {
+        "name": "attr:String",
+        "required": true,
+        "options": [
+          "version",
+          "install",
+          "updates",
+          "minsdk"
+        ]
+      },
+      {
+        "name": "val-body:String",
+        "required": true,
+        "options": null
+      }
+    ],
+    "return": [
+      {
+        "name": "attr",
+        "type": "string"
+      },
+      {
+        "name": "oldVal",
+        "type": "string"
+      }
+    ],
+    "method": "PUT",
+    "url": "/appUpdate/{aid}/{rev}"
+  },
+  {
+    "name": "dropReversion",
+    "args": [
+      {
+        "name": "aid-path:AppId",
+        "required": true,
+        "options": null
+      },
+      {
+        "name": "rev-path:Int",
+        "required": true,
+        "options": null
+      }
+    ],
+    "return": {
+      "type": "object",
+      "of": "AppUpdate"
+    },
+    "method": "DELETE",
+    "url": "/appUpdate/{aid}/{rev}"
+  },
+  {
+    "name": "searchComment",
+    "args": [
+      {
+        "name": "inApp:AppId",
+        "required": false,
+        "options": null
+      },
+      {
+        "name": "user:UserId",
+        "required": false,
+        "options": null
+      },
+      {
+        "name": "repliesTo:CommentId",
+        "required": false,
+        "options": null
+      },
+      {
+        "name": "content-path:String",
+        "required": true,
+        "options": null
+      }
+    ],
+    "return": {
+      "type": "array",
+      "of": "Comment"
+    },
+    "method": "GET",
+    "url": "/comment/search/{content}"
+  },
+  {
+    "name": "listCommentInApp",
+    "args": [
+      {
+        "name": "aid-path:AppId",
+        "required": true,
+        "options": null
+      },
+      {
+        "name": "sliceFrom:CommentSize",
+        "required": false,
+        "options": null
+      },
+      {
+        "name": "sliceTo:CommentSize",
+        "required": false,
+        "options": null
+      }
+    ],
+    "return": {
+      "type": "array",
+      "of": "Comment"
+    },
+    "method": "GET",
+    "url": "/comment/{aid}"
+  },
+  {
+    "name": "listSubComment",
+    "args": [
+      {
+        "name": "cid-path:CommentId",
+        "required": true,
+        "options": null
+      }
+    ],
+    "return": {
+      "type": "array",
+      "of": "Comment"
+    },
+    "method": "GET",
+    "url": "/comment/subOf/{cid}"
+  },
+  {
+    "name": "listAllComment",
+    "args": [
+      {
+        "name": "inApp:AppId",
+        "required": false,
+        "options": null
+      },
+      {
+        "name": "user:UserId",
+        "required": false,
+        "options": null
+      },
+      {
+        "name": "sliceFrom:CommentSize",
+        "required": false,
+        "options": null
+      },
+      {
+        "name": "sliceTo:CommentSize",
+        "required": false,
+        "options": null
+      }
+    ],
+    "return": {
+      "type": "array",
+      "of": "Comment"
+    },
+    "method": "GET",
+    "url": "/comment/all"
+  },
+  {
+    "name": "createComment",
+    "args": [
+      {
+        "name": "aid-path:AppId",
+        "required": true,
+        "options": null
+      },
+      {
+        "name": "content:String",
+        "required": true,
+        "options": null
+      }
+    ],
+    "return": {
+      "type": "object",
+      "of": "Comment"
+    },
+    "method": "POST",
+    "url": "/comment/{aid}"
+  },
+  {
+    "name": "editComment",
+    "args": [
+      {
+        "name": "cid-path:CommentId",
+        "required": true,
+        "options": null
+      }
+    ],
+    "return": [
+      {
+        "name": "oldContent",
+        "type": "string"
+      },
+      {
+        "name": "newContent",
+        "type": "string"
+      }
+    ],
+    "method": "PUT",
+    "url": "/comment/edit/{cid}"
+  },
+  {
+    "name": "deleteComment",
+    "args": [
+      {
+        "name": "cid-path:CommentId",
+        "required": true,
+        "options": null
+      }
+    ],
+    "return": {
+      "type": "object",
+      "of": "Comment"
+    },
+    "method": "DELETE",
+    "url": "/comment/delete/{cid}"
+  },
+  {
+    "name": "follow",
+    "args": [
+      {
+        "name": "uid-path:UserId",
+        "required": true,
+        "options": null
+      }
+    ],
+    "return": [
+      {
+        "name": "oldCount",
+        "type": "number"
+      },
+      {
+        "name": "newCount",
+        "type": "number"
+      }
+    ],
+    "method": "POST",
+    "url": "/follow/{uid}"
+  },
+  {
+    "name": "unfollow",
+    "args": [
+      {
+        "name": "uid-path:UserId",
+        "required": true,
+        "options": null
+      }
+    ],
+    "return": [
+      {
+        "name": "oldCount",
+        "type": "number"
+      },
+      {
+        "name": "newCount",
+        "type": "number"
+      }
+    ],
+    "method": "DELETE",
+    "url": "/follow/{uid}"
+  },
+  {
+    "name": "followers",
+    "args": [
+      {
+        "name": "uid-path:UserId",
+        "required": true,
+        "options": null
+      }
+    ],
+    "return": {
+      "type": "array",
+      "of": "GeekUser"
+    },
+    "method": "GET",
+    "url": "/follow/followers/{uid}"
+  },
+  {
+    "name": "following",
+    "args": [
+      {
+        "name": "uid-path:UserId",
+        "required": true,
+        "options": null
+      }
+    ],
+    "return": {
+      "type": "array",
+      "of": "GeekUser"
+    },
+    "method": "GET",
+    "url": "/follow/{uid}"
+  },
+  {
+    "name": "star",
+    "args": [
+      {
+        "name": "aid-path:AppId",
+        "required": true,
+        "options": null
+      }
+    ],
+    "return": [
+      {
+        "name": "oldCount",
+        "type": "number"
+      },
+      {
+        "name": "newCount",
+        "type": "number"
+      }
+    ],
+    "method": "POST",
+    "url": "/star/{aid}"
+  },
+  {
+    "name": "unStar",
+    "args": [
+      {
+        "name": "aid-path:AppId",
+        "required": true,
+        "options": null
+      }
+    ],
+    "return": [
+      {
+        "name": "oldCount",
+        "type": "number"
+      },
+      {
+        "name": "newCount",
+        "type": "number"
+      }
+    ],
+    "method": "DELETE",
+    "url": "/star/{aid}"
+  },
+  {
+    "name": "stargazers",
+    "args": [
+      {
+        "name": "aid-path:AppId",
+        "required": true,
+        "options": null
+      }
+    ],
+    "return": {
+      "type": "array",
+      "of": "App"
+    },
+    "method": "GET",
+    "url": "/star/{aid}"
+  },
+  {
+    "name": "stars",
+    "args": [
+      {
+        "name": "uid-path:UserId",
+        "required": true,
+        "options": null
+      }
+    ],
+    "return": {
+      "type": "array",
+      "of": "App"
+    },
+    "method": "GET",
+    "url": "/star/user/{uid}"
+  }
+]

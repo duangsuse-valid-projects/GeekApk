@@ -48,6 +48,9 @@ EoCMD
 #########################################################################
 
 # 代码质量非常垃圾，非常脚本化，所以就 Apache2 了，开玩笑，好吧，是我懒得 extract...
+# Parser 我没有重写，虽然重写正则也比较简单，因为首先 GeekSpec 是 CFG，其次它的确很简单... 几乎正则都够了
+# 这个是个小工具，我希望让它成为一个测试用的客户端，暂时还没有其他打算
+# 以后的 GeekApk Ruby 客户端可能有一部分代码可以使用这个生成，当然这次直接元编程就可以了，不需要生成代码字符串了
 
 class Interface
   class Argument
@@ -60,6 +63,10 @@ class Interface
          search = @name.match(/(\S+):(\S+)/)
          return { type: search[2], real_name: search[1] }
       end
+    end
+
+    def to_map
+      { name: @name, required: @required, options: @options }
     end
 
     def initialize(json)
@@ -145,6 +152,7 @@ class Interface
     @name = json['name']
     @args = json['args'].map { |a| Argument.new(a) }
     @return = Interface.map_return_type(json['return'])
+    @return_original = json['return']
     @location = json['url']
   end
 
@@ -183,7 +191,13 @@ class Interface
     "#{Paint[name, :bright, :yellow]}(#{args.join(', ')})#{return_to_s}\n  #{Paint['=', :red]} #{Paint[@method, :cyan, :bold]} #{url_to_s}"
   end
 
-  attr_accessor :name, :args, :return, :method, :location
+  def to_map
+    {
+      name: name, args: args.map(&:to_map), return: @return_original, method: method, url: @location
+    }
+  end
+
+  attr_accessor :name, :args, :return, :method, :location, :return_original
 end
 
 ShowcaseObject = Object
@@ -207,6 +221,20 @@ class ClientShowcase < ShowcaseObject
   attr_accessor :apis
 end
 
+def make_json(apis)
+  f = File.new("spectrum_#{ARGV[0].gsub(/\..*$/, '')}.json", 'w+')
+
+  begin
+    f.write(JSON.pretty_generate(apis.map(&:to_map)))
+    f.flush
+    f.close
+    puts "Wrote to #{f.path}"
+  rescue Exception => ex
+    warn "Failed to write to #{f.path}: #{ex}"
+    File.delete(f)
+  end
+end
+
 def right_away(spec)
   pp spec, indent_size: 2 if $DEBUG
   interfaces = spec.map { |i| Interface.new(i) }
@@ -214,6 +242,9 @@ def right_away(spec)
 
   case ARGV[1]
     when 'show' then return me.show
+    when 'licence' then return puts 'Apache 2.0'
+    when 'help' then return puts '👆 Help contents above'
+    when 'json' then return make_json(interfaces)
   end
 
   Object.method(:pry).call(me)
@@ -239,7 +270,7 @@ end
 
 # CLI launcher
 def start(args = ARGV)
-  puts "Spectrum v#{VERSION}: usage: #{$0} <spec json file> [command]"
+  puts "Spectrum v#{VERSION}: usage: #{$0} <spec json file> [command]{show,licence,help,json}"
 
   return unless ARGV.size <= 2
 
