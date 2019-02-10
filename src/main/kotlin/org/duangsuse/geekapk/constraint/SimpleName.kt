@@ -4,6 +4,9 @@ import javax.validation.Constraint
 import javax.validation.ConstraintValidator
 import javax.validation.ConstraintValidatorContext
 
+/**
+ * Simple user name
+ */
 @Constraint(validatedBy = [SimpleName.Validator::class])
 @Target(AnnotationTarget.FIELD)
 @Retention(AnnotationRetention.RUNTIME)
@@ -16,9 +19,9 @@ annotation class SimpleName {
 
     companion object {
       /**
-       * First 2 letters must be plain letters (A-Za-z, _), rest can have digits and dash (-)
+       * First 3 letters must be plain letters (A-Za-z, _), rest can have digits and dash (-), at least 4 char long
        */
-        val VALID_PATTERN = Regex("[A-Za-z_]{2,3}[A-Za-z0-9_\\-]+")
+        val VALID_PATTERN = Regex("[A-Za-z_]{3}[A-Za-z0-9_\\-]+")
     }
   }
 }

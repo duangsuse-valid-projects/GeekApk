@@ -22,7 +22,7 @@ typealias PayloadVariable =  Array<KClass<out Payload>>
 @Retention(AnnotationRetention.RUNTIME)
 annotation class PackageName(val maxSize: Int = 1, val payload: PayloadVariable= [], val groups: Array<KClass<*>> = []) {
   class Validator: ConstraintValidator<PackageName, CharSequence> {
-    private var max: Int = 0
+    private var max: Int = 64
     override fun initialize(constraintAnnotation: PackageName?) {
       super.initialize(constraintAnnotation)
       constraintAnnotation?.let { max = it.maxSize }
