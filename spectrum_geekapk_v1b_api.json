@@ -262,7 +262,7 @@
     "url": "/admin/dropAppUpdate/{aid}/{rev}"
   },
   {
-    "name": "deleteComment",
+    "name": "removeComment",
     "args": [
       {
         "name": "cid-path:CommentId",

@@ -52,6 +52,10 @@ EoCMD
 # 这个是个小工具，我希望让它成为一个测试用的客户端，暂时还没有其他打算
 # 以后的 GeekApk Ruby 客户端可能有一部分代码可以使用这个生成，当然这次直接元编程就可以了，不需要生成代码字符串了
 
+def nn_banner(char = '+', color = :green)
+  print "[#{Paint[char, color]}] "
+end
+
 class Interface
   class Argument
     def parse_extra(json = @name)
@@ -156,6 +160,24 @@ class Interface
     @location = json['url']
   end
 
+  def make_api_method(showcase)
+    if $DEBUG
+      nn_banner('-', :yellow)
+      puts "Making API method #{to_s}"
+    end
+
+    spec = self # to be package (reference back to here)
+
+    showcase.class.define_method(name) do |*params|
+      my_spec = spec # packaged spec base
+
+      my_auth = self.auth
+      my_conn = self.conn
+
+      ClientShowcase.handler(my_spec, my_conn, my_auth, params)
+    end
+  end
+
   def self.map_return_type(json)
     if json.is_a? Hash
       return ReturnTypeAndObject.new(json['type'], json['of'])
@@ -202,9 +224,47 @@ end
 
 ShowcaseObject = Object
 
+class GeekAuth
+  def initialize(uid, tok, adm = '')
+    user = uid
+    token = tok
+    server = adm
+  end
+
+  attr_accessor :user, :token, :server
+
+  def to_s
+    unless server
+      "User(#{user}):#{token}"
+    else
+      "Admin(#{user}):#{token}:#{server}"
+    end
+  end
+end
+
 class ClientShowcase < ShowcaseObject
   def initialize(interfaces)
+    @conn = Faraday.new(:url => 'http://127.0.0.1:8080')
     @apis = interfaces
+    @auth = GeekAuth.new(-1, '')
+  end
+
+  def instance_api_methods
+    apis.each { |api| api.make_api_method(self) }
+  end
+
+  def on_load
+    nn_banner('i', :cyan)
+    puts "Faraday connection: #{Paint['conn', :blue]}, Apis: #{Paint['apis', :blue]}, Auth configuration: #{Paint['auth', :blue]}"
+    nn_banner
+    puts "Have fun!"
+
+    Pry.config.prompt = [ proc do |obj, nest_level, _|
+      pre = "#{obj} :: " unless obj == self
+      "spectrum(#{pre}#{nest_level}.#{_.input_array.size})> "
+    end, proc { "*" }]
+
+    instance_api_methods
   end
 
   def show
@@ -218,7 +278,64 @@ class ClientShowcase < ShowcaseObject
 
   def to_s; "GeekApk"; end
 
-  attr_accessor :apis
+  attr_accessor :apis, :conn, :auth
+end
+
+def ClientShowcase.require_auth?(spec)
+  true # should be optimized in future releases
+end
+
+# Should be optimized in future releases
+def ClientShowcase.handler(my_spec, my_conn, my_auth, params)
+  if $DEBUG
+    nn_banner('^', :yellow)
+    puts "Committing request #{my_spec.method} #{my_conn.url_prefix}#{my_spec.location}"
+    nn_banner('#', :cyan)
+    print "Using auth #{my_auth}, " if ClientShowcase.require_auth?(my_spec)
+    puts "with parameters #{params}"
+  end
+
+  return puts my_spec if my_spec.args.size != 0 && params.size == 0 || params.size > my_spec.args.size
+
+  response = my_conn.send(my_spec.method.downcase) do |req|
+    finally = my_spec.location.dup
+    body = ''
+    url_type_map = Hash.new
+    type_map = Hash.new
+
+    rest = my_spec.args.reverse.collect { |a| a.required }.drop_while.to_a
+
+    if params.size < my_spec.args.size - rest.size
+      nn_banner('-', :red)
+      warn "Should not ignore #{rest}"
+    end
+
+    params.zip(my_spec.args).each do |p|
+      if p[1].options and not p[1].options.empty?
+        unless p[1].options.include?(p.first)
+          nn_banner('-', :red)
+          warn "Warning, parameter #{p.first} not in range #{p[1].options}"
+        end
+      end
+
+      case (t = p[1].extra)[:param_location]
+        when 'path'
+          finally.gsub!("{#{t[:real_name]}}", p.first.to_s)
+          url_type_map[t[:real_name]] = t[:type]
+        when 'body' then if body.empty? then body = p.first else warn "Duplicate body variable processing #{my_spec}" end
+        when nil
+          type_map[t[:real_name]] = t[:type]
+          req.params[t[:real_name]] = p.first
+      end
+    end
+
+    req.body = body unless body.empty?
+
+    nn_banner
+    puts "Finally url #{finally} (#{req.params}), UT map #{url_type_map}, map #{type_map}, body = #{body}" if $DEBUG
+
+    req.url(finally)
+  end
 end
 
 def make_json(apis)
@@ -245,8 +362,10 @@ def right_away(spec)
     when 'licence' then return puts 'Apache 2.0'
     when 'help' then return puts '👆 Help contents above'
     when 'json' then return make_json(interfaces)
+    when 'debug' then $DEBUG = true
   end
 
+  me.on_load
   Object.method(:pry).call(me)
 end
 
@@ -270,7 +389,7 @@ end
 
 # CLI launcher
 def start(args = ARGV)
-  puts "Spectrum v#{VERSION}: usage: #{$0} <spec json file> [command]{show,licence,help,json}"
+  puts "Spectrum v#{VERSION}: usage: #{$0} <spec json file> [command]{show,licence,help,json,debug}"
 
   return unless ARGV.size <= 2
 

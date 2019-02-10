@@ -23,7 +23,7 @@ serverDetail() -> object:string
 
 
 ## Server ADMIN api section
-## All ADMIN apis except deleteApp, transferAppCategory, deleteComment, flagUser should have serverAdmin permission
+## All ADMIN apis except deleteApp, transferAppCategory, removeComment, flagUser should have serverAdmin permission
 
 POST@createUser(username:String) -> object:GeekUser
   = /admin/makeUser
@@ -62,7 +62,7 @@ DELETE@deleteAppUpdate(aid-path:AppId, rev-path:Int) -> object:AppUpdate
   = /admin/dropAppUpdate/{aid}/{rev}
 
 #### Requires superuser session
-DELETE@deleteComment(cid-path:CommentId) -> [$cid:number, $deletedSubComments:number]
+DELETE@removeComment(cid-path:CommentId) -> [$cid:number, $deletedSubComments:number]
   = /admin/dropComment/{cid}
 
 
