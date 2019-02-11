@@ -298,9 +298,54 @@ EoCMD
       nil
     end
 
-    def list
-      apis.each { |a| puts a.name }
-      nil
+    def list(limit = -1, &predicate)
+      if limit == -1
+        apis.each { |a| puts a.name }
+      else
+        apis.first(limit).find_all(&predicate).each { |a| puts a.name }
+      end
+      return nil
+    end
+
+    def list_from(item, limit = 10)
+      list = apis.drop_while { |a| a.name != item.to_s }
+      list.first(limit).each { |i| puts i }
+      return apis.size - list.size
+    end
+
+    def all_params
+      apis.collect { |a| a.args }.flatten
+    end
+
+    def all_return
+      apis.collect { |a| a.return }
+    end
+
+    def all_obj_return
+      all_return.find_all { |rt| rt.is_a? Spectrum::Interface::ReturnTypeAndObject }
+    end
+
+    def status
+      nn_banner
+      puts "Total #{apis.size} APIs, method count: #{apis.group_by { |a| a.method }.map { |m, c| "#{m}: #{c.size}" }.join('; ')}"
+      puts "receiving #{all_params.collect { |it| it.extra[:type] }.uniq}\nand returning #{all_return.size} types (#{all_obj_return.collect { |it| it.name }.uniq})"
+      nn_banner
+      puts "#{all_params.find_all { |it| it.extra[:param_location] == 'path' }.size} path params, #{all_params.find_all { |it| it.extra[:param_location] == 'body' }.size} body params"
+      return nil
+    end
+
+    def tree(type = :plain)
+      case type
+      when :plain then apis.each { |a| puts "#{a.method} #{a.location}" }
+      when :return then apis.each { |a| puts "#{a.method} #{a.location}\n  = #{a.return}" }
+      when :args then apis.each { |a| puts "#{a.method} #{a.location}\n  * #{a.args.join("\n  * ")}" }
+      else
+      apis.each do |a|
+        puts "#{a.method} #{a.location} (#{a.args.join(';')})"
+        puts "  = #{a.return}"
+      end
+      end
+      return nil
     end
 
     def nil?
@@ -355,7 +400,42 @@ EoCMD
     end
   end
 
+  class SpringError
+    attr_accessor :time, :status, :error, :message, :trace, :path
+
+    def initialize(json)
+      @time = Time.at(0, json['timestamp'], :millisecond)
+      @status = json['status']
+      @error = json['error']
+      @trace = json['trace'].split("\n\t")
+      @path = json['path']
+      @message = json['message']
+    end
+
+    def to_s
+      "[#{status}] Spring Application #{error} - #{path}: #{message} @ #{time}\n#{trace.first} #{trace[1]}"
+    end
+  end
+
   def ClientShowcase.map_response(spec, resp)
+    if (high_digit = resp.status / 100) != 2
+      begin
+        json = JSON.parse(resp.body)
+      rescue
+        return resp
+      end
+
+      # 为什么要用这种滥用弱类型的手段... 异常系统不好么
+      return SpringError.new(json) if json.each_key.to_a == %w[timestamp status error message trace path]
+
+      case high_digit
+      when 4
+        return json
+      when 5
+        return json
+      end
+    end
+
     if (r = spec.return).is_a? Spectrum::Interface::ReturnTypeAndObject
       json = JSON.parse(resp.body)
       mapper = "map_resp_#{r.name}"
