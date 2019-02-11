@@ -320,16 +320,16 @@ EoCMD
 
   def ClientShowcase.require_auth?(spec)
     # true # should be optimized in future releases
-    #return true if %w[createUser resetSharedHash deleteUser flagUser createCategory renameCategory deleteCategory deleteApp transferAppCategory transferAppOwner].include?(spec.name)
+    # return true if %w[createUser resetSharedHash deleteUser flagUser createCategory renameCategory deleteCategory deleteApp transferAppCategory transferAppOwner].include?(spec.name)
     return true if spec.location.start_with?('/admin')
-    return true if spec.location.start_with?('user') and spec.method != 'GET'
+    return true if spec.location.start_with?('user') && (spec.method != 'GET')
     return false if spec.location.start_with?('/timeline')
     return true if spec.location.start_with?('/notification')
-    return true if spec.location.start_with?('/app') and spec.method != 'GET'
-    return true if spec.location.start_with?('/appUpdate') and spec.method != 'GET'
-    return true if (spec.location.start_with?('/comment') or spec.location.start_with?('/follow') or spec.location.start_with?('/star')) and spec.method != 'GET'
+    return true if spec.location.start_with?('/app') && (spec.method != 'GET')
+    return true if spec.location.start_with?('/appUpdate') && (spec.method != 'GET')
+    return true if spec.location.start_with?('/comment', '/follow', '/star') && (spec.method != 'GET')
 
-    return false
+    false
   end
 
   def ClientShowcase.from_json(json_str)
@@ -337,13 +337,13 @@ EoCMD
 
     interfaces = json.map { |i| Interface.new(i) }
 
-    return new interfaces
+    new interfaces
   end
 
   def ClientShowcase.from_code(code)
     json_str = Spectrum.translate_extra_node(code.gsub(/#.*$/, ''))
 
-    return from_json json_str
+    from_json json_str
   end
 
   def ClientShowcase.from_file(path = Dir.glob('*.geekspec').first)
@@ -355,7 +355,21 @@ EoCMD
     end
   end
 
-  def ClientShowcase.map_response(_spec, resp)
+  def ClientShowcase.map_response(spec, resp)
+    if (r = spec.return).is_a? ReturnTypeAndObject
+      json = JSON.parse(resp.body)
+      mapper = "map_resp_#{r.name}"
+      if ClientShowcase.respond_to?(mapper)
+        case r.type
+        when 'object' then return ClientShowcase.send(mapper, json)
+        when 'array' then return json.map { |it| ClientShowcase.send(mapper, it) }
+        end
+      end
+      return json
+    elsif spec.return.is_a? ReturnTypesAndNames
+      return JSON.parse(resp.body)
+    end
+
     resp
   end
 
