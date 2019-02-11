@@ -1,4 +1,4 @@
-
+package org.duangsuse.geekapk
 import org.duangsuse.geekapk.constraint.PackageName
 import org.junit.Test
 

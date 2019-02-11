@@ -70,6 +70,22 @@ class GeekApkApplication {
      * Is initialization file processed?
      */
       @Volatile var iniLoaded: Boolean = false
+
+
+    /**
+    * The application entrance
+    */
+    @JvmStatic
+    fun main(args: Array<String>) {
+      // Should set initialize properties first
+      initializeINIConfig()
+      initializeINIShadowChain()
+
+      val spring = runApplication<GeekApkApplication>(*args)
+
+      spring.setId("GeekApk @ ${Thread.currentThread()}")
+      spring.registerShutdownHook()
+    }
   }
 }
 
@@ -111,20 +127,6 @@ internal fun initializeINIConfig() {
 
   // load defaults
   parseGeekINIBuffer(buffer)
-}
-
-/**
- * The application entrance
- */
-fun main(args: Array<String>) {
-  // Should set initialize properties first
-  initializeINIConfig()
-  initializeINIShadowChain()
-
-  val spring = runApplication<GeekApkApplication>(*args)
-
-  spring.setId("GeekApk @ ${Thread.currentThread()}")
-  spring.registerShutdownHook()
 }
 
 /**

@@ -31,7 +31,7 @@ group = 'org.duangsuse'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
 
-mainClassName = 'org.duangsuse.GeekApk.GeekApkApplication'
+mainClassName = 'org.duangsuse.geekapk.GeekApkApplication'
 
 repositories { RepositoryHandler x -> aliMavenCentral(x) }
 
