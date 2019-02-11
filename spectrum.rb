@@ -451,6 +451,10 @@ EoCMD
       json = JSON.parse(resp.body)
       mapper = "map_resp_#{r.name}"
       if ClientShowcase.respond_to?(mapper)
+        if $DEBUG
+          nn_banner 'i', :blue
+          puts "Middleware #{mapper} exists, process..."
+        end
         case r.type
         when 'object' then return ClientShowcase.send(mapper, json, resp, me)
         when 'array' then return json.map { |it| ClientShowcase.send(mapper, it, resp, me) }
@@ -462,7 +466,13 @@ EoCMD
     end
 
     mapper = "map_resp_text_#{spec.return}"
-    if ClientShowcase.respond_to?(mapper) then ClientShowcase.send(mapper, resp.body, resp, me) else resp.body end
+    if ClientShowcase.respond_to?(mapper) then
+      if $DEBUG
+        nn_banner 'i', :blue
+        puts "Sending response to text processor #{mapper}"
+      end
+      ClientShowcase.send(mapper, resp.body, resp, me) else resp.body
+    end
   end
 
   def ClientShowcase.map_resp_text_datetime(body, _, _me = nil)
@@ -554,6 +564,12 @@ EoCMD
       ClientShowcase.setup_auth(req, my_auth, me) if ClientShowcase.require_auth?(my_spec, me)
     end
 
+    if $DEBUG
+      nn_banner '+', :bold, :green
+      puts "Response #{response.env[:method]}#{response.reason_phrase} #{response.env[:url]} = [#{response.env[:status]}]: #{response.body}"
+      print '  '
+      puts response.headers.map { |k, v| "#{k}:#{v};" }.join("\n  ")
+    end
     ClientShowcase.map_response(my_spec, response, me)
   end
 

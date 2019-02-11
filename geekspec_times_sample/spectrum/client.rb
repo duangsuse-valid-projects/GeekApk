@@ -12,7 +12,7 @@ class String
 end
 
 class Spectrum::ClientShowcase
-  def self.map_resp_text_number(t, _); t.to_i; end
+  def self.map_resp_text_number(t, _, _me); t.to_i; end
 end
 
 class Times
@@ -37,6 +37,10 @@ class Times
 
     def shift
       @conn.freeLastPost(@times.pass)
+    end
+
+    def size
+      @conn.countPosts
     end
 
     def initialize(ds, times)
@@ -87,4 +91,14 @@ class Times
   def version; spectrum.apiVersion; end
   def posts_count; spectrum.countPosts; end
   def stream; spectrum.realtime; end
+
+  def all_posts
+    ary = []
+    index = 0
+    while index <= posts_count - 1
+      ary << posts[index]
+      index += 1
+    end
+    return ary
+  end
 end
