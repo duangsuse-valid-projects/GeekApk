@@ -19,10 +19,14 @@ require 'pry'
 require 'pp'
 require 'paint'
 
+# Print fancy ANSI colorized banner
 def nn_banner(char = '+', color = :green, *va)
   print "[#{Paint[char, color, *va]}] "
 end
 
+# Spectrum -- GeekApk GeekSpec toolchain
+# Author: duangsuse
+# For POSIX platform (now)
 module Spectrum
   # Program version
   SPECTRUM_VERSION = '0.1.0'.freeze
@@ -57,8 +61,14 @@ EoCMD
   # 这个是个小工具，我希望让它成为一个测试用的客户端，暂时还没有其他打算
   # 以后的 GeekApk Ruby 客户端可能有一部分代码可以使用这个生成，当然这次直接元编程就可以了，不需要生成代码字符串了
 
+  # GeekApk Spec API interface
   class Interface
+    attr_accessor :name, :args, :return, :method, :location, :return_original
+
+    # API call arguments
     class Argument
+      attr_accessor :name, :required, :options, :extra
+
       def parse_extra(_json = @name)
         if @name.include?(':')
           if @name.include?('-')
@@ -117,11 +127,11 @@ EoCMD
       def to_s
         "#{name_to_s}#{required_to_s}#{options_to_s}"
       end
-
-      attr_accessor :name, :required, :options, :extra
     end
 
     class ReturnTypeAndObject
+      attr_accessor :name, :type
+
       def initialize(type, of)
         @type = type
         @name = of
@@ -130,11 +140,14 @@ EoCMD
       def to_s
         "#{Paint[type, :blue]}:#{Paint[name, :green]}"
       end
-      attr_accessor :name, :type
     end
 
     class ReturnTypesAndNames
+      attr_accessor :return_ary
+
       class ReturnTypeAndName
+        attr_accessor :name, :type
+
         def initialize(type, name)
           @type = type
           @name = name
@@ -143,7 +156,6 @@ EoCMD
         def to_s
           "$#{Paint[name, :green]}:#{Paint[type, :blue]}"
         end
-        attr_accessor :name, :type
       end
 
       def initialize(json)
@@ -153,7 +165,6 @@ EoCMD
       def to_s
         "[#{return_ary.join(', ')}]"
       end
-      attr_accessor :return_ary
     end
 
     def initialize(json)
@@ -171,7 +182,7 @@ EoCMD
         puts "Making API method #{self}"
       end
 
-      spec = self # to be package (reference back to here)
+      spec = self # to be packaged (reference back to here)
 
       showcase.class.define_method(name) do |*params, &block|
         my_spec = spec # packaged spec base
@@ -221,24 +232,20 @@ EoCMD
     end
 
     def to_map
-      {
-        name: name, args: args.map(&:to_map), return: @return_original, method: method, url: @location
-      }
+      { name: name, args: args.map(&:to_map), return: @return_original, method: method, url: @location }
     end
-
-    attr_accessor :name, :args, :return, :method, :location, :return_original
   end
 
   ShowcaseObject = Object
 
   class GeekAuth
+    attr_accessor :user, :token, :server
+
     def initialize(uid, tok, adm = '')
       @user = uid
       @token = tok
       @server = adm
     end
-
-    attr_accessor :user, :token, :server
 
     def to_s
       if server
@@ -258,9 +265,11 @@ EoCMD
   end
 
   class ClientShowcase < ShowcaseObject
+    attr_accessor :apis, :conn, :auth
+
     def initialize(interfaces)
       @conn = Faraday.new(url: 'http://127.0.0.1:8080')
-      @apis = interfaces
+      @apis = if interfaces.is_a? Array then interfaces else [interfaces] end
       @auth = GeekAuth.new(-1, '')
     end
 
@@ -291,7 +300,7 @@ EoCMD
       if item_id
         return puts apis.find { |a| a.name == item_id.to_s } if item_id.is_a? Symbol
 
-        apis.find_all { |i| i.name.match(item_id) || i.location == item_id }.each { |r| puts r; puts }
+        apis.find_all { |i| i.name.match(item_id) || i.location.match(item_id) }.each { |r| puts r; puts }
       else
         apis.each { |a| puts a; puts }
       end
@@ -328,19 +337,21 @@ EoCMD
     def status
       nn_banner
       puts "Total #{apis.size} APIs, method count: #{apis.group_by { |a| a.method }.map { |m, c| "#{m}: #{c.size}" }.join('; ')}"
-      puts "receiving #{all_params.collect { |it| it.extra[:type] }.uniq}\nand returning #{all_return.size} types (#{all_obj_return.collect { |it| it.name }.uniq})"
+      puts "Receiving #{all_params.collect { |it| it.extra[:type] }.uniq}\nAnd returning #{all_return.size} types (#{all_obj_return.collect { |it| it.name }.uniq})"
       nn_banner
-      puts "#{all_params.find_all { |it| it.extra[:param_location] == 'path' }.size} path params, #{all_params.find_all { |it| it.extra[:param_location] == 'body' }.size} body params"
+      print "#{all_params.find_all { |it| it.extra[:param_location] == 'path' }.size} path params, #{all_params.find_all { |it| it.extra[:param_location] == 'body' }.size} body params"
+      puts ", #{all_params.find_all { |it| it.extra[:param_location] == nil }.size} query parameters"
       return nil
     end
 
-    def tree(type = :plain)
+    def tree(type = :plain, prefix_filter = '')
+      docs = apis.find_all { |a| a.location.start_with?(prefix_filter) }
       case type
-      when :plain then apis.each { |a| puts "#{a.method} #{a.location}" }
-      when :return then apis.each { |a| puts "#{a.method} #{a.location}\n  = #{a.return}" }
-      when :args then apis.each { |a| puts "#{a.method} #{a.location}\n  * #{a.args.join("\n  * ")}" }
+      when :plain then docs.each { |a| puts "#{a.method} #{a.location}" }
+      when :return then docs.each { |a| puts "#{a.method} #{a.location}\n  = #{a.return}" }
+      when :args then docs.each { |a| puts "#{a.method} #{a.location}\n  * #{a.args.join("\n  * ")}" }
       else
-      apis.each do |a|
+      docs.each do |a|
         puts "#{a.method} #{a.location} (#{a.args.join(';')})"
         puts "  = #{a.return}"
       end
@@ -359,8 +370,6 @@ EoCMD
     def to_s
       'GeekApk'
     end
-
-    attr_accessor :apis, :conn, :auth
   end
 
   def ClientShowcase.require_auth?(spec)
@@ -377,12 +386,14 @@ EoCMD
     false
   end
 
+  def ClientShowcase.from_hashes(hashes)
+    interfaces = hashes.map { |i| Interface.new(i) }
+    new interfaces
+  end
+
   def ClientShowcase.from_json(json_str)
     json = json_str.yield_self { |c| JSON.parse(c) }
-
-    interfaces = json.map { |i| Interface.new(i) }
-
-    new interfaces
+    from_hashes json
   end
 
   def ClientShowcase.from_code(code)
@@ -407,13 +418,13 @@ EoCMD
       @time = Time.at(0, json['timestamp'], :millisecond)
       @status = json['status']
       @error = json['error']
-      @trace = json['trace'].split("\n\t")
+      @trace = json['trace'].split("\n\t") if json['trace']
       @path = json['path']
       @message = json['message']
     end
 
     def to_s
-      "[#{status}] Spring Application #{error} - #{path}: #{message} @ #{time}\n#{trace.first} #{trace[1]}"
+      "[#{status}] Spring Application #{error} - #{path}: #{message} @ #{time}" + if trace then "\n#{trace.first} #{trace[1]}" else '' end
     end
   end
 
@@ -426,7 +437,7 @@ EoCMD
       end
 
       # 为什么要用这种滥用弱类型的手段... 异常系统不好么
-      return SpringError.new(json) if json.each_key.to_a == %w[timestamp status error message trace path]
+      return SpringError.new(json) if (json.each_key.to_a & %w[timestamp status error message trace path]).tap { |a| a.size >= 5 and not a.include?('trace') }
 
       case high_digit
       when 4

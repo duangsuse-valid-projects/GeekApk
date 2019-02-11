@@ -24,7 +24,7 @@ class StarController {
 
   @DeleteMapping("/{aid}")
   @ResponseBody
-  fun unStar(@PathVariable("aid") aid: AppId): Map<String, Int> /* oldCount: number *//* newCount: number */ {
+  fun unstar(@PathVariable("aid") aid: AppId): Map<String, Int> /* oldCount: number *//* newCount: number */ {
     TODO()
   }
 

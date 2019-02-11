@@ -1373,7 +1373,7 @@
     "url": "/star/{aid}"
   },
   {
-    "name": "unStar",
+    "name": "unstar",
     "args": [
       {
         "name": "aid-path:AppId",

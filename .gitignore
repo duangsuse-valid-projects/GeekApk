@@ -12,9 +12,12 @@
 .sts4-cache
 
 ### IntelliJ IDEA ###
-.idea
+.idea/workspace.xml
+# Scan them yourself
+.idea/libraries
 *.iws
 *.iml
+!geekapk*.iml
 *.ipr
 /out/
 

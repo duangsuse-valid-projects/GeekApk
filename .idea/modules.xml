@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/geekapk.iml" filepath="$PROJECT_DIR$/.idea/modules/geekapk.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/geekapk_main.iml" filepath="$PROJECT_DIR$/.idea/modules/geekapk_main.iml" group="geekapk" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/geekapk_test.iml" filepath="$PROJECT_DIR$/.idea/modules/geekapk_test.iml" group="geekapk" />
+    </modules>
+  </component>
+</project>

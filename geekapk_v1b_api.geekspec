@@ -246,7 +246,7 @@ following(uid-path:UserId) -> array:GeekUser
 POST@star(aid-path:AppId) -> [$oldCount:number, $newCount:number]
   = /star/{aid}
 
-DELETE@unStar(aid-path:AppId) -> [$oldCount:number, $newCount:number]
+DELETE@unstar(aid-path:AppId) -> [$oldCount:number, $newCount:number]
   = /star/{aid}
 
 stargazers(aid-path:AppId) -> array:App
