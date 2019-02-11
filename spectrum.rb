@@ -233,9 +233,9 @@ EoCMD
 
   class GeekAuth
     def initialize(uid, tok, adm = '')
-      user = uid
-      token = tok
-      server = adm
+      @user = uid
+      @token = tok
+      @server = adm
     end
 
     attr_accessor :user, :token, :server
@@ -454,7 +454,7 @@ EoCMD
       ClientShowcase.setup_auth(req, my_auth) if ClientShowcase.require_auth?(my_spec)
     end
 
-    ClientShowcase.map_response(my_spec, reponse)
+    ClientShowcase.map_response(my_spec, response)
   end
 
   def self.make_json(apis)
