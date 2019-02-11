@@ -210,6 +210,10 @@ The GeekApk API Server has built-in API documents, see [API Index](http://api.ge
 + [APIs for GeekApk v1.0b](geekapk_v1b_api.geekspec)
 + [Rebase server](https://github.com/imufun/rebase-server/tree/master/src/main/java/com/drakeet/rebase/api/)
 + [Testable Solutions for Modern Applications Book](https://github.com/arquillian/continuous-enterprise-development)
++ [Old Python Bottle](https://github.com/geekapk-r/temp-solution)
++ [Old Rust](https://github.com/geekapk-r/ServerR)
++ [Times news API server](https://github.com/geekapk-r/Times)
++ [GeekApkR Gaee](https://github.com/geekapk-r/Gaee)
 
 ## License
 
