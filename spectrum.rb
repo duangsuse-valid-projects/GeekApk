@@ -332,6 +332,29 @@ EoCMD
     return false
   end
 
+  def ClientShowcase.from_json(json_str)
+    json = json_str.yield_self { |c| JSON.parse(c) }
+
+    interfaces = json.map { |i| Interface.new(i) }
+
+    return new interfaces
+  end
+
+  def ClientShowcase.from_code(code)
+    json_str = Spectrum.translate_extra_node(code.gsub(/#.*$/, ''))
+
+    return from_json json_str
+  end
+
+  def ClientShowcase.from_file(path = Dir.glob('*.geekspec').first)
+    text = File.read(path)
+    if path.end_with?('.json')
+      return from_json(text)
+    else
+      return from_code(text)
+    end
+  end
+
   def ClientShowcase.map_response(_spec, resp)
     resp
   end
