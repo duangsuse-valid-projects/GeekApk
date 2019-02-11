@@ -20,14 +20,14 @@ require 'pp'
 require 'paint'
 
 # Program version
-VERSION = "0.1.0"
+VERSION = '0.1.0'.freeze
 
 # Node template
 PARSER_CODE = ENV['PARSER_CODE'] || './geekspec_parser.js'
-NODE_FD = '/proc/self/fd/0'
-NODE_INPUT = "fs.readFileSync('#{NODE_FD}')"
+NODE_FD = '/proc/self/fd/0'.freeze
+NODE_INPUT = "fs.readFileSync('#{NODE_FD}')".freeze
 
-PARSER = <<EoCMD
+PARSER = <<EoCMD.freeze
 node -e "console.log(JSON.stringify(require('#{PARSER_CODE}').parse(#{NODE_INPUT}.toString())))"
 EoCMD
 
@@ -58,14 +58,14 @@ end
 
 class Interface
   class Argument
-    def parse_extra(json = @name)
+    def parse_extra(_json = @name)
       if @name.include?(':')
         if @name.include?('-')
           search = @name.match(/(\S+)-(\S+):(\S+)/)
           return { type: search[3], param_location: search[2], real_name: search[1] }
         end
-         search = @name.match(/(\S+):(\S+)/)
-         return { type: search[2], real_name: search[1] }
+        search = @name.match(/(\S+):(\S+)/)
+        { type: search[2], real_name: search[1] }
       end
     end
 
@@ -80,35 +80,37 @@ class Interface
 
       begin
         @extra = parse_extra
-      rescue
+      rescue StandardError
         @extra = nil
       end
     end
 
     def required_to_s
-      if @required then '' else Paint['?', :red, :reveal] end
+      @required ? '' : Paint['?', :red, :reveal]
     end
 
     def options_to_s
-      return '' if @options == nil
+      return '' if @options.nil?
+
       list = @options.map { |x| Paint[x, :green, :bold] }.join(', ') unless @options.empty?
       "{#{list}}"
     end
 
     def name_to_s
-      unless @extra == nil
+      unless @extra.nil?
         name_desc = Paint[extra[:real_name], :bright, :blue]
         if extra[:type]
           type_desc = Paint[extra[:type], :green]
           if extra[:param_location]
             return "#{name_desc}-#{Paint[extra[:param_location], :magenta, :bold]}:#{type_desc}"
           end
+
           return "#{name_desc}:#{type_desc}"
         end
-        return "#{Paint[extra[:real_name], :blue]}"
+        return (Paint[extra[:real_name], :blue]).to_s
       end
 
-      return @name
+      @name
     end
 
     def to_s
@@ -147,7 +149,9 @@ class Interface
       @return_ary = json.map { |sub| ReturnTypeAndName.new(sub['type'], sub['name']) }
     end
 
-    def to_s; "[#{return_ary.join(', ')}]"; end
+    def to_s
+      "[#{return_ary.join(', ')}]"
+    end
     attr_accessor :return_ary
   end
 
@@ -163,18 +167,18 @@ class Interface
   def make_api_method(showcase)
     if $DEBUG
       nn_banner('-', :yellow)
-      puts "Making API method #{to_s}"
+      puts "Making API method #{self}"
     end
 
     spec = self # to be package (reference back to here)
 
-    showcase.class.define_method(name) do |*params|
+    showcase.class.define_method(name) do |*params, &block|
       my_spec = spec # packaged spec base
 
-      my_auth = self.auth
-      my_conn = self.conn
+      my_auth = auth
+      my_conn = conn
 
-      ClientShowcase.handler(my_spec, my_conn, my_auth, params)
+      ClientShowcase.handler(my_spec, my_conn, my_auth, params, &block)
     end
   end
 
@@ -185,15 +189,16 @@ class Interface
       return ReturnTypesAndNames.new(json)
     elsif json.is_a? String
       return json
-    elsif json == nil
+    elsif json.nil?
       return nil
     end
+
     warn "Cannot recognize json sub-structure #{json}"
   end
 
   def url_to_s
-    #parser = URI::Parser.new
-    #path = parser.parse(@location)
+    # parser = URI::Parser.new
+    # path = parser.parse(@location)
     convert = lambda do |cannon_part|
       if v = cannon_part.match(/\{(.*)\}/)
         return "{#{Paint[v[1], :blue, :bold]}}"
@@ -205,7 +210,8 @@ class Interface
   end
 
   def return_to_s
-    return if @return == nil
+    return if @return.nil?
+
     " #{Paint['->', :bold, :yellow]} #{@return}"
   end
 
@@ -234,17 +240,17 @@ class GeekAuth
   attr_accessor :user, :token, :server
 
   def to_s
-    unless server
-      "User(#{user}):#{token}"
-    else
+    if server
       "Admin(#{user}):#{token}:#{server}"
+    else
+      "User(#{user}):#{token}"
     end
   end
 end
 
 class ClientShowcase < ShowcaseObject
   def initialize(interfaces)
-    @conn = Faraday.new(:url => 'http://127.0.0.1:8080')
+    @conn = Faraday.new(url: 'http://127.0.0.1:8080')
     @apis = interfaces
     @auth = GeekAuth.new(-1, '')
   end
@@ -257,12 +263,12 @@ class ClientShowcase < ShowcaseObject
     nn_banner('i', :cyan)
     puts "Faraday connection: #{Paint['conn', :blue]}, Apis: #{Paint['apis', :blue]}, Auth configuration: #{Paint['auth', :blue]}"
     nn_banner
-    puts "Have fun!"
+    puts 'Have fun!'
 
-    Pry.config.prompt = [ proc do |obj, nest_level, _|
+    Pry.config.prompt = [proc do |obj, nest_level, _|
       pre = "#{obj} :: " unless obj == self
       "spectrum(#{pre}#{nest_level}.#{_.input_array.size})> "
-    end, proc { "*" }]
+    end, proc { '*' }]
 
     instance_api_methods
   end
@@ -272,21 +278,31 @@ class ClientShowcase < ShowcaseObject
     nil
   end
 
-  def nil?; false; end
+  def nil?
+    false
+  end
 
-  def puts(*va); ::Kernel.method(:puts).call(*va); end
+  def puts(*va)
+    ::Kernel.method(:puts).call(*va)
+  end
 
-  def to_s; "GeekApk"; end
+  def to_s
+    'GeekApk'
+  end
 
   attr_accessor :apis, :conn, :auth
 end
 
-def ClientShowcase.require_auth?(spec)
+def ClientShowcase.require_auth?(_spec)
   true # should be optimized in future releases
 end
 
+def ClientShowcase.map_response(_spec, resp)
+  resp
+end
+
 # Should be optimized in future releases
-def ClientShowcase.handler(my_spec, my_conn, my_auth, params)
+def ClientShowcase.handler(my_spec, my_conn, my_auth, params, &action)
   if $DEBUG
     nn_banner('^', :yellow)
     puts "Committing request #{my_spec.method} #{my_conn.url_prefix}#{my_spec.location}"
@@ -295,23 +311,44 @@ def ClientShowcase.handler(my_spec, my_conn, my_auth, params)
     puts "with parameters #{params}"
   end
 
-  return puts my_spec if my_spec.args.size != 0 && params.size == 0 || params.size > my_spec.args.size
-
   response = my_conn.send(my_spec.method.downcase) do |req|
     finally = my_spec.location.dup
     body = ''
-    url_type_map = Hash.new
-    type_map = Hash.new
+    url_type_map = {}
+    type_map = {}
 
-    rest = my_spec.args.reverse.collect { |a| a.required }.drop_while.to_a
+    action.call(req) if action
 
-    if params.size < my_spec.args.size - rest.size
+    # must = my_spec.args.collect { |a| a.required }.take_while { |p| p }
+    must = my_spec.args.take_while(&:required)
+    puts must if $DEBUG
+
+    if !my_spec.args.empty? && params.empty? || params.size > my_spec.args.size
+      nn_banner('!', :red)
+      warn "Arity mismatch: expected #{my_spec.args.size} (not optional #{must.size}), got #{params.size}"
+      if must.empty?
+        nn_banner('*', :blue)
+        puts 'NOTE: fill first optional argument to get started'
+      end
+      return puts my_spec
+    end
+
+    if params.size < must.size
       nn_banner('-', :red)
-      warn "Should not ignore #{rest}"
+      warn "Should not ignore parameter #{must[params.size..must.size].join(', ')}"
+    end
+
+    rest_must = my_spec.args[must.size..-1].zip(my_spec.args.each_index).find_all { |ai| ai[0].required }
+    last_rest_index = rest_must.empty? ? -1 : rest_must.max { |ai| ai[1] }[1]
+    puts "Rest non-optional arguments #{rest_must}" if $DEBUG
+
+    if params.size <= last_rest_index
+      nn_banner('!', :red)
+      puts "Should fill rest non-optional parameters #{rest_must.join(', ')}, expected to index #{last_rest_index + 1}, actual: #{params.size}"
     end
 
     params.zip(my_spec.args).each do |p|
-      if p[1].options and not p[1].options.empty?
+      if p[1].options && !p[1].options.empty?
         unless p[1].options.include?(p.first)
           nn_banner('-', :red)
           warn "Warning, parameter #{p.first} not in range #{p[1].options}"
@@ -319,23 +356,25 @@ def ClientShowcase.handler(my_spec, my_conn, my_auth, params)
       end
 
       case (t = p[1].extra)[:param_location]
-        when 'path'
-          finally.gsub!("{#{t[:real_name]}}", p.first.to_s)
-          url_type_map[t[:real_name]] = t[:type]
-        when 'body' then if body.empty? then body = p.first else warn "Duplicate body variable processing #{my_spec}" end
-        when nil
-          type_map[t[:real_name]] = t[:type]
-          req.params[t[:real_name]] = p.first
+      when 'path'
+        finally.gsub!("{#{t[:real_name]}}", p.first.to_s)
+        url_type_map[t[:real_name]] = t[:type]
+      when 'body' then body.empty? ? (body = p.first) : (warn "Duplicate body variable processing #{my_spec}")
+      when nil
+        type_map[t[:real_name]] = t[:type]
+        req.params[t[:real_name]] = p.first
       end
     end
 
     req.body = body unless body.empty?
 
-    nn_banner
+    nn_banner if $DEBUG
     puts "Finally url #{finally} (#{req.params}), UT map #{url_type_map}, map #{type_map}, body = #{body}" if $DEBUG
 
     req.url(finally)
   end
+
+  ClientShowcase.map_response(my_spec, reponse)
 end
 
 def make_json(apis)
@@ -358,11 +397,11 @@ def right_away(spec)
   me = ClientShowcase.new(interfaces)
 
   case ARGV[1]
-    when 'show' then return me.show
-    when 'licence' then return puts 'Apache 2.0'
-    when 'help' then return puts '👆 Help contents above'
-    when 'json' then return make_json(interfaces)
-    when 'debug' then $DEBUG = true
+  when 'show' then return me.show
+  when 'licence' then return puts 'Apache 2.0'
+  when 'help' then return puts '👆 Help contents above'
+  when 'json' then return make_json(interfaces)
+  when 'debug' then $DEBUG = true
   end
 
   me.on_load
@@ -371,31 +410,31 @@ end
 
 # synchronous, bit buggy, not robust
 def translate_extra_node(code)
-#  %x[#{"cat<<CODE\n" + code + "\nCODE\n|" + PARSER}]
-#  %x[#{"echo " + code + '|' + PARSER}]
+  #  %x[#{"cat<<CODE\n" + code + "\nCODE\n|" + PARSER}]
+  #  %x[#{"echo " + code + '|' + PARSER}]
   f = File.new("Code_#{rand(0..100)}", 'w+')
 
   begin
     f.write(code)
     f.flush
 
-    result = %x(#{PARSER.gsub(NODE_FD, f.path)})
+    result = `#{PARSER.gsub(NODE_FD, f.path)}`
   ensure
     File.delete(f)
   end
 
-  return result
+  result
 end
 
 # CLI launcher
-def start(args = ARGV)
-  puts "Spectrum v#{VERSION}: usage: #{$0} <spec json file> [command]{show,licence,help,json,debug}"
+def start(_args = ARGV)
+  puts "Spectrum v#{VERSION}: usage: #{$PROGRAM_NAME} <spec json file> [command]{show,licence,help,json,debug}"
 
-  return unless ARGV.size <= 2
+  return unless (ARGV.size <= 2) && (ARGV.size >= 1)
 
   code = File.read(ARGV.first)
 
-  unless ARGV.first.end_with?('.json') or ENV['JSON']
+  unless ARGV.first.end_with?('.json') || ENV['JSON']
     translated = translate_extra_node(code.gsub(/#.*$/, ''))
 
     json = translated.yield_self { |c| JSON.parse(c) }
@@ -407,4 +446,4 @@ def start(args = ARGV)
 end
 
 # invokes main function if this script is running not as a library
-start if $0 == __FILE__
+start if $PROGRAM_NAME == __FILE__
