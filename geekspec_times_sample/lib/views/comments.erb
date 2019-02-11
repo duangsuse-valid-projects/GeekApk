@@ -1,0 +1,10 @@
+<html>
+<head>
+  <title>Comments of <%= @nth %>:<%= @post.comments.size %></title>
+</head>
+<body>
+  <% for c in @post.comments %>
+  <%=   c.ser %>
+  <% end %>
+</body>
+</html>

@@ -32,4 +32,9 @@
 *.hi
 *.o
 
+### Ruby ###
+.rspec_status
+Gemfile.lock
+*.gem
+
 GeekCoder

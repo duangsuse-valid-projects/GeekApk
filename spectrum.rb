@@ -190,7 +190,7 @@ EoCMD
         my_auth = auth
         my_conn = conn
 
-        ClientShowcase.handler(my_spec, my_conn, my_auth, params, &block)
+        ClientShowcase.handler(my_spec, my_conn, my_auth, showcase, params, &block)
       end
     end
 
@@ -265,7 +265,7 @@ EoCMD
   end
 
   class ClientShowcase < ShowcaseObject
-    attr_accessor :apis, :conn, :auth
+    attr_accessor :apis, :conn, :auth, :opts
 
     def initialize(interfaces)
       @conn = Faraday.new(url: 'http://127.0.0.1:8080')
@@ -372,7 +372,7 @@ EoCMD
     end
   end
 
-  def ClientShowcase.require_auth?(spec)
+  def ClientShowcase.require_auth?(spec, _me = nil)
     # true # should be optimized in future releases
     # return true if %w[createUser resetSharedHash deleteUser flagUser createCategory renameCategory deleteCategory deleteApp transferAppCategory transferAppOwner].include?(spec.name)
     return true if spec.location.start_with?('/admin')
@@ -428,7 +428,7 @@ EoCMD
     end
   end
 
-  def ClientShowcase.map_response(spec, resp)
+  def ClientShowcase.map_response(spec, resp, me = nil)
     if (high_digit = resp.status / 100) != 2
       begin
         json = JSON.parse(resp.body)
@@ -452,8 +452,8 @@ EoCMD
       mapper = "map_resp_#{r.name}"
       if ClientShowcase.respond_to?(mapper)
         case r.type
-        when 'object' then return ClientShowcase.send(mapper, json, resp)
-        when 'array' then return json.map { |it| ClientShowcase.send(mapper, it, resp) }
+        when 'object' then return ClientShowcase.send(mapper, json, resp, me)
+        when 'array' then return json.map { |it| ClientShowcase.send(mapper, it, resp, me) }
         end
       end
       return json
@@ -462,10 +462,10 @@ EoCMD
     end
 
     mapper = "map_resp_text_#{spec.return}"
-    if ClientShowcase.respond_to?(mapper) then ClientShowcase.send(mapper, resp.body, resp) else resp.body end
+    if ClientShowcase.respond_to?(mapper) then ClientShowcase.send(mapper, resp.body, resp, me) else resp.body end
   end
 
-  def ClientShowcase.map_resp_text_datetime(body, _)
+  def ClientShowcase.map_resp_text_datetime(body, _, _me = nil)
     if body.match(/[0-9]+/)
       Time.at(0, body.to_i, :millisecond)
     else
@@ -473,14 +473,14 @@ EoCMD
     end
   end
 
-  def ClientShowcase.setup_auth(req, auth)
+  def ClientShowcase.setup_auth(req, auth, _me = nil)
     puts "Setup Auth #{auth}(#{auth.to_cookie}) for request #{req}" if $DEBUG
     # gaUser, gaHash, gaModTok
     req.headers['Cookie'] = auth.to_cookie
   end
 
   # Should be optimized in future releases
-  def ClientShowcase.handler(my_spec, my_conn, my_auth, params, &action)
+  def ClientShowcase.handler(my_spec, my_conn, my_auth, me, params, &action)
     if $DEBUG
       nn_banner('^', :yellow)
       puts "Committing request #{my_spec.method} #{my_conn.url_prefix}#{my_spec.location}"
@@ -551,10 +551,10 @@ EoCMD
 
       req.url(finally)
 
-      ClientShowcase.setup_auth(req, my_auth) if ClientShowcase.require_auth?(my_spec)
+      ClientShowcase.setup_auth(req, my_auth, me) if ClientShowcase.require_auth?(my_spec, me)
     end
 
-    ClientShowcase.map_response(my_spec, response)
+    ClientShowcase.map_response(my_spec, response, me)
   end
 
   def self.make_json(apis)

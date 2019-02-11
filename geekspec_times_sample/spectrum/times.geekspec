@@ -1,0 +1,35 @@
+apiVersion() -> semver
+  = /api/version
+
+countPosts() -> number
+  = /api
+
+readPostPreview(nth-path:Int) -> object:Post
+  = /api/{nth}
+
+readPost(nth-path:Int) -> object:Post
+  = /api/{nth}/detail
+
+readPostViews(nth-path:Int) -> number
+  = /api/{nth}/views
+
+POST@makePost(author-path:String, pass-path:String, title-path:String, content-body:String) -> plain
+  = /api/{author}/{pass}/{title}
+
+DELETE@freeLastPost(pass-path:String) -> plain
+  = /api/pop/{pass}
+
+readPostComments(nth-path:Int) -> array:Comment
+  = /api/{nth}/comments
+
+countPostComment(nth-path:Int) -> number
+  = /api/{nth}/comments/len
+
+POST@writePostComment(nth-path:Int, author-path:String, content-body:String) -> plain
+  = /api/{nth}/comment/{author}
+
+POST@likePostComment(nth-path:Int, created-path:Int) -> plain
+  = /api/{nth}/comment/{created}/like
+
+realtime() -> stream
+  = /api/realtime

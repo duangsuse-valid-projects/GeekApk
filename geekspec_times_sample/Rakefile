@@ -1,0 +1,66 @@
+require 'bundler/gem_tasks'
+require 'rspec/core/rake_task'
+
+RSpec::Core::RakeTask.new(:spec)
+
+task default: :spec
+
+# Excited easter-egg
+desc 'Print hello'
+task :hello do
+  puts '😀 Got Frogn?'
+end
+
+# Display Times Version
+desc 'Print library version'
+task :version do
+  puts Times::VERSION
+end
+
+# Print all models and model methods
+desc 'Print Models&Methods'
+task :model do
+  p 'Post: String author, Time time, String title, String summary,' \
+    ' String text, Integer views, Set comments'
+  p 'Comment: String author, Time time, String text, Integer likes'
+end
+
+desc 'Build this Gem'
+task :build do
+  system 'gem build times.gemspec'
+end
+
+desc 'Install this Gem'
+task install: :build do
+  system "gem install times-#{Times::VERSION}.gem"
+end
+
+desc 'Install this Gem(as root)'
+task sudoinstall: :build do
+  system "sudo gem install times-#{Times::VERSION}.gem" if Process.uid != 0
+end
+
+desc 'Format code'
+task :fmt do
+  system 'rufo bin/ test/ lib/ times.gemspec'
+end
+
+desc 'Rubocop Lint'
+task :lint do
+  system 'rubocop'
+end
+
+desc 'Clean up'
+task :clean do
+  begin
+    File.delete "times-#{Times::VERSION}.gem"
+  rescue Errno::ENOENT
+    puts 'Nothing to do.'
+  end
+end
+
+desc 'Start server (for testing)'
+task :server do
+  require 'times'
+  TimesApp.run!
+end
