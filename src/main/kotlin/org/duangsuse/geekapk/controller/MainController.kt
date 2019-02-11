@@ -70,6 +70,7 @@ class MainController {
       result["jvmCompiler"] = jvmComp
       result["jvmDataModel"] = System.getProperty("sun.arch.data.model", "Unknown")
       result["encoding"] = System.getProperty("file.encoding", "UTF-8")
+      result["startupAt"] = Date().toString()
 
       result.putAll(mapOf(
         "os" to System.getProperty("os.name", "Unknown OS Family"),

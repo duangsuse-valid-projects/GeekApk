@@ -356,21 +356,30 @@ EoCMD
   end
 
   def ClientShowcase.map_response(spec, resp)
-    if (r = spec.return).is_a? ReturnTypeAndObject
+    if (r = spec.return).is_a? Spectrum::Interface::ReturnTypeAndObject
       json = JSON.parse(resp.body)
       mapper = "map_resp_#{r.name}"
       if ClientShowcase.respond_to?(mapper)
         case r.type
-        when 'object' then return ClientShowcase.send(mapper, json)
-        when 'array' then return json.map { |it| ClientShowcase.send(mapper, it) }
+        when 'object' then return ClientShowcase.send(mapper, json, resp)
+        when 'array' then return json.map { |it| ClientShowcase.send(mapper, it, resp) }
         end
       end
       return json
-    elsif spec.return.is_a? ReturnTypesAndNames
-      return JSON.parse(resp.body)
+    elsif spec.return.is_a? Spectrum::Interface::ReturnTypesAndNames
+      return JSON.parse(resp.body) # plain map
     end
 
-    resp
+    mapper = "map_resp_text_#{spec.return}"
+    if ClientShowcase.respond_to?(mapper) then ClientShowcase.send(mapper, resp.body, resp) else resp.body end
+  end
+
+  def ClientShowcase.map_resp_text_datetime(body, _)
+    if body.match(/[0-9]+/)
+      Time.at(0, body.to_i, :millisecond)
+    else
+      Time.new(body)
+    end
   end
 
   def ClientShowcase.setup_auth(req, auth)
