@@ -81,25 +81,43 @@ create a file with these content in `/lib/systemd/system/geekapk_spring.service`
 ```ini
 [Unit]
 Description=GeekApk Spring server
-After=network.target postgresql.service
+After=network.target
+Requires=postgresql.service
 
 [Service]
+Type=simple
+
+# Recommended to run as 
+User=geekapk
+Group=geekapk
+WorkingDirectory=/home/geekapk/service
+
+LimitNOFILE=10
 ExecStart=#Your server start command
 
 Restart=always
-RestartSec=1
+RestartSec=2
 
-Environment=Key=Value
-Environment=K=V
+Environment=Key=Value K=V
+
+CapabilityBoundingSet=CAP_NET_BIND_SERVICE
+AmbientCapabilities=CAP_NET_BIND_SERVICE
+
+[Install]
+WantedBy=multi-user.target
 ```
+
+(see systemd service file format manual by `man systemd.service`, you can edit config file using `nano`, `vi` and `vim`)
 
 Then you can use `sudo systemctl start geekapk_spring` to start the server
 
 For server status checking, execute shell command `sudo systemctl status geekapk_spring.service`
 
+And when you're sure about your configuration, run `sudo systemctl enable geekapk_spring` to auto-start the service when system boots
+
 Process control daemon [Supervisor](http://supervisord.org/) is also a good option for this case
 
-[man page for systemd](https://www.freedesktop.org/software/systemd/man/systemd.service.html) | [related practice](https://gitlab.com/duangsuse/naive_fortunes/blob/master/bootstrap.sh)
+[man page for systemd](https://www.freedesktop.org/software/systemd/man/systemd.service.html) | [related practice](https://gitlab.com/duangsuse/naive_fortunes/blob/master/bootstrap.sh) | [related document](https://docs.gitea.io/en-us/linux-service/)
 
 ### (Optional) Make a reverse proxy
 
