@@ -40,19 +40,19 @@ class UserController {
   }
 
   @GetMapping("/all")
-  @ResponseBody fun listUser(@RequestParam(name = "sort", required = false) sort: String,
-                             @RequestParam(name = "sliceFrom", required = false) sliceFrom: UserSize, @RequestParam(name = "sliceTo", required = false) sliceTo: UserSize): List<GeekUser> {
+  @ResponseBody fun listUser(@RequestParam(name = "sort", required = false) sort: String?,
+                             @RequestParam(name = "sliceFrom", required = false) sliceFrom: UserSize?, @RequestParam(name = "sliceTo", required = false) sliceTo: UserSize?): List<GeekUser> {
     TODO()
   }
 
   @GetMapping("/allHasMetaApp")
-  @ResponseBody fun listMetaUser(@RequestParam(name = "sort", required = false) sort: String,
-                             @RequestParam(name = "sliceFrom", required = false) sliceFrom: UserSize, @RequestParam(name = "sliceTo", required = false) sliceTo: UserSize): List<GeekUser> {
+  @ResponseBody fun listMetaUser(@RequestParam(name = "sort", required = false) sort: String?,
+                             @RequestParam(name = "sliceFrom", required = false) sliceFrom: UserSize?, @RequestParam(name = "sliceTo", required = false) sliceTo: UserSize?): List<GeekUser> {
     TODO()
   }
 
   @GetMapping("/search/{kw}")
-  @ResponseBody fun searchUser(@RequestParam(name = "type", required = false) type: String, @PathVariable("kw") kw: String, @RequestParam(name = "sort", required = false) sort: String): List<GeekUser> {
+  @ResponseBody fun searchUser(@RequestParam(name = "type", required = false) type: String?, @PathVariable("kw") kw: String, @RequestParam(name = "sort", required = false) sort: String?): List<GeekUser> {
     TODO()
   }
 
