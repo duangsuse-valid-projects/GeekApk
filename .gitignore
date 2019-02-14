@@ -38,3 +38,6 @@ Gemfile.lock
 *.gem
 
 GeekCoder
+
+### Others ###
+posts.json

@@ -7,7 +7,6 @@ Encoding.default_external = Encoding::UTF_8
 
 # Times Server
 module Times
-  VERSION = '0.1.0'.freeze
 
   @posts = []
   @storage = ENV['TRB_STORAGE'] || 'posts.json'
