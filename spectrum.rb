@@ -19,6 +19,9 @@ require 'pry'
 require 'pp'
 require 'paint'
 
+# Time parsing
+require 'time'
+
 # Print fancy ANSI colorized banner
 def nn_banner(char = '+', color = :green, *va)
   print "[#{Paint[char, color, *va]}] "
@@ -271,7 +274,6 @@ EoCMD
       @conn = Faraday.new(url: 'http://127.0.0.1:8080')
       @apis = if interfaces.is_a? Array then interfaces else [interfaces] end
       @auth = GeekAuth.new(-1, '')
-      @conn.headers['Content-Type'] = 'application/json;charset=UTF-8'
     end
 
     def instance_api_methods
@@ -480,7 +482,7 @@ EoCMD
     if body.match(/[0-9]+/)
       Time.at(0, body.to_i, :millisecond)
     else
-      Time.new(body)
+      Time.parse(body)
     end
   end
 
@@ -507,6 +509,12 @@ EoCMD
       type_map = {}
 
       action.call(req) if action
+
+      unless req.headers['Content-Type']
+        if my_spec.method == 'PATCH'
+          req.headers['Content-Type'] = 'application/json;charset=UTF-8'
+        end
+      end
 
       # must = my_spec.args.collect { |a| a.required }.take_while { |p| p }
       must = my_spec.args.take_while(&:required)
