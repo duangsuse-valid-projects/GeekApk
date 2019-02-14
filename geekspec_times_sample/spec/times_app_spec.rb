@@ -38,14 +38,14 @@ RSpec.describe TimesApp do
     expect(last_response).to be_ok
   end
 
-  it 'purning spam log' do
-    TimesApp::ANTISPAM.delete '127.0.0.1'
+  it 'pruning spam log' do
+    TimesApp::ANTI_SPAM.delete '127.0.0.1'
   end
 
   it 'stops spam' do
-    a = TimesApp.aspm
+    a = TimesApp.anti_spam
     expect(a).to eq({})
-    a = TimesApp.aspm
+    a = TimesApp.anti_spam
     class TimesApp
       client_down(1, '1')
     end
@@ -194,12 +194,12 @@ RSpec.describe TimesApp do
 
   it 'clears spamming log' do
     pid = Process.pid
-    TimesApp::ANTISPAM.clear
-    TimesApp::ANTISPAM['12.32.43.1'] = 30
-    TimesApp::ANTISPAM['212.3.42.4'] = 20
+    TimesApp::ANTI_SPAM.clear
+    TimesApp::ANTI_SPAM['12.32.43.1'] = 30
+    TimesApp::ANTI_SPAM['212.3.42.4'] = 20
     Process.kill :USR2, pid
-    expect(TimesApp.aspm).to eq({})
-    expect(File.read('spamlog')).to eq("{\"12.32.43.1\"=>30, \"212.3.42.4\"=>20}\n")
-    File.delete 'spamlog'
+    expect(TimesApp.anti_spam).to eq({})
+    expect(File.read('spam_log')).to eq("{\"12.32.43.1\"=>30, \"212.3.42.4\"=>20}\n")
+    File.delete 'spam_log'
   end
 end

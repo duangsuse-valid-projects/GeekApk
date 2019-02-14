@@ -5,36 +5,51 @@
       <w>affero</w>
       <w>agpl</w>
       <w>appname</w>
+      <w>bindir</w>
       <w>bundler</w>
       <w>chinglish</w>
       <w>collab</w>
+      <w>commentable</w>
       <w>configurer</w>
       <w>cors</w>
+      <w>ctime</w>
       <w>ctor</w>
       <w>datasource</w>
+      <w>dbin</w>
       <w>devtools</w>
       <w>dorg</w>
       <w>downcase</w>
       <w>duangsuse</w>
+      <w>emmmm</w>
       <w>endlocal</w>
+      <w>enoent</w>
       <w>errorlevel</w>
+      <w>eventmachine</w>
       <w>followee</w>
+      <w>frogn</w>
       <w>gaee</w>
       <w>geekapk</w>
       <w>geekspec</w>
+      <w>gemfile</w>
+      <w>gemspec</w>
       <w>graal</w>
       <w>gsub</w>
+      <w>ivanilla</w>
       <w>jdbc</w>
       <w>klass</w>
       <w>licensors</w>
       <w>microservice</w>
       <w>microservices</w>
       <w>minbase</w>
+      <w>mustermann</w>
       <w>nand</w>
+      <w>neofelhz</w>
       <w>nfun</w>
       <w>nginx</w>
       <w>noncommercially</w>
       <w>noninfringement</w>
+      <w>nsfw</w>
+      <w>pandecheng</w>
       <w>parsearg</w>
       <w>parseentity</w>
       <w>parsefield</w>
@@ -45,25 +60,36 @@
       <w>parsepossible</w>
       <w>parsesimpleletter</w>
       <w>parseurl</w>
+      <w>poped</w>
       <w>postgre</w>
       <w>postgresql</w>
       <w>proc</w>
       <w>proxying</w>
       <w>rdbms</w>
+      <w>realtime</w>
       <w>relicensing</w>
+      <w>rikka</w>
       <w>rspec</w>
       <w>rtxd</w>
+      <w>rubocop</w>
+      <w>rubygems</w>
+      <w>rufo</w>
+      <w>semver</w>
       <w>setlocal</w>
       <w>sexp</w>
       <w>sexpression</w>
       <w>shash</w>
+      <w>sigusr</w>
       <w>simpleletter</w>
       <w>sublicenses</w>
       <w>sublicensing</w>
       <w>substr</w>
+      <w>sudoinstall</w>
       <w>systemd</w>
+      <w>trumeet</w>
       <w>uids</w>
       <w>uniq</w>
+      <w>unshift</w>
       <w>unstar</w>
       <w>vals</w>
       <w>wipo</w>

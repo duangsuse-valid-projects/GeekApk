@@ -65,12 +65,12 @@ module Times
       @comments.size
     end
 
-    # Seriailze post comments
+    # Serialize post comments
     def ser_comments
       @comments.map { |c| c.ser }.to_json
     end
 
-    # Seriailze self
+    # Serialize self
     def ser
       {
         author: @author,
@@ -182,18 +182,18 @@ class TimesApp < Sinatra::Base
   set port: ENV['TRB_PORT'] || '234'
 
   TRB_PASS = ENV['TRB_PASS'] || 'dolphins'
-  puts "Password setted to #{TRB_PASS}"
+  puts "Password set to #{TRB_PASS}"
   CONNECTIONS = Set.new
   # I'm really sorry...
-  ANTISPAM = {}
+  ANTI_SPAM = {}
 
-  def self.aspm
-    ANTISPAM
+  def self.anti_spam
+    ANTI_SPAM
   end
 
   def client_banned?(ip)
-    return false unless TimesApp.aspm.key?(ip)
-    TimesApp.aspm[ip] > 500
+    return false unless TimesApp.anti_spam.key?(ip)
+    TimesApp.anti_spam[ip] > 500
   end
 
   def client_ip(req)
@@ -202,8 +202,8 @@ class TimesApp < Sinatra::Base
 
   class << self
     def client_down(n, k)
-      TimesApp.aspm[k] = 0 unless TimesApp.aspm.key? k
-      TimesApp.aspm[k] += n
+      TimesApp.anti_spam[k] = 0 unless TimesApp.anti_spam.key? k
+      TimesApp.anti_spam[k] += n
     end
   end
 
@@ -381,8 +381,8 @@ trap(:USR1) { Times.dump }
 
 trap :USR2 do
   puts 'Cleaning spam log...' unless ENV['RACK_ENV'] == 'test'
-  l = TimesApp::ANTISPAM
-  f = File.open 'spamlog', 'w+'
+  l = TimesApp::ANTI_SPAM
+  f = File.open 'spam_log', 'w+'
   f.puts l
   f.close
   l.clear

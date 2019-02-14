@@ -26,30 +26,30 @@ RSpec.describe Times do
       expect(Time.now - c.created).not_to be nil
     end
 
-    it 'serializes&deserializes right' do
-      c = Times::Comment.new('boy', 'Oh, my shoudler')
+    it 'serializes&deserialize right' do
+      c = Times::Comment.new('boy', 'Oh, my shoulder')
       c.likes = 1
       c.created = Time.at 2333
       ser = c.ser
       expect(JSON.parse(ser.to_json)).to eq({
         'author' => 'boy',
-        'text' => 'Oh, my shoudler',
+        'text' => 'Oh, my shoulder',
         'created' => Time.at(2333).to_s,
         'likes' => 1
       })
       expect(Times::Comment.de(JSON.parse ser.to_json).ser).to eq(c.ser)
-      c.text << '\n' << 'Billy replies: Oh f**king c**mming'
+      c.text << '\n' << 'Billy replies: Oh f**king c**ming'
       expect(c.ser[:text]).to include('Billy')
     end
   end
 
   describe Times::Post do
     it 'can new' do
-      summ = 'After a big py trade, Gee Android client released at 2018.3.10'
-      p = Times::Post.new 'duangsuse', 'Gee v0.1.0 released', summ, 'rt'
+      sum = 'After a big py trade, Gee Android client released at 2018.3.10'
+      p = Times::Post.new 'duangsuse', 'Gee v0.1.0 released', sum, 'rt'
       expect(p.author).to eq 'duangsuse'
       expect(p.title).to eq 'Gee v0.1.0 released'
-      expect(p.summary).to eq summ
+      expect(p.summary).to eq sum
       expect(p.text).to eq 'rt'
       expect(p.created.class).to eq Time
       expect(p.comments.class).to eq Array
@@ -57,7 +57,7 @@ RSpec.describe Times do
       expect(p.views).to eq 0
     end
 
-    it 'serializes&deserializes right' do
+    it 'serializes&deserialize right' do
       p = Times::Post.new 'billy', 'Ass we can', '**********', '(nsfw content)'
       p.created = Time.new '1926.8.17'
       ser = p.ser
@@ -159,7 +159,7 @@ RSpec.describe Times do
     expect(JSON.parse(ser).size).to eq(5)
   end
 
-  it 'deserializes well' do
+  it 'deserialize well' do
     ser = Times.ser
     de = Times.de(ser)
     4.times { |n| expect(Times.posts[n].instance_variables).to eq(de[n].instance_variables) }

@@ -27,6 +27,15 @@ def nn_banner(char = '+', color = :green, *va)
   print "[#{Paint[char, color, *va]}] "
 end
 
+# Shim for Ruby 2.4
+unless Kernel.respond_to?('yield_self')
+ class Kernel
+   def yield_self(*args)
+     yield(self, *args)
+   end
+ end
+end
+
 # Spectrum -- GeekApk GeekSpec toolchain
 # Author: duangsuse
 # For POSIX platform (now)

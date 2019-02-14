@@ -27,6 +27,7 @@ script:
   - ruby ./spectrum.rb spectrum_geekapk_v1b_api.json show
   - ./gradlew check
   - rspec ./spectrum_checks.rb
+  - pushd geekspec_times_sample; rake; popd
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
