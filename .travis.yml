@@ -8,7 +8,7 @@ addons:
       - ruby
       - nodejs
 
-install: gem install faraday pry pp paint
+install: gem install faraday pry pp paint rspec
 
 branches:
   except:
@@ -21,11 +21,12 @@ before_script:
   - psql -c "CREATE USER geekapk with password 'a1234567';" -U postgres
   - psql -c "GRANT ALL PRIVILEGES ON DATABASE geekapk TO geekapk;" -U postgres
   - chmod +x spectrum.rb
-  - ./spectrum.rb geekapk_v1b_api.geekspec json
+  - ruby ./spectrum.rb geekapk_v1b_api.geekspec json
 
 script:
-  - ./spectrum.rb spectrum_geekapk_v1b_api.json show
+  - ruby ./spectrum.rb spectrum_geekapk_v1b_api.json show
   - ./gradlew check
+  - rspec ./spectrum_checks.rb
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
