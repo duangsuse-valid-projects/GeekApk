@@ -29,7 +29,7 @@ end
 
 # Shim for Ruby 2.4
 unless Kernel.respond_to?('yield_self')
- class Kernel
+ module Kernel
    def yield_self(*args)
      yield(self, *args)
    end
