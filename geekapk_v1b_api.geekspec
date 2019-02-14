@@ -70,43 +70,43 @@ DELETE@removeComment(cid-path:CommentId) -> [$cid:number, $deletedSubComments:nu
 ## GeekApk Categories section
 
 categoryList() -> array:Category
-  = category/all
+  = /category/all
 
 categoryName(id-path:CategoryId) -> plain
-  = category/{id}
+  = /category/{id}
 
 
 
 ## GeekApk Users section
 
 readUser(id-path:UserId) -> object:GeekUser
-  = user/{id}
+  = /user/{id}
 
 
 ### Requires user permission
 PUT@updateUser(id-path:UserId, prop:String{username, nickname, avatar, bio, metaApp}, value-body:String)
   -> [$user:number, $prop:string, $old:string, $new:string]
-  = user/{id}
+  = /user/{id}
 
 PUT@resetHash(id-path:UserId, shash:String, hash:String)
   -> [$id:number, $newShash:string, $newHash:string]
-  = user/{id}/hash
+  = /user/{id}/hash
 
 checkHash(id-path:UserId, hash:String)
   -> [$valid:boolean, $message:string]
-  = user/{id}/checkHash
+  = /user/{id}/checkHash
 
 listUser(sort:String?{created, followers}, sliceFrom:UserSize?, sliceTo:UserSize?) -> array:GeekUser
-  = user/all
+  = /user/all
 
 listMetaUser(sort:String?{created, followers}, sliceFrom:UserSize?, sliceTo:UserSize?) -> array:GeekUser
-  = user/allHasMetaApp
+  = /user/allHasMetaApp
 
 searchUser(type:String?{username, nickname, bio}, kw-path:String, sort:String?{created, followers}) -> array:GeekUser
-  = user/search/{kw}
+  = /user/search/{kw}
 
 PUT@updateOnlineTime(id-path:UserId)
-  = user/{id}/online
+  = /user/{id}/online
 
 ## GeekApk Timeline section
 
@@ -254,3 +254,13 @@ stargazers(aid-path:AppId) -> array:App
 
 stars(uid-path:UserId) -> array:App
   = /star/user/{uid}
+
+## PATCH APIs
+PATCH@patchUser(uid-path:UserId, obj-body:GeekUser) -> object:GeekUser
+  = /user/{uid}
+
+PATCH@patchApp(aid-path:AppId, obj-body:App) -> object:App
+  = /app/{aid}
+
+PATCH@patchReversion(aid-path:AppId, rev-path:Int, obj-body:AppUpdate) -> object:AppUpdate
+  = /appUpdate/{aid}/{rev}

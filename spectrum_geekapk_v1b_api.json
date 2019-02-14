@@ -293,7 +293,7 @@
       "of": "Category"
     },
     "method": "GET",
-    "url": "category/all"
+    "url": "/category/all"
   },
   {
     "name": "categoryName",
@@ -306,7 +306,7 @@
     ],
     "return": "plain",
     "method": "GET",
-    "url": "category/{id}"
+    "url": "/category/{id}"
   },
   {
     "name": "readUser",
@@ -322,7 +322,7 @@
       "of": "GeekUser"
     },
     "method": "GET",
-    "url": "user/{id}"
+    "url": "/user/{id}"
   },
   {
     "name": "updateUser",
@@ -368,7 +368,7 @@
       }
     ],
     "method": "PUT",
-    "url": "user/{id}"
+    "url": "/user/{id}"
   },
   {
     "name": "resetHash",
@@ -404,7 +404,7 @@
       }
     ],
     "method": "PUT",
-    "url": "user/{id}/hash"
+    "url": "/user/{id}/hash"
   },
   {
     "name": "checkHash",
@@ -431,7 +431,7 @@
       }
     ],
     "method": "GET",
-    "url": "user/{id}/checkHash"
+    "url": "/user/{id}/checkHash"
   },
   {
     "name": "listUser",
@@ -460,7 +460,7 @@
       "of": "GeekUser"
     },
     "method": "GET",
-    "url": "user/all"
+    "url": "/user/all"
   },
   {
     "name": "listMetaUser",
@@ -489,7 +489,7 @@
       "of": "GeekUser"
     },
     "method": "GET",
-    "url": "user/allHasMetaApp"
+    "url": "/user/allHasMetaApp"
   },
   {
     "name": "searchUser",
@@ -522,7 +522,7 @@
       "of": "GeekUser"
     },
     "method": "GET",
-    "url": "user/search/{kw}"
+    "url": "/user/search/{kw}"
   },
   {
     "name": "updateOnlineTime",
@@ -535,7 +535,7 @@
     ],
     "return": null,
     "method": "PUT",
-    "url": "user/{id}/online"
+    "url": "/user/{id}/online"
   },
   {
     "name": "readUserTimeline",
@@ -1425,5 +1425,73 @@
     },
     "method": "GET",
     "url": "/star/user/{uid}"
+  },
+  {
+    "name": "patchUser",
+    "args": [
+      {
+        "name": "uid-path:UserId",
+        "required": true,
+        "options": null
+      },
+      {
+        "name": "obj-body:GeekUser",
+        "required": true,
+        "options": null
+      }
+    ],
+    "return": {
+      "type": "object",
+      "of": "GeekUser"
+    },
+    "method": "PATCH",
+    "url": "/user/{uid}"
+  },
+  {
+    "name": "patchApp",
+    "args": [
+      {
+        "name": "aid-path:AppId",
+        "required": true,
+        "options": null
+      },
+      {
+        "name": "obj-body:App",
+        "required": true,
+        "options": null
+      }
+    ],
+    "return": {
+      "type": "object",
+      "of": "App"
+    },
+    "method": "PATCH",
+    "url": "/app/{aid}"
+  },
+  {
+    "name": "patchReversion",
+    "args": [
+      {
+        "name": "aid-path:AppId",
+        "required": true,
+        "options": null
+      },
+      {
+        "name": "rev-path:Int",
+        "required": true,
+        "options": null
+      },
+      {
+        "name": "obj-body:AppUpdate",
+        "required": true,
+        "options": null
+      }
+    ],
+    "return": {
+      "type": "object",
+      "of": "AppUpdate"
+    },
+    "method": "PATCH",
+    "url": "/appUpdate/{aid}/{rev}"
   }
 ]

@@ -49,6 +49,12 @@ class AppReversionController {
     TODO()
   }
 
+  @PatchMapping("/{aid}/{rev}")
+  @ResponseBody
+  fun patchReversion(@PathVariable("aid") aid: AppId, @PathVariable("rev") rev: Int, @RequestBody obj: AppUpdate): AppUpdate {
+    TODO()
+  }
+
 
   @DeleteMapping("/{aid}/{rev}")
   @ResponseBody

@@ -13,6 +13,7 @@ import java.io.Serializable
 import java.util.*
 import javax.persistence.*
 import javax.validation.constraints.Size
+import javax.xml.bind.annotation.XmlTransient
 import kotlin.math.roundToInt
 
 /**
@@ -79,6 +80,7 @@ data class GeekUser (
    */
   @UserPrivate
   @JsonIgnore
+  @XmlTransient
   var sharedHash: String = makeSharedHash(20), /* static server-computed size */
 
   /**
@@ -86,6 +88,7 @@ data class GeekUser (
    */
   @UserPrivate /* should be set to another value in controller level */
   @JsonIgnore
+  @XmlTransient
   @Size(min = 256 / 4, max = 256 / 4) /* SHA-256 hex representation hash */
   var hash: String = "68e656b251e67e8358bef8483ab0d51c6619f3e7a1a9f0e75838d41ff368f728",
 

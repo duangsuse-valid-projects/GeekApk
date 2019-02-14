@@ -31,6 +31,12 @@ class AppController {
     TODO()
   }
 
+  @PatchMapping("/{aid}")
+  @ResponseBody
+  fun patchApp(@PathVariable("aid") aid: AppId, @RequestBody obj: App): App {
+    TODO()
+  }
+
 
   @PostMapping("/")
   @ResponseBody

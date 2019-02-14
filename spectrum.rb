@@ -271,6 +271,7 @@ EoCMD
       @conn = Faraday.new(url: 'http://127.0.0.1:8080')
       @apis = if interfaces.is_a? Array then interfaces else [interfaces] end
       @auth = GeekAuth.new(-1, '')
+      @conn.headers['Content-Type'] = 'application/json;charset=UTF-8'
     end
 
     def instance_api_methods

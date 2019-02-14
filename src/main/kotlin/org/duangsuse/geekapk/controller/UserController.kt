@@ -29,6 +29,12 @@ class UserController {
     TODO()
   }
 
+  @PatchMapping("/{uid}")
+  @ResponseBody
+  fun patchUser(@PathVariable("uid") uid: UserId, @RequestBody obj: GeekUser): GeekUser {
+    TODO()
+  }
+
   @PutMapping("/{id}/hash")
   @ResponseBody fun resetHash(@PathVariable("id") id: UserId, @RequestParam("shash") shash: String, @RequestParam("hash") hash: String): Map<String, String> {
     TODO()
