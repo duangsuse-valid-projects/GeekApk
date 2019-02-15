@@ -196,7 +196,7 @@ EoCMD
 
       spec = self # to be packaged (reference back to here)
 
-      showcase.class.define_method(name) do |*params, &block|
+      showcase.class.send(:define_method, name) do |*params, &block|
         my_spec = spec # packaged spec base
 
         my_auth = auth
