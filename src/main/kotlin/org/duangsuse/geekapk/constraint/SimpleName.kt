@@ -12,7 +12,7 @@ import kotlin.reflect.KClass
 @Constraint(validatedBy = [SimpleName.Validator::class])
 @Target(AnnotationTarget.FIELD)
 @Retention(AnnotationRetention.RUNTIME)
-annotation class SimpleName(val message: String = MESSAGE, val payload: PayloadVariable= [], val groups: Array<KClass<*>> = []) {
+annotation class SimpleName(val message: String = MESSAGE, @Suppress("unused") val payload: PayloadVariable= [], @Suppress("unused") val groups: Array<KClass<*>> = []) {
   class Validator: ConstraintValidator<SimpleName, CharSequence> {
     override fun isValid(value: CharSequence?, context: ConstraintValidatorContext?): Boolean {
       value?.run { return matches(VALID_PATTERN) }

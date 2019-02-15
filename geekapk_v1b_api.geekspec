@@ -264,3 +264,11 @@ PATCH@patchApp(aid-path:AppId, obj-body:App) -> object:App
 
 PATCH@patchReversion(aid-path:AppId, rev-path:Int, obj-body:AppUpdate) -> object:AppUpdate
   = /appUpdate/{aid}/{rev}
+
+## QCL API
+POST@qclExecute(stmt:String) -> object:string
+  = /qclExec
+
+## GeekHits (Rate limit) API
+getMyLimit() -> object:LimitMap
+  = /limit

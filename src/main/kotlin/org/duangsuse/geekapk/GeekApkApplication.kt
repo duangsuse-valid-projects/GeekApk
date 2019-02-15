@@ -1,6 +1,12 @@
 package org.duangsuse.geekapk
 
 import org.duangsuse.geekapk.controller.MainController
+import org.duangsuse.geekapk.migrate.*
+import org.duangsuse.geekapk.repositories.*
+import org.duangsuse.geekapk.repositories.relations.CollabRelRepository
+import org.duangsuse.geekapk.repositories.relations.FollowRelRepository
+import org.duangsuse.geekapk.repositories.relations.StarRelRepository
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.CommandLineRunner
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
 import org.springframework.boot.autoconfigure.SpringBootApplication
@@ -10,6 +16,32 @@ import org.springframework.context.annotation.Bean
 import java.io.BufferedInputStream
 import java.io.IOException
 import java.util.*
+
+/**
+ * Database source CDI consumer
+ */
+class DbDataSource {
+  @Autowired lateinit var apps: AppRepository
+  @Autowired lateinit var revs: AppUpdateRepository
+  @Autowired lateinit var comments: CommentRepository
+  @Autowired lateinit var users: UserRepository
+  @Autowired lateinit var timeline: TimelineRepository
+  @Autowired lateinit var notifications: NotificationRepository
+  @Autowired lateinit var categories: CategoryRepository
+  @Autowired lateinit var collaborators: CollabRelRepository
+  @Autowired lateinit var follow: FollowRelRepository
+  @Autowired lateinit var star: StarRelRepository
+  fun dumpDb() {
+    val rel = RelationMigrationRepositories(collaborators, follow, star)
+
+    val a = MigrationRepositoriesA(apps, revs, comments)
+    val b = MigrationRepositoriesB(users, timeline, notifications)
+    val c = MigrationRepositoriesC(categories, rel)
+
+    val migration = Migrates.Migration(a, b, c)
+    Migrates.dumpAll(migration)
+  }
+}
 
 /**
  * The GeekApk Spring Application
@@ -59,6 +91,7 @@ class GeekApkApplication {
         "--help", "help" -> println("Program usage: geekapk [version|help|licence]" +
           "Find help at https://github.com/duangsuse/GeekApk")
         "--licence", "licence" -> println("Copyright (C) 2019 duangsuse, GeekApk Spring, licenced under GNU AGPL-3.0")
+        "dump!" -> DbDataSource().dumpDb()
         else -> println("Warning: unknown operation")
       }
       else -> println("Warning: unexpected argument vector length: ${args.size}")

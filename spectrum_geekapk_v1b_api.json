@@ -1493,5 +1493,33 @@
     },
     "method": "PATCH",
     "url": "/appUpdate/{aid}/{rev}"
+  },
+  {
+    "name": "qclExecute",
+    "args": [
+      {
+        "name": "stmt:String",
+        "required": true,
+        "options": null
+      }
+    ],
+    "return": {
+      "type": "object",
+      "of": "string"
+    },
+    "method": "POST",
+    "url": "/qclExecute"
+  },
+  {
+    "name": "getMyLimit",
+    "args": [
+
+    ],
+    "return": {
+      "type": "object",
+      "of": "LimitMap"
+    },
+    "method": "GET",
+    "url": "/limit"
   }
 ]

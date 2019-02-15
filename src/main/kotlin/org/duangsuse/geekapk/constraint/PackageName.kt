@@ -22,7 +22,7 @@ typealias PayloadVariable =  Array<KClass<out Payload>>
 @Target(AnnotationTarget.FIELD, AnnotationTarget.VALUE_PARAMETER)
 @Retention(AnnotationRetention.RUNTIME)
 annotation class PackageName(val maxSize: Int = 1, val message: String = "Invalid package name, should match [A-Za-z0-9_\\\\.]{64}", // yoo
-                             val payload: PayloadVariable= [], val groups: Array<KClass<*>> = []) {
+                             @Suppress("unused") val payload: PayloadVariable= [], @Suppress("unused") val groups: Array<KClass<*>> = []) {
   class Validator: ConstraintValidator<PackageName, CharSequence> {
     private var max: Int = 64
     override fun initialize(constraintAnnotation: PackageName?) {
