@@ -20,6 +20,7 @@
       <w>dorg</w>
       <w>downcase</w>
       <w>duangsuse</w>
+      <w>eaddrinuse</w>
       <w>emmmm</w>
       <w>endlocal</w>
       <w>enoent</w>
@@ -34,6 +35,7 @@
       <w>gemspec</w>
       <w>graal</w>
       <w>gsub</w>
+      <w>inet</w>
       <w>ivanilla</w>
       <w>jdbc</w>
       <w>klass</w>
@@ -81,6 +83,7 @@
       <w>shash</w>
       <w>sigusr</w>
       <w>simpleletter</w>
+      <w>sockaddr</w>
       <w>sublicenses</w>
       <w>sublicensing</w>
       <w>substr</w>
