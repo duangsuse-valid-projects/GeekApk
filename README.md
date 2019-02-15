@@ -23,7 +23,8 @@ by __♥\\\_(ㇱ)\_/✐__
 - [x] MetaApp for users
 - [x] AppType, GeekApk bot
 - [ ] Query Combating Language support (bulk query)
-- [ ] Lexical scoping (lambda calculus) for QCL Interpreter
+- [ ] Lexical scoping (lambda calculus) for the QCL Interpreter
+- [ ] GeekPush Server-side-push support
 
 ## Deploying
 
@@ -102,6 +103,9 @@ Environment=Key=Value K=V
 
 CapabilityBoundingSet=CAP_NET_BIND_SERVICE
 AmbientCapabilities=CAP_NET_BIND_SERVICE
+
+#ExecStartPre=-/bin/setcap 'cap_net_bind_service=+eip' your_server_jvm_binary
+#PermissionsStartOnly=true # Only ExecStartPre to be run as root (but not ExecStart)
 
 [Install]
 WantedBy=multi-user.target
