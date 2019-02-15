@@ -7,33 +7,33 @@
 # Write your API specifications with GeekSpec markup and load them with Spectrum!
 
 # Http client wrapper
-require 'faraday'
+require "faraday"
 
 # Json library
-require 'json'
+require "json"
 
 # Pry!
-require 'pry'
+require "pry"
 
 # Pretty print
-require 'pp'
-require 'paint'
+require "pp"
+require "paint"
 
 # Time parsing
-require 'time'
+require "time"
 
 # Print fancy ANSI colorized banner
-def nn_banner(char = '+', color = :green, *va)
+def nn_banner(char = "+", color = :green, *va)
   print "[#{Paint[char, color, *va]}] "
 end
 
 # Shim for Ruby 2.4
-unless Kernel.respond_to?('yield_self')
- module Kernel
-   def yield_self(*args)
-     yield(self, *args)
-   end
- end
+unless Kernel.respond_to?("yield_self")
+  module Kernel
+    def yield_self(*args)
+      yield(self, *args)
+    end
+  end
 end
 
 # Spectrum -- GeekApk GeekSpec toolchain
@@ -41,11 +41,11 @@ end
 # For POSIX platform (now)
 module Spectrum
   # Program version
-  SPECTRUM_VERSION = '0.1.0'.freeze
+  SPECTRUM_VERSION = "0.1.0".freeze
 
   # Node template
-  PARSER_CODE = ENV['PARSER_CODE'] || './geekspec_parser.js'
-  NODE_FD = '/proc/self/fd/0'.freeze
+  PARSER_CODE = ENV["PARSER_CODE"] || "./geekspec_parser.js"
+  NODE_FD = "/proc/self/fd/0".freeze
   NODE_INPUT = "fs.readFileSync('#{NODE_FD}')".freeze
 
   PARSER = <<EoCMD.freeze
@@ -82,8 +82,8 @@ EoCMD
       attr_accessor :name, :required, :options, :extra
 
       def parse_extra(_json = @name)
-        if @name.include?(':')
-          if @name.include?('-')
+        if @name.include?(":")
+          if @name.include?("-")
             search = @name.match(/(\S+)-(\S+):(\S+)/)
             return { type: search[3], param_location: search[2], real_name: search[1] }
           end
@@ -97,9 +97,9 @@ EoCMD
       end
 
       def initialize(json)
-        @name = json['name']
-        @required = json['required']
-        @options = json['options']
+        @name = json["name"]
+        @required = json["required"]
+        @options = json["options"]
 
         begin
           @extra = parse_extra
@@ -109,13 +109,13 @@ EoCMD
       end
 
       def required_to_s
-        @required ? '' : Paint['?', :red, :reveal]
+        @required ? "" : Paint["?", :red, :reveal]
       end
 
       def options_to_s
-        return '' if @options.nil?
+        return "" if @options.nil?
 
-        list = @options.map { |x| Paint[x, :green, :bold] }.join(', ') unless @options.empty?
+        list = @options.map { |x| Paint[x, :green, :bold] }.join(", ") unless @options.empty?
         "{#{list}}"
       end
 
@@ -171,26 +171,26 @@ EoCMD
       end
 
       def initialize(json)
-        @return_ary = json.map { |sub| ReturnTypeAndName.new(sub['type'], sub['name']) }
+        @return_ary = json.map { |sub| ReturnTypeAndName.new(sub["type"], sub["name"]) }
       end
 
       def to_s
-        "[#{return_ary.join(', ')}]"
+        "[#{return_ary.join(", ")}]"
       end
     end
 
     def initialize(json)
-      @method = json['method']
-      @name = json['name']
-      @args = json['args'].map { |a| Argument.new(a) }
-      @return = Interface.map_return_type(json['return'])
-      @return_original = json['return']
-      @location = json['url']
+      @method = json["method"]
+      @name = json["name"]
+      @args = json["args"].map { |a| Argument.new(a) }
+      @return = Interface.map_return_type(json["return"])
+      @return_original = json["return"]
+      @location = json["url"]
     end
 
     def make_api_method(showcase)
       if $DEBUG
-        nn_banner('-', :yellow)
+        nn_banner("-", :yellow)
         puts "Making API method #{self}"
       end
 
@@ -208,7 +208,7 @@ EoCMD
 
     def self.map_return_type(json)
       if json.is_a? Hash
-        return ReturnTypeAndObject.new(json['type'], json['of'])
+        return ReturnTypeAndObject.new(json["type"], json["of"])
       elsif json.is_a? Array
         return ReturnTypesAndNames.new(json)
       elsif json.is_a? String
@@ -230,17 +230,17 @@ EoCMD
           return Paint[cannon_part, :magenta]
         end
       end
-      @location.split('/').reduce { |is, i| "#{is}/#{convert.call(i)}" }
+      @location.split("/").reduce { |is, i| "#{is}/#{convert.call(i)}" }
     end
 
     def return_to_s
       return if @return.nil?
 
-      " #{Paint['->', :bold, :yellow]} #{@return}"
+      " #{Paint["->", :bold, :yellow]} #{@return}"
     end
 
     def to_s
-      "#{Paint[name, :bright, :yellow]}(#{args.join(', ')})#{return_to_s}\n  #{Paint['=', :red]} #{Paint[@method, :cyan, :bold]} #{url_to_s}"
+      "#{Paint[name, :bright, :yellow]}(#{args.join(", ")})#{return_to_s}\n  #{Paint["=", :red]} #{Paint[@method, :cyan, :bold]} #{url_to_s}"
     end
 
     def to_map
@@ -253,7 +253,7 @@ EoCMD
   class GeekAuth
     attr_accessor :user, :token, :server
 
-    def initialize(uid, tok, adm = '')
+    def initialize(uid, tok, adm = "")
       @user = uid
       @token = tok
       @server = adm
@@ -280,9 +280,9 @@ EoCMD
     attr_accessor :apis, :conn, :auth, :opts
 
     def initialize(interfaces)
-      @conn = Faraday.new(url: 'http://127.0.0.1:8080')
+      @conn = Faraday.new(url: "http://127.0.0.1:8080")
       @apis = if interfaces.is_a? Array then interfaces else [interfaces] end
-      @auth = GeekAuth.new(-1, '')
+      @auth = GeekAuth.new(-1, "")
     end
 
     def instance_api_methods
@@ -290,10 +290,10 @@ EoCMD
     end
 
     def show_help
-      nn_banner('i', :cyan)
-      puts "Faraday connection: #{Paint['conn', :blue]}, Apis: #{Paint['apis', :blue]}, Auth configuration: #{Paint['auth', :blue]}"
+      nn_banner("i", :cyan)
+      puts "Faraday connection: #{Paint["conn", :blue]}, Apis: #{Paint["apis", :blue]}, Auth configuration: #{Paint["auth", :blue]}"
       nn_banner
-      puts "run #{Paint['show [:apiName|apiNameRegex|apiLocationRegex]', :green, :bold]} to see api documentation, run #{Paint['list', :green, :bold]} to view api list, have fun!"
+      puts "run #{Paint["show [:apiName|apiNameRegex|apiLocationRegex]", :green, :bold]} to see api documentation, run #{Paint["list", :green, :bold]} to view api list, have fun!"
     end
 
     alias api_help show_help
@@ -303,7 +303,7 @@ EoCMD
       Pry.config.prompt = [proc do |obj, nest_level, _|
         pre = "#{obj} :: " unless obj == self
         "spectrum(#{pre}#{nest_level}.#{_.input_array.size})> "
-      end, proc { '*' }]
+      end, proc { "*" }]
 
       instance_api_methods
     end
@@ -348,25 +348,25 @@ EoCMD
 
     def status
       nn_banner
-      puts "Total #{apis.size} APIs, method count: #{apis.group_by { |a| a.method }.map { |m, c| "#{m}: #{c.size}" }.join('; ')}"
+      puts "Total #{apis.size} APIs, method count: #{apis.group_by { |a| a.method }.map { |m, c| "#{m}: #{c.size}" }.join("; ")}"
       puts "Receiving #{all_params.collect { |it| it.extra[:type] }.uniq}\nAnd returning #{all_return.size} types (#{all_obj_return.collect { |it| it.name }.uniq})"
       nn_banner
-      print "#{all_params.find_all { |it| it.extra[:param_location] == 'path' }.size} path params, #{all_params.find_all { |it| it.extra[:param_location] == 'body' }.size} body params"
+      print "#{all_params.find_all { |it| it.extra[:param_location] == "path" }.size} path params, #{all_params.find_all { |it| it.extra[:param_location] == "body" }.size} body params"
       puts ", #{all_params.find_all { |it| it.extra[:param_location] == nil }.size} query parameters"
       return nil
     end
 
-    def tree(type = :plain, prefix_filter = '')
+    def tree(type = :plain, prefix_filter = "")
       docs = apis.find_all { |a| a.location.start_with?(prefix_filter) }
       case type
       when :plain then docs.each { |a| puts "#{a.method} #{a.location}" }
       when :return then docs.each { |a| puts "#{a.method} #{a.location}\n  = #{a.return}" }
       when :args then docs.each { |a| puts "#{a.method} #{a.location}\n  * #{a.args.join("\n  * ")}" }
       else
-      docs.each do |a|
-        puts "#{a.method} #{a.location} (#{a.args.join(';')})"
-        puts "  = #{a.return}"
-      end
+        docs.each do |a|
+          puts "#{a.method} #{a.location} (#{a.args.join(";")})"
+          puts "  = #{a.return}"
+        end
       end
       return nil
     end
@@ -380,20 +380,20 @@ EoCMD
     end
 
     def to_s
-      'GeekApk'
+      "GeekApk"
     end
   end
 
   def ClientShowcase.require_auth?(spec, _me = nil)
     # true # should be optimized in future releases
     # return true if %w[createUser resetSharedHash deleteUser flagUser createCategory renameCategory deleteCategory deleteApp transferAppCategory transferAppOwner].include?(spec.name)
-    return true if spec.location.start_with?('/admin')
-    return true if spec.location.start_with?('user') && (spec.method != 'GET')
-    return false if spec.location.start_with?('/timeline')
-    return true if spec.location.start_with?('/notification')
-    return true if spec.location.start_with?('/app') && (spec.method != 'GET')
-    return true if spec.location.start_with?('/appUpdate') && (spec.method != 'GET')
-    return true if spec.location.start_with?('/comment', '/follow', '/star') && (spec.method != 'GET')
+    return true if spec.location.start_with?("/admin")
+    return true if spec.location.start_with?("user") && (spec.method != "GET")
+    return false if spec.location.start_with?("/timeline")
+    return true if spec.location.start_with?("/notification")
+    return true if spec.location.start_with?("/app") && (spec.method != "GET")
+    return true if spec.location.start_with?("/appUpdate") && (spec.method != "GET")
+    return true if spec.location.start_with?("/comment", "/follow", "/star") && (spec.method != "GET")
 
     false
   end
@@ -409,14 +409,14 @@ EoCMD
   end
 
   def ClientShowcase.from_code(code)
-    json_str = Spectrum.translate_extra_node(code.gsub(/#.*$/, ''))
+    json_str = Spectrum.translate_extra_node(code.gsub(/#.*$/, ""))
 
     from_json json_str
   end
 
-  def ClientShowcase.from_file(path = Dir.glob('*.geekspec').first)
+  def ClientShowcase.from_file(path = Dir.glob("*.geekspec").first)
     text = File.read(path)
-    if path.end_with?('.json')
+    if path.end_with?(".json")
       return from_json(text)
     else
       return from_code(text)
@@ -427,16 +427,16 @@ EoCMD
     attr_accessor :time, :status, :error, :message, :trace, :path
 
     def initialize(json)
-      @time = Time.at(0, json['timestamp'], :millisecond)
-      @status = json['status']
-      @error = json['error']
-      @trace = json['trace'].split("\n\t") if json['trace']
-      @path = json['path']
-      @message = json['message']
+      @time = Time.at(0, json["timestamp"], :millisecond)
+      @status = json["status"]
+      @error = json["error"]
+      @trace = json["trace"].split("\n\t") if json["trace"]
+      @path = json["path"]
+      @message = json["message"]
     end
 
     def to_s
-      "[#{status}] Spring Application #{error} - #{path}: #{message} @ #{time}" + if trace then "\n#{trace.first} #{trace[1]}" else '' end
+      "[#{status}] Spring Application #{error} - #{path}: #{message} @ #{time}" + if trace then "\n#{trace.first} #{trace[1]}"       else "" end
     end
   end
 
@@ -449,7 +449,7 @@ EoCMD
       end
 
       # 为什么要用这种滥用弱类型的手段... 异常系统不好么
-      return SpringError.new(json) if (json.each_key.to_a & %w[timestamp status error message trace path]).tap { |a| a.size >= 5 and not a.include?('trace') }
+      return SpringError.new(json) if (json.each_key.to_a & %w[timestamp status error message trace path]).tap { |a| a.size >= 5 and not a.include?("trace") }
 
       case high_digit
       when 4
@@ -464,12 +464,12 @@ EoCMD
       mapper = "map_resp_#{r.name}"
       if ClientShowcase.respond_to?(mapper)
         if $DEBUG
-          nn_banner 'i', :blue
-          puts "Middleware #{mapper} exists, process..."
+          nn_banner "i", :blue
+          puts "Middleware #{mapper} exists, processing..."
         end
         case r.type
-        when 'object' then return ClientShowcase.send(mapper, json, resp, me)
-        when 'array' then return json.map { |it| ClientShowcase.send(mapper, it, resp, me) }
+        when "object" then return ClientShowcase.send(mapper, json, resp, me)
+        when "array" then return json.map { |it| ClientShowcase.send(mapper, it, resp, me) }
         end
       end
       return json
@@ -478,12 +478,14 @@ EoCMD
     end
 
     mapper = "map_resp_text_#{spec.return}"
-    if ClientShowcase.respond_to?(mapper) then
+    if ClientShowcase.respond_to?(mapper)
       if $DEBUG
-        nn_banner 'i', :blue
+        nn_banner "i", :blue
         puts "Sending response to text processor #{mapper}"
       end
-      ClientShowcase.send(mapper, resp.body, resp, me) else resp.body
+      ClientShowcase.send(mapper, resp.body, resp, me)
+    else
+      resp.body
     end
   end
 
@@ -498,30 +500,30 @@ EoCMD
   def ClientShowcase.setup_auth(req, auth, _me = nil)
     puts "Setup Auth #{auth}(#{auth.to_cookie}) for request #{req}" if $DEBUG
     # gaUser, gaHash, gaModTok
-    req.headers['Cookie'] = auth.to_cookie
+    req.headers["Cookie"] = auth.to_cookie
   end
 
   # Should be optimized in future releases
   def ClientShowcase.handler(my_spec, my_conn, my_auth, me, params, &action)
     if $DEBUG
-      nn_banner('^', :yellow)
+      nn_banner("^", :yellow)
       puts "Committing request #{my_spec.method} #{my_conn.url_prefix}#{my_spec.location}"
-      nn_banner('#', :cyan)
+      nn_banner("#", :cyan)
       print "Using auth #{my_auth}, " if ClientShowcase.require_auth?(my_spec)
       puts "with parameters #{params}"
     end
 
     response = my_conn.send(my_spec.method.downcase) do |req|
       finally = my_spec.location.dup
-      body = ''
+      body = ""
       url_type_map = {}
       type_map = {}
 
       action.call(req) if action
 
-      unless req.headers['Content-Type']
-        if my_spec.method == 'PATCH'
-          req.headers['Content-Type'] = 'application/json;charset=UTF-8'
+      unless req.headers["Content-Type"]
+        if my_spec.method == "PATCH"
+          req.headers["Content-Type"] = "application/json;charset=UTF-8"
         end
       end
 
@@ -530,18 +532,18 @@ EoCMD
       puts must if $DEBUG
 
       if !my_spec.args.empty? && params.empty? || params.size > my_spec.args.size
-        nn_banner('!', :red)
+        nn_banner("!", :red)
         warn "Arity mismatch: expected #{my_spec.args.size} (not optional #{must.size}), got #{params.size}"
         if must.empty?
-          nn_banner('*', :blue)
-          puts 'NOTE: fill first optional argument to get started'
+          nn_banner("*", :blue)
+          puts "NOTE: fill first optional argument to get started"
         end
         return puts my_spec
       end
 
       if params.size < must.size
-        nn_banner('-', :red)
-        warn "Should not ignore parameter #{must[params.size..must.size].join(', ')}"
+        nn_banner("-", :red)
+        warn "Should not ignore parameter #{must[params.size..must.size].join(", ")}"
       end
 
       rest_must = my_spec.args[must.size..-1].zip(my_spec.args.each_index).find_all { |ai| ai[0].required }
@@ -549,23 +551,23 @@ EoCMD
       puts "Rest non-optional arguments #{rest_must}" if $DEBUG
 
       if params.size <= last_rest_index
-        nn_banner('!', :red)
-        puts "Should fill rest non-optional parameters #{rest_must.join(', ')}, expected to index #{last_rest_index + 1}, actual: #{params.size}"
+        nn_banner("!", :red)
+        puts "Should fill rest non-optional parameters #{rest_must.join(", ")}, expected to index #{last_rest_index + 1}, actual: #{params.size}"
       end
 
       params.zip(my_spec.args).each do |p|
         if p[1].options && !p[1].options.empty?
           unless p[1].options.include?(p.first)
-            nn_banner('-', :red)
+            nn_banner("-", :red)
             warn "Warning, parameter #{p.first} not in range #{p[1].options}"
           end
         end
 
         case (t = p[1].extra)[:param_location]
-        when 'path'
+        when "path"
           finally.gsub!("{#{t[:real_name]}}", p.first.to_s)
           url_type_map[t[:real_name]] = t[:type]
-        when 'body' then body.empty? ? (body = p.first) : (warn "Duplicate body variable processing #{my_spec}")
+        when "body" then body.empty? ? (body = p.first) : (warn "Duplicate body variable processing #{my_spec}")
         when nil
           type_map[t[:real_name]] = t[:type]
           req.params[t[:real_name]] = p.first
@@ -583,16 +585,16 @@ EoCMD
     end
 
     if $DEBUG
-      nn_banner '+', :bold, :green
+      nn_banner "+", :bold, :green
       puts "Response #{response.env[:method]}#{response.reason_phrase} #{response.env[:url]} = [#{response.env[:status]}]: #{response.body}"
-      print '  '
+      print "  "
       puts response.headers.map { |k, v| "#{k}:#{v};" }.join("\n  ")
     end
     ClientShowcase.map_response(my_spec, response, me)
   end
 
   def self.make_json(apis)
-    f = File.new("spectrum_#{ARGV[0].gsub(/\..*$/, '')}.json", 'w+')
+    f = File.new("spectrum_#{ARGV[0].gsub(/\..*$/, "")}.json", "w+")
 
     begin
       f.write(JSON.pretty_generate(apis.map(&:to_map)))
@@ -611,11 +613,11 @@ EoCMD
     me = ClientShowcase.new(interfaces)
 
     case ARGV[1]
-    when 'show' then return me.show
-    when 'licence' then return puts 'Apache 2.0'
-    when 'help' then return puts '👆 Help contents above'
-    when 'json' then return make_json(interfaces)
-    when 'debug' then $DEBUG = true
+    when "show" then return me.show
+    when "licence" then return puts "Apache 2.0"
+    when "help" then return puts "👆 Help contents above"
+    when "json" then return make_json(interfaces)
+    when "debug" then $DEBUG = true
     end
 
     me.on_load
@@ -626,7 +628,7 @@ EoCMD
   def self.translate_extra_node(code)
     #  %x[#{"cat<<CODE\n" + code + "\nCODE\n|" + PARSER}]
     #  %x[#{"echo " + code + '|' + PARSER}]
-    f = File.new("Code_#{rand(0..100)}", 'w+')
+    f = File.new("Code_#{rand(0..100)}", "w+")
 
     begin
       f.write(code)
@@ -648,8 +650,8 @@ EoCMD
 
     code = File.read(ARGV.first)
 
-    unless ARGV.first.end_with?('.json') || ENV['JSON']
-      translated = translate_extra_node(code.gsub(/#.*$/, ''))
+    unless ARGV.first.end_with?(".json") || ENV["JSON"]
+      translated = translate_extra_node(code.gsub(/#.*$/, ""))
 
       json = translated.yield_self { |c| JSON.parse(c) }
 
