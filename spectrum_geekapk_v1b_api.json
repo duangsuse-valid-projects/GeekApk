@@ -1508,7 +1508,7 @@
       "of": "string"
     },
     "method": "POST",
-    "url": "/qclExecute"
+    "url": "/qclExec"
   },
   {
     "name": "getMyLimit",

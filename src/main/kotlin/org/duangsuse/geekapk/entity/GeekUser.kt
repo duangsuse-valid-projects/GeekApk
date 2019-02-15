@@ -129,19 +129,19 @@ data class GeekUser (
     /**
      * Banned user
      */
-    const val FLAG_BANNED = 0b10
+    const val FLAG_BANNED = 0b100
     /**
      * "Muted" users
      */
-    const val FLAG_READONLY = 0b1
+    const val FLAG_READONLY = 0b10
     /**
      * Basic user permissions
      */
-    const val FLAG_NONE = 0b0
+    const val FLAG_NONE = 0b1
     /**
      * Administers
      */
-    const val FLAG_ADMIN = 0b11
+    const val FLAG_ADMIN = 0b1000
 
     @Suppress("SpellCheckingInspection")
     private const val A_TO_Z = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
