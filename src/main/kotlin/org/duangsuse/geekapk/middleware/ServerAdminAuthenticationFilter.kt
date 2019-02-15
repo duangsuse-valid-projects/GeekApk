@@ -39,8 +39,18 @@ class ServerAdminAuthenticationFilter: OncePerRequestFilter() {
       return
     }
 
+    val userInt = user.value.toIntOrNull()
+
+    // Bad practice
+    // Bad duangsuse
+    if (userInt == null) {
+      response.status = HttpStatus.BAD_REQUEST.value()
+      response.writer.print("Failed to parse user id ${user.value}")
+      return
+    }
+
     // check user
-    user.value.toIntOrNull()?.let {
+    userInt.let {
       val found = users.findById(it)
 
       if (!found.isPresent) {
@@ -67,24 +77,13 @@ class ServerAdminAuthenticationFilter: OncePerRequestFilter() {
         return@let
 
       // check for server Admin permission
-
       val admin = request.cookies.find { cookie ->  cookie.name == GA_MOD_TOKEN }
       admin?.run {
-        if (value == GeekUser.KEY) {
-          return@let
-        } else {
-          response.status = HttpStatus.FORBIDDEN.value()
-          response.writer.print("Bad server program password")
-          return
-        }
+        if (value == GeekUser.KEY) return@let
       }
-    }
 
-    // Bad practice
-    // Bad duangsuse
-    if (user.value.toIntOrNull() == null) {
-      response.status = HttpStatus.BAD_REQUEST.value()
-      response.writer.print("Failed to parse user id ${user.value}")
+      response.status = HttpStatus.FORBIDDEN.value()
+      response.writer.print("Bad server program password")
       return
     }
 
