@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletResponse
 @WebFilter("/admin/*")
 class ServerAdminAuthenticationFilter: OncePerRequestFilter() {
   override fun doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, filterChain: FilterChain) {
-
     filterChain.doFilter(request, response)
   }
 }

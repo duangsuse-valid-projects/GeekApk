@@ -13,6 +13,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 import org.springframework.boot.web.servlet.ServletComponentScan
 import org.springframework.context.annotation.Bean
+import org.springframework.stereotype.Component
 import java.io.BufferedInputStream
 import java.io.IOException
 import java.util.*
@@ -20,24 +21,9 @@ import java.util.*
 /**
  * Database source CDI consumer
  */
+@Component
 class DbDataSource {
-  @Autowired lateinit var apps: AppRepository
-  @Autowired lateinit var revs: AppUpdateRepository
-  @Autowired lateinit var comments: CommentRepository
-  @Autowired lateinit var users: UserRepository
-  @Autowired lateinit var timeline: TimelineRepository
-  @Autowired lateinit var notifications: NotificationRepository
-  @Autowired lateinit var categories: CategoryRepository
-  @Autowired lateinit var collaborators: CollabRelRepository
-  @Autowired lateinit var follow: FollowRelRepository
-  @Autowired lateinit var star: StarRelRepository
-  fun dumpDb() {
-    val rel = RelationMigrationRepositories(collaborators, follow, star)
-
-    val a = MigrationRepositoriesA(apps, revs, comments)
-    val b = MigrationRepositoriesB(users, timeline, notifications)
-    val c = MigrationRepositoriesC(categories, rel)
-
+  fun dumpDb(a: MigrationRepositoriesA, b: MigrationRepositoriesB, c: MigrationRepositoriesC) {
     val migration = Migrates.Migration(a, b, c)
     Migrates.dumpAll(migration)
   }
@@ -53,6 +39,23 @@ class DbDataSource {
 @SpringBootApplication
 @EnableAutoConfiguration
 class GeekApkApplication {
+  @Autowired(required = false) lateinit var apps: AppRepository
+  @Autowired(required = false) lateinit var revs: AppUpdateRepository
+  @Autowired(required = false) lateinit var comments: CommentRepository
+  @Autowired(required = false) lateinit var users: UserRepository
+  @Autowired(required = false) lateinit var timeline: TimelineRepository
+  @Autowired(required = false) lateinit var notifications: NotificationRepository
+  @Autowired(required = false) lateinit var categories: CategoryRepository
+  @Autowired(required = false) lateinit var collaborators: CollabRelRepository
+  @Autowired(required = false) lateinit var follow: FollowRelRepository
+  @Autowired(required = false) lateinit var star: StarRelRepository
+
+  fun rel() = RelationMigrationRepositories(collaborators, follow, star)
+
+  fun a() = MigrationRepositoriesA(apps, revs, comments)
+  fun b() = MigrationRepositoriesB(users, timeline, notifications)
+  fun c() = MigrationRepositoriesC(categories, rel())
+
   /**
    * Print welcome message and (may process initialization files)
    */
@@ -91,7 +94,7 @@ class GeekApkApplication {
         "--help", "help" -> println("Program usage: geekapk [version|help|licence]" +
           "Find help at https://github.com/duangsuse/GeekApk")
         "--licence", "licence" -> println("Copyright (C) 2019 duangsuse, GeekApk Spring, licenced under GNU AGPL-3.0")
-        "dump!" -> DbDataSource().dumpDb()
+        "dump!" -> DbDataSource().dumpDb(a(), b(), c())
         else -> println("Warning: unknown operation")
       }
       else -> println("Warning: unexpected argument vector length: ${args.size}")

@@ -11,6 +11,10 @@ class LimitController {
   @GetMapping("/limit")
   @ResponseBody
   fun getMyLimit(): LimitMap {
-    TODO()
+    return limitMap
+  }
+
+  companion object {
+      val limitMap: LimitMap = mutableMapOf()
   }
 }
